@@ -63,7 +63,12 @@ public class ComputerDAOImpl implements ComputerDAO{
 			connection.setAutoCommit(false);
 			
 			preparedStatement = connection.prepareStatement(INSERT_QUERY);
-			preparedStatement.setInt(1, company.getId());
+			if(company == null){
+				preparedStatement.setNull(1, java.sql.Types.BIGINT);
+			}
+			else{
+				preparedStatement.setInt(1, company.getId());
+			}
 			preparedStatement.setTimestamp(2, discontinued);
 			preparedStatement.setTimestamp(3, introduced);
 			preparedStatement.setString(4, name);
@@ -158,7 +163,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 	}
 
 	@Override
-	public Computer getById(int id) {
+	public Computer getById(int id) throws DAOException{
 
 		ResultSet results = null;
 		Computer computerResult = null;
@@ -190,7 +195,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 	}
 
 	@Override
-	public ArrayList<Computer> getByName(String name) {
+	public ArrayList<Computer> getByName(String name) throws DAOException{
 
 		ResultSet results = null;
 		ArrayList<Computer> computerResult = null;
@@ -218,7 +223,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 	}
 
 	@Override
-	public ArrayList<Computer> listComputers() {
+	public ArrayList<Computer> listComputers() throws DAOException{
 
 		ResultSet results = null;
 		ArrayList<Computer> computerResult = null;

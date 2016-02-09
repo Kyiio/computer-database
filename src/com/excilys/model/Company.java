@@ -38,7 +38,7 @@ public class Company {
 	public String toString() {
 		
 		StringBuilder strBuilder = new StringBuilder("Company [id=");
-		strBuilder.append(id).append(", name=").append(name);
+		strBuilder.append(id).append(", name=").append(name).append("]");
 				
 		return strBuilder.toString();
 	}	

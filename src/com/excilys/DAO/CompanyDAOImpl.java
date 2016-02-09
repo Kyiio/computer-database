@@ -50,7 +50,7 @@ public class CompanyDAOImpl implements CompanyDAO{
 			
 			
 		} catch (SQLException e) {
-			throw new DAOException(e);
+			throw new DAOException("Error retrieving company with id " + id, e);
 			
 		}finally {
 			ConnectionCloser.fermeturesSilencieuses(results, preparedStatement, connection);
@@ -78,7 +78,7 @@ public class CompanyDAOImpl implements CompanyDAO{
 			companyResults = ResultsMapper.getCompanyList(results);
 			
 		} catch (SQLException e) {
-			throw new DAOException(e);
+			throw new DAOException("Error retrieving company with name " + name, e);
 			
 		}finally {
 			ConnectionCloser.fermeturesSilencieuses(results, preparedStatement, connection);
@@ -106,7 +106,7 @@ public class CompanyDAOImpl implements CompanyDAO{
 			companyResults = ResultsMapper.getCompanyList(results);
 			
 		} catch (SQLException e) {
-			throw new DAOException(e);
+			throw new DAOException("Error retrieving company list", e);
 			
 		}finally {
 			ConnectionCloser.fermeturesSilencieuses(results, preparedStatement, connection);
