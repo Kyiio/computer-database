@@ -5,15 +5,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Class that offers different methods to close properly a ResultSet, a Statement and a Connection 
  * @author Bastien Herbaut 
  */
 public class ConnectionCloser {
-	
+		
 	/**
 	 * Method that close the result set
 	 * @param resultSet The result set that we want to close

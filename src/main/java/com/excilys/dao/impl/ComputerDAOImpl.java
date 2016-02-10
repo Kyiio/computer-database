@@ -17,7 +17,7 @@ import com.excilys.mapper.ResultsMapper;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
-public class ComputerDAOImpl extends ComputerDAO{
+public class ComputerDAOImpl implements ComputerDAO{
 
 	private final String INSERT_QUERY = "INSERT INTO computer(COMPANY_ID, DISCONTINUED, INTRODUCED, NAME) VALUES (?, ?, ?, ?);";
 	private final String UPDATE_QUERY = "UPDATE computer SET COMPANY_ID=?, DISCONTINUED=?, INTRODUCED=?, NAME=? WHERE ID=?";
@@ -50,7 +50,7 @@ public class ComputerDAOImpl extends ComputerDAO{
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		
-		checkData(name, introduced, discontinued);
+		//checkData(name, introduced, discontinued);
 		
 		try {
 			connection = connectionFactory.getConnection();
@@ -112,7 +112,7 @@ public class ComputerDAOImpl extends ComputerDAO{
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		
-		checkData(computer);
+		//checkData(computer);
 				
 		try {
 			connection = connectionFactory.getConnection();

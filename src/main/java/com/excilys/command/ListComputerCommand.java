@@ -2,7 +2,7 @@ package com.excilys.command;
 
 import java.util.Scanner;
 
-import com.excilys.dao.impl.ComputerDAOImpl;
+import service.impl.ComputerServiceImpl;
 
 public class ListComputerCommand extends AbstractCommand{
 
@@ -14,7 +14,7 @@ public class ListComputerCommand extends AbstractCommand{
 	public void execute() {
 		
 		System.out.println("Here is the list of all the company's computer :");
-		System.out.println(ComputerDAOImpl.getInstance().listComputers());
+		System.out.println(ComputerServiceImpl.getInstance().listComputers());
 	}
 	
 }

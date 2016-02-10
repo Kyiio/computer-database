@@ -5,12 +5,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.excilys.dao.impl.CompanyDAOImpl;
 import com.excilys.dao.impl.ComputerDAOImpl;
+import com.excilys.exception.InvalidInputException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+
+import service.impl.CompanyServiceImpl;
 
 public abstract class AbstractCommand {
 
@@ -79,17 +83,26 @@ public abstract class AbstractCommand {
 		boolean isIdOk = false;
 		Computer matchingComputer = null;
 		
+		int idOfExistingComputer;
+		
 		while(!isIdOk){
 		
 			System.out.println("Enter the id of the computer you want to " + action);
 			
-		    int idOfExistingComputer = scanner.nextInt();
+		    try{
+		    	idOfExistingComputer = scanner.nextInt();
+		    }
+		    catch(InputMismatchException e){
+		    	System.out.println("Please !");
+		    	continue;
+		    }
+		    
 		    scanner.nextLine();
 		    
 		    matchingComputer = ComputerDAOImpl.getInstance().getById(idOfExistingComputer);
 		    	    
 		    if(matchingComputer == null){
-		    	System.out.println("The name you entered doesn't match any existing computer !");
+		    	System.out.println("The id you entered doesn't match any existing computer !");
 		    	continue;
 		    }
 		    
@@ -123,17 +136,22 @@ public abstract class AbstractCommand {
 		
 	protected Company askForExistingCompanyByAskingName(){
 		
+		Company resCompany = null;
+		
 		System.out.println("Company name:");
-	    
+		
 		String companyName = scanner.nextLine();
 	    
-	    ArrayList<Company> matchingCompany = CompanyDAOImpl.getInstance().getByName(companyName);
-	    	    
-	    if(matchingCompany.size() > 0){	
-	    	return matchingCompany.get(0);
-	    }
-	    
-	    return null;
+		if(companyName.length() > 0){
+			
+		    ArrayList<Company> matchingCompany = CompanyServiceImpl.getInstance().getByName(companyName);
+		    	    
+		    if(matchingCompany.size() > 0){	
+		    	resCompany = matchingCompany.get(0);
+		    }
+		}
+		
+	    return resCompany;
 	}
 	
 	protected LocalDateTime askForDate(String dateType){
@@ -152,9 +170,11 @@ public abstract class AbstractCommand {
 		    while (!dateOk){
 		    	try {
 		    		dateOk = true;
+
+		    		InputValidator.isDate(tmpDate);
 		    		localDateTime = new Timestamp(new SimpleDateFormat(format).parse(tmpDate).getTime()).toLocalDateTime();
 		    		
-				} catch (ParseException e) {
+				} catch (ParseException | InvalidInputException e ) {
 					dateOk = false;
 					System.out.println("Wrong format entered, please retry :");
 					tmpDate = scanner.nextLine();

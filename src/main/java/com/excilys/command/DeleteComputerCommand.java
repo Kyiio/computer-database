@@ -2,8 +2,9 @@ package com.excilys.command;
 
 import java.util.Scanner;
 
-import com.excilys.dao.impl.ComputerDAOImpl;
 import com.excilys.model.Computer;
+
+import service.impl.ComputerServiceImpl;
 
 public class DeleteComputerCommand extends AbstractCommand{
 
@@ -16,7 +17,7 @@ public class DeleteComputerCommand extends AbstractCommand{
 		
 		Computer oldComputer = askForMethodToFindComputer("delete");
 		
-		ComputerDAOImpl.getInstance().deleteComputer(oldComputer.getId());
+		ComputerServiceImpl.getInstance().deleteComputer(oldComputer.getId());
 		
 		System.out.println("Delete complete !");
 		

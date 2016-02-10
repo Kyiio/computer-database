@@ -2,8 +2,10 @@ package com.excilys.command;
 
 import java.util.Scanner;
 
-import com.excilys.dao.impl.ComputerDAOImpl;
+import com.excilys.exception.ServiceException;
 import com.excilys.model.Computer;
+
+import service.impl.ComputerServiceImpl;
 
 public class UpdateComputerCommand extends AbstractCommand{
 
@@ -35,10 +37,12 @@ public class UpdateComputerCommand extends AbstractCommand{
 	    		
 	    oldComputer.setCompany(askForExistingCompanyByAskingName());
 	    
-	    ComputerDAOImpl.getInstance().updateComputer(oldComputer);
-	    
-	    System.out.println("Update done !");
-	    	    
+	    try {
+	    	ComputerServiceImpl.getInstance().updateComputer(oldComputer);
+	    	System.out.println("Update succeeded!");
+		} catch (ServiceException se) {
+			System.out.println("Inconsistant data entered (Issue with the name or with the dates)\nUpdate aborted!");
+		}	    	    
 	}
 	
 }
