@@ -7,8 +7,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import org.apache.tomcat.jni.Local;
-
 import com.excilys.dao.impl.CompanyDAOImpl;
 import com.excilys.dao.impl.ComputerDAOImpl;
 import com.excilys.model.Company;

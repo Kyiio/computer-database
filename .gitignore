@@ -1,13 +1,15 @@
+
+# Created by https://www.gitignore.io/api/eclipse,maven,java
+
+### Eclipse ###
+
 .metadata
 bin/
-build/
 tmp/
 *.tmp
 *.bak
 *.swp
-*.class
 *~.nib
-
 local.properties
 .settings/
 .loadpath
@@ -21,12 +23,55 @@ local.properties
 # Locally stored "Eclipse launch configurations"
 *.launch
 
+# PyDev specific (Python IDE for Eclipse)
+*.pydevproject
+
+# CDT-specific (C/C++ Development Tooling)
+.cproject
+
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
 # Java annotation processor (APT)
 .factorypath
 
+# PDT-specific (PHP Development Tools)
+.buildpath
+
+# sbteclipse plugin
+.target
+
+# TeXlipse plugin
+.texlipse
+
 # STS (Spring Tool Suite)
 .springBeans
+
+
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+
+### Java ###
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
 
