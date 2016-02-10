@@ -2,8 +2,7 @@ package com.excilys.command;
 
 import java.util.Scanner;
 
-import com.excilys.DAO.ComputerDAO;
-import com.excilys.DAO.DAOFactory;
+import com.excilys.dao.impl.ComputerDAOImpl;
 
 public class ListComputerCommand extends AbstractCommand{
 
@@ -14,10 +13,8 @@ public class ListComputerCommand extends AbstractCommand{
 	@Override
 	public void execute() {
 		
-		ComputerDAO computerDAO = DAOFactory.getInstance().getComputerDao();
-		
 		System.out.println("Here is the list of all the company's computer :");
-		System.out.println(computerDAO.listComputers());
+		System.out.println(ComputerDAOImpl.getInstance().listComputers());
 	}
 	
 }

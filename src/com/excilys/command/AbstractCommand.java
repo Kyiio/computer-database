@@ -3,17 +3,21 @@ package com.excilys.command;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import com.excilys.DAO.DAOFactory;
+import org.apache.tomcat.jni.Local;
+
+import com.excilys.dao.impl.CompanyDAOImpl;
+import com.excilys.dao.impl.ComputerDAOImpl;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
 public abstract class AbstractCommand {
 
-	protected Scanner scanner; 
-	
+	protected Scanner scanner;
+
 	public AbstractCommand(Scanner scanner) {
 		this.scanner = scanner;
 	}
@@ -24,18 +28,42 @@ public abstract class AbstractCommand {
 	
 	public abstract void execute();
 	
-	protected Computer getExistingComputerByAskingName(String prompt){
+	protected Computer askForMethodToFindComputer(String action){
+		
+		Computer foundComputer = null;
+		String searchingMethod;
+		
+		while(foundComputer == null){
+			System.out.println("Do you want to find the computer by 'ID' or by 'NAME' ?");
+			searchingMethod = scanner.nextLine();
+			
+			if("ID".equals(searchingMethod))
+				foundComputer = getExistingComputerByAskingId(action);
+			else if("NAME".equals(searchingMethod)){
+				foundComputer = getExistingComputerByAskingName(action);
+			}
+			else{
+				System.out.println("Action not recognize !");
+			}
+			
+			
+		}
+		
+		return null;
+	}
+	
+	protected Computer getExistingComputerByAskingName(String action){
 		
 		boolean isNameOk = false;
 		ArrayList<Computer> matchingComputer = null;
 		
 		while(!isNameOk){
 		
-			System.out.println(prompt);
-			//scanner.nextLine();
+			System.out.println("Enter the name of the computer you want to " + action);
+			
 		    String nameOfExistingComputer = scanner.nextLine();
 		    
-		    matchingComputer = DAOFactory.getInstance().getComputerDao().getByName(nameOfExistingComputer);
+		    matchingComputer = ComputerDAOImpl.getInstance().getByName(nameOfExistingComputer);
 		    	    
 		    if(matchingComputer.size() <= 0){
 		    	System.out.println("The name you entered doesn't match any existing computer !");
@@ -48,6 +76,31 @@ public abstract class AbstractCommand {
 		
 	}
 	
+	protected Computer getExistingComputerByAskingId(String action){
+		
+		boolean isIdOk = false;
+		Computer matchingComputer = null;
+		
+		while(!isIdOk){
+		
+			System.out.println("Enter the id of the computer you want to " + action);
+			
+		    int idOfExistingComputer = scanner.nextInt();
+		    scanner.nextLine();
+		    
+		    matchingComputer = ComputerDAOImpl.getInstance().getById(idOfExistingComputer);
+		    	    
+		    if(matchingComputer == null){
+		    	System.out.println("The name you entered doesn't match any existing computer !");
+		    	continue;
+		    }
+		    
+		    isIdOk = true;
+		}
+	    return matchingComputer;
+		
+	}
+	
 	protected String askForNewComputerName(){
 		
 	    boolean isNameOk = false;	    
@@ -56,7 +109,7 @@ public abstract class AbstractCommand {
 	    while(!isNameOk){
 		    
 	    	System.out.println("Computer's name :");
-	    	//scanner.nextLine();
+	    	
 	    	name = scanner.nextLine();
 		    
 		    if(name.length() <= 0){
@@ -73,11 +126,10 @@ public abstract class AbstractCommand {
 	protected Company askForExistingCompanyByAskingName(){
 		
 		System.out.println("Company name:");
-		//scanner.nextLine();
 	    
 		String companyName = scanner.nextLine();
 	    
-	    ArrayList<Company> matchingCompany = DAOFactory.getInstance().getCompanyDao().getByName(companyName);
+	    ArrayList<Company> matchingCompany = CompanyDAOImpl.getInstance().getByName(companyName);
 	    	    
 	    if(matchingCompany.size() > 0){	
 	    	return matchingCompany.get(0);
@@ -86,27 +138,34 @@ public abstract class AbstractCommand {
 	    return null;
 	}
 	
-	protected Timestamp askForDate(String dateType){
+	protected LocalDateTime askForDate(String dateType){
 		
 		String format = "yyyy-MM-dd";
 		
 	    System.out.println(dateType + " date (YYYY-MM-DD) :");
-	    //scanner.nextLine();
 	    
 	    String tmpDate = scanner.nextLine();
 	    
-	    Timestamp timestamp = null;
+	    LocalDateTime localDateTime = null;
 	    
 	    if(tmpDate.length() > 0){   
 	    		
-		    try {
-		    	timestamp = new Timestamp(new SimpleDateFormat(format).parse(tmpDate).getTime());
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+	    	boolean dateOk = false;
+		    while (!dateOk){
+		    	try {
+		    		dateOk = true;
+		    		localDateTime = new Timestamp(new SimpleDateFormat(format).parse(tmpDate).getTime()).toLocalDateTime();
+		    		
+				} catch (ParseException e) {
+					dateOk = false;
+					System.out.println("Wrong format entered, please retry :");
+					tmpDate = scanner.nextLine();
+				}
+		    }
 	    }
 	    
-	    return timestamp;
+	    
+	    return localDateTime;
 	}
 	
 }

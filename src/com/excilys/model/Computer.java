@@ -1,7 +1,12 @@
 package com.excilys.model;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
+/**
+ * This class represents a computer from the database. A computer is identified by its id and must possess a name.
+ * It can also possess other information like the company that owns it and the introduced and discontinued date
+ * @author Bastien Herbaut
+ */
 public class Computer {
 
 	private int id;
@@ -9,14 +14,14 @@ public class Computer {
 	
 	private String name;
 	
-	private Timestamp discontinued;
-	private Timestamp introduced;
+	private LocalDateTime discontinued;
+	private LocalDateTime introduced;
 	
 	public Computer() {
 		
 	}
 	
-	public Computer(int id, Company company, String name, Timestamp discontinued, Timestamp introduced) {
+	public Computer(int id, Company company, String name, LocalDateTime discontinued, LocalDateTime introduced) {
 		this.id = id;
 		this.company = company;
 		this.name = name;
@@ -48,19 +53,19 @@ public class Computer {
 		this.name = name;
 	}
 	
-	public Timestamp getDiscontinued() {
+	public LocalDateTime getDiscontinued() {
 		return discontinued;
 	}
 	
-	public void setDiscontinued(Timestamp discontinued) {
+	public void setDiscontinued(LocalDateTime discontinued) {
 		this.discontinued = discontinued;
 	}
 	
-	public Timestamp getIntroduced() {
+	public LocalDateTime getIntroduced() {
 		return introduced;
 	}
 	
-	public void setIntroduced(Timestamp introduced) {
+	public void setIntroduced(LocalDateTime introduced) {
 		this.introduced = introduced;
 	}
 
@@ -73,8 +78,52 @@ public class Computer {
 		strBuilder.append("]\n");
 		
 		return strBuilder.toString();
-				
 	}
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((company == null) ? 0 : company.hashCode());
+		result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
+		result = prime * result + id;
+		result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Computer other = (Computer) obj;
+		if (company == null) {
+			if (other.company != null)
+				return false;
+		} else if (!company.equals(other.company))
+			return false;
+		if (discontinued == null) {
+			if (other.discontinued != null)
+				return false;
+		} else if (!discontinued.equals(other.discontinued))
+			return false;
+		if (id != other.id)
+			return false;
+		if (introduced == null) {
+			if (other.introduced != null)
+				return false;
+		} else if (!introduced.equals(other.introduced))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
 	
 }

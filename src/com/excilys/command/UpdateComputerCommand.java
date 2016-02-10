@@ -2,7 +2,7 @@ package com.excilys.command;
 
 import java.util.Scanner;
 
-import com.excilys.DAO.DAOFactory;
+import com.excilys.dao.impl.ComputerDAOImpl;
 import com.excilys.model.Computer;
 
 public class UpdateComputerCommand extends AbstractCommand{
@@ -16,7 +16,7 @@ public class UpdateComputerCommand extends AbstractCommand{
 		
 		/* We ask for the name of the computer the use want to change */
 					    	    		
-	    Computer oldComputer = getExistingComputerByAskingName("Enter the name of the old computer you want to change :");
+	    Computer oldComputer = askForMethodToFindComputer("update");
 	    
 	    /* New name */
 	    
@@ -25,7 +25,7 @@ public class UpdateComputerCommand extends AbstractCommand{
 	    	    
 	    /* New introduced date */
 	    
-	    oldComputer.setDiscontinued(askForDate("Introduced"));
+	    oldComputer.setIntroduced(askForDate("Introduced"));
 	    
 	    /* New discontinued date */
 	    
@@ -35,7 +35,7 @@ public class UpdateComputerCommand extends AbstractCommand{
 	    		
 	    oldComputer.setCompany(askForExistingCompanyByAskingName());
 	    
-	    DAOFactory.getInstance().getComputerDao().updateComputer(oldComputer);
+	    ComputerDAOImpl.getInstance().updateComputer(oldComputer);
 	    
 	    System.out.println("Update done !");
 	    	    

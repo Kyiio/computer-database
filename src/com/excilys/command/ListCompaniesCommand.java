@@ -2,8 +2,8 @@ package com.excilys.command;
 
 import java.util.Scanner;
 
-import com.excilys.DAO.CompanyDAO;
-import com.excilys.DAO.DAOFactory;
+import com.excilys.dao.CompanyDAO;
+import com.excilys.dao.impl.CompanyDAOImpl;
 import com.excilys.model.Company;
 
 public class ListCompaniesCommand extends AbstractCommand{
@@ -14,8 +14,8 @@ public class ListCompaniesCommand extends AbstractCommand{
 
 	@Override
 	public void execute() {
-		
-		CompanyDAO companyDAO = DAOFactory.getInstance().getCompanyDao();
+				
+		CompanyDAO companyDAO = CompanyDAOImpl.getInstance();
 		
 		System.out.println("Here is the list of all the company's computer :");
 		
