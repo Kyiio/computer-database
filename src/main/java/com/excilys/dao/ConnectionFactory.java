@@ -17,7 +17,7 @@ import com.excilys.exception.DAOConfigurationException;
  */
 public class ConnectionFactory {
 	
-    private static final String FILE_PROPERTIES         = "dao.properties";
+    private static final String FILE_PROPERTIES         = "connection.properties";
     private static final String PROPERTY_URL            = "url";
     private static final String PROPERTY_DRIVER         = "driver";
     private static final String PROPERTY_USER_NAME 		= "nomutilisateur";
@@ -50,7 +50,8 @@ public class ConnectionFactory {
         String userName;
         String password;
 
-        InputStream fichierProperties = ConnectionFactory.class.getClassLoader().getResourceAsStream( FILE_PROPERTIES );
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream fichierProperties = classLoader.getResourceAsStream( FILE_PROPERTIES );
         
         if(fichierProperties == null) {
             throw new DAOConfigurationException( "The properties file " + FILE_PROPERTIES + " can't be found" );

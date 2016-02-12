@@ -5,13 +5,13 @@
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
   <servlet>
-  	<servlet-name>CDBServlet</servlet-name>
-  	<display-name>CDBServlet</display-name>
+  	<servlet-name>DashboardServlet</servlet-name>
+  	<display-name>DashboardServlet</display-name>
   	<description></description>
-  	<servlet-class>com.excilys.servlets.CDBServlet</servlet-class>
+  	<servlet-class>com.excilys.servlets.DashboardServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>CDBServlet</servlet-name>
-  	<url-pattern>/CDBServlet</url-pattern>
+  	<servlet-name>DashboardServlet</servlet-name>
+  	<url-pattern>/DashboardServlet</url-pattern>
   </servlet-mapping>
 </web-app>
