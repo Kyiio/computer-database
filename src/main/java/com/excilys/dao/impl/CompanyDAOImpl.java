@@ -36,7 +36,7 @@ public class CompanyDAOImpl implements CompanyDAO{
 	}
 	
 	@Override
-	public Company getById(int id) {
+	public Company getById(int id) throws DAOException {
 
 		ResultSet results = null;
 		Company companyResult = null;
@@ -69,7 +69,7 @@ public class CompanyDAOImpl implements CompanyDAO{
 	}
 
 	@Override
-	public ArrayList<Company> getByName(String name) {
+	public ArrayList<Company> getByName(String name) throws DAOException {
 		
 		ResultSet results = null;
 		Connection connection = null;
@@ -98,7 +98,7 @@ public class CompanyDAOImpl implements CompanyDAO{
 	}
 
 	@Override
-	public ArrayList<Company> listCompanies() {
+	public ArrayList<Company> listCompanies() throws DAOException {
 
 		ResultSet results = null;
 		Connection connection = null;

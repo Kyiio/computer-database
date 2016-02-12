@@ -1,6 +1,6 @@
 package com.excilys.main;
 
-import UI.CommandLineInterface;
+import com.excilys.UI.CommandLineInterface;
 
 public class Main {
 

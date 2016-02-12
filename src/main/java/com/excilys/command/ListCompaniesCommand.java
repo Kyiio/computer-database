@@ -3,8 +3,7 @@ package com.excilys.command;
 import java.util.Scanner;
 
 import com.excilys.model.Company;
-
-import service.impl.CompanyServiceImpl;
+import com.excilys.service.impl.CompanyServiceImpl;
 
 public class ListCompaniesCommand extends AbstractCommand{
 

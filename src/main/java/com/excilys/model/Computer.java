@@ -28,6 +28,14 @@ public class Computer {
 		this.discontinued = discontinued;
 		this.introduced = introduced;
 	}
+	
+	public Computer(Computer computer){
+		this.id = computer.id;
+		this.company = new Company(computer.company);
+		this.name = computer.name;
+		this.discontinued = computer.discontinued;
+		this.introduced = computer.introduced;
+	}
 
 	public int getId() {
 		return id;

@@ -13,6 +13,11 @@ public class Company {
 		
 	}
 	
+	public Company(Company company){
+		this.id = company.id;
+		this.name = company.name;
+	}
+	
 	public Company(int id) {
 		this.id = id;
 	}

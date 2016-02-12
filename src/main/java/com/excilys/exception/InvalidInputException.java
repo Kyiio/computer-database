@@ -1,5 +1,6 @@
 package com.excilys.exception;
 
+@SuppressWarnings("serial")
 public class InvalidInputException extends RuntimeException {
 
     public InvalidInputException(String message) {
@@ -13,5 +14,4 @@ public class InvalidInputException extends RuntimeException {
     public InvalidInputException(Throwable cause) {
         super(cause);
     }
-
 }

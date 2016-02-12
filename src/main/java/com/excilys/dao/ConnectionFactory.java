@@ -28,11 +28,13 @@ public class ConnectionFactory {
     private String url;
     private String username;
     private String password;
+    private String driver;
 
-    private ConnectionFactory(String url, String username, String password) {
+    private ConnectionFactory(String url, String username, String password, String driver) {
         this.url = url;
         this.username = username;
         this.password = password;
+        this.driver = driver;
     }
 
     /**
@@ -48,7 +50,7 @@ public class ConnectionFactory {
         String userName;
         String password;
 
-        InputStream fichierProperties = ConnectionFactory.class.getResourceAsStream( FILE_PROPERTIES );
+        InputStream fichierProperties = ConnectionFactory.class.getClassLoader().getResourceAsStream( FILE_PROPERTIES );
         
         if(fichierProperties == null) {
             throw new DAOConfigurationException( "The properties file " + FILE_PROPERTIES + " can't be found" );
@@ -71,7 +73,7 @@ public class ConnectionFactory {
             throw new DAOConfigurationException("Can't find the driver", e);
         }
 
-        INSTANCE = new ConnectionFactory(url, userName, password);
+        INSTANCE = new ConnectionFactory(url, userName, password, driver);
     }
     
     /**
@@ -91,4 +93,21 @@ public class ConnectionFactory {
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, username, password);
     }
+
+	public String getUrl() {
+		return url;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public String getDriver() {
+		return driver;
+	}  
+    
 }

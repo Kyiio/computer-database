@@ -8,13 +8,11 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import com.excilys.dao.impl.CompanyDAOImpl;
 import com.excilys.dao.impl.ComputerDAOImpl;
 import com.excilys.exception.InvalidInputException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
-
-import service.impl.CompanyServiceImpl;
+import com.excilys.service.impl.CompanyServiceImpl;
 
 public abstract class AbstractCommand {
 
@@ -45,7 +43,7 @@ public abstract class AbstractCommand {
 				foundComputer = getExistingComputerByAskingName(action);
 			}
 			else{
-				System.out.println("Action not recognize !");
+				System.out.println("Action not recognized !");
 			}
 			
 			

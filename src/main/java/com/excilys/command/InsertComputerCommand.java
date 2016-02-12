@@ -4,8 +4,7 @@ import java.util.Scanner;
 
 import com.excilys.exception.ServiceException;
 import com.excilys.model.Computer;
-
-import service.impl.ComputerServiceImpl;
+import com.excilys.service.impl.ComputerServiceImpl;
 
 public class InsertComputerCommand extends AbstractCommand{
 

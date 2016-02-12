@@ -2,7 +2,7 @@ package com.excilys.command;
 
 import java.util.Scanner;
 
-import service.impl.ComputerServiceImpl;
+import com.excilys.service.impl.ComputerServiceImpl;
 
 public class ListComputerCommand extends AbstractCommand{
 
