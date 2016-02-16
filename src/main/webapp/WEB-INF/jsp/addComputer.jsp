@@ -14,7 +14,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
+            <a class="navbar-brand" href="dashboard?pageNumber=1"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -53,7 +53,7 @@
                         <div class="actions pull-right">
                             <input type="submit" value="Add" class="btn btn-primary" id="addComputerSubmit">
                             or
-                            <a href="dashboard" class="btn btn-default">Cancel</a>
+                            <a href="dashboard?pageNumber=1" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>

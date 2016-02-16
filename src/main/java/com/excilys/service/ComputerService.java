@@ -70,4 +70,11 @@ public interface ComputerService {
 	 * @see ComputerDAO
 	 */
 	public ArrayList<Computer> getXComputersStartingAtIndexY(int offset, int pageNumber);
+	
+	/**
+	 * Method that calls the getNbComputer from the ComputerDAO
+	 * @return The number of computer in the database
+	 * @see ComputerDAO
+	 */
+	public int getNbComputer();
 }

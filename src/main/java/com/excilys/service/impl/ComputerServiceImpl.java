@@ -83,4 +83,9 @@ public class ComputerServiceImpl implements ComputerService{
 		return ComputerDAOImpl.getInstance().getXComputersStartingAtIndexY(offset, pageNumber);
 	}
 
+	@Override
+	public int getNbComputer() {
+		return ComputerDAOImpl.getInstance().getNbComputer();
+	}
+
 }

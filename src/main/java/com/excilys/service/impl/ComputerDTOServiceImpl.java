@@ -2,6 +2,7 @@ package com.excilys.service.impl;
 
 import java.util.ArrayList;
 
+import com.excilys.dao.impl.ComputerDAOImpl;
 import com.excilys.dto.ComputerDTO;
 import com.excilys.mapper.DTOMapper;
 import com.excilys.model.Computer;
@@ -87,6 +88,11 @@ public class ComputerDTOServiceImpl implements ComputerDTOService{
 		ComputerValidator.checkPageNumber(pageNumber);
 		
 		return DTOMapper.getComputerDTOListFromComputerList(ComputerServiceImpl.getInstance().getXComputersStartingAtIndexY(offset, pageNumber));
+	}
+	
+	@Override
+	public int getNbComputer() {
+		return ComputerServiceImpl.getInstance().getNbComputer();
 	}
 
 }

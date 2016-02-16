@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.dto.ComputerDTO;
 import com.excilys.mapper.DTOMapper;
 import com.excilys.model.Page;
+import com.excilys.service.impl.ComputerDTOServiceImpl;
 
 /**
  * Servlet implementation class CDBServelt
@@ -50,6 +51,7 @@ public class DashboardServlet extends HttpServlet {
 		ArrayList<ComputerDTO> computerDTOList = page.getContent();
 		
 		request.setAttribute("computerList", computerDTOList);
+		request.setAttribute("totalComputerFound", ComputerDTOServiceImpl.getInstance().getNbComputer());
 		request.setAttribute("page", page);
 		request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
 	}

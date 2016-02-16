@@ -17,14 +17,14 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="#"> Application - Computer Database
+			<a class="navbar-brand" href="dashboard?pageNumber=1"> Application - Computer Database
 			</a>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">121 Computers found</h1>
+			<h1 id="homeTitle">${totalComputerFound} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -89,7 +89,7 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-		<div class="container text-center" style="display:inline-block; margin-left: 20em;">
+		<div class="container text-center" style="display:inline-block;"> <!-- margin-left: 20em;-->
 			<ul class="pagination">
 				<pagination:Page pageNumber="${page.pageNumber}" maxPageNumber="${page.maxPageNumber}" computerPerPage="${page.computerPerPage}"/>
 			</ul>

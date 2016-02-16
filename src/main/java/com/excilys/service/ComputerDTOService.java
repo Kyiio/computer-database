@@ -2,6 +2,7 @@ package com.excilys.service;
 
 import java.util.ArrayList;
 
+import com.excilys.dao.ComputerDAO;
 import com.excilys.dto.ComputerDTO;
 import com.excilys.model.Computer;
 
@@ -68,4 +69,11 @@ public interface ComputerDTOService {
 	 * @see ComputerDTO, ComputerService
 	 */
 	public ArrayList<ComputerDTO> getXComputersStartingAtIndexY(int offset, int pageNumber);
+	
+	/**
+	 * Method that calls the getNbComputer from the ComputerService
+	 * @return The number of computer in the database
+	 * @see ComputerService
+	 */
+	public int getNbComputer();
 }
