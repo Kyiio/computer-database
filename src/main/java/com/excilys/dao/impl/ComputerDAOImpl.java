@@ -13,7 +13,7 @@ import com.excilys.dao.ComputerDAO;
 import com.excilys.dao.ConnectionCloser;
 import com.excilys.dao.ConnectionFactory;
 import com.excilys.exception.DAOException;
-import com.excilys.mapper.ResultsMapper;
+import com.excilys.mapper.DAOMapper;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
@@ -24,8 +24,10 @@ public class ComputerDAOImpl implements ComputerDAO {
 	private final String DELETE_QUERY = "DELETE FROM computer WHERE ID=?";
 
 	private final String LIST_ALL_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID";
+	private final String GET_PAGE_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID LIMIT ? OFFSET ?";
 	private final String GET_BY_ID_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID WHERE computer.ID = ?";
-	private final String GET_BY_NAME_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID WHERE computer.NAME = ?";
+	private final String GET_BY_NAME_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID WHERE computer.AME = ?";
+	private final String GET_NB_COMPUTER = "SELECT COUNT(*) FROM computer";
 
 	private static ComputerDAO INSTANCE;
 
@@ -207,7 +209,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 			results = preparedStatement.executeQuery();
 
-			ArrayList<Computer> computerList = ResultsMapper.getComputerList(results);
+			ArrayList<Computer> computerList = DAOMapper.getComputerList(results);
 
 			if (computerList.size() > 0) {
 				computerResult = computerList.get(0);
@@ -239,7 +241,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 			results = preparedStatement.executeQuery();
 
-			computerResult = ResultsMapper.getComputerList(results);
+			computerResult = DAOMapper.getComputerList(results);
 
 		} catch (SQLException e) {
 			throw new DAOException("Error while trying to retrieve computer with name :" + name, e);
@@ -264,7 +266,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			preparedStatement = connection.prepareStatement(LIST_ALL_QUERY);
 			results = preparedStatement.executeQuery();
 
-			computerResult = ResultsMapper.getComputerList(results);
+			computerResult = DAOMapper.getComputerList(results);
 
 		} catch (SQLException e) {
 			throw new DAOException("Error while trying to retrieve the computer list", e);
@@ -276,4 +278,62 @@ public class ComputerDAOImpl implements ComputerDAO {
 		return computerResult;
 	}
 
+	@Override
+	public ArrayList<Computer> getXComputersStartingAtIndexY(int offset, int pageNumber) throws DAOException {
+
+		ResultSet results = null;
+		ArrayList<Computer> computerResult = null;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		try {
+			connection = ConnectionFactory.getInstance().getConnection();
+			preparedStatement = connection.prepareStatement(GET_PAGE_QUERY);
+			preparedStatement.setInt(1, offset);
+			preparedStatement.setInt(2, pageNumber*offset);
+			
+			results = preparedStatement.executeQuery();
+
+			computerResult = DAOMapper.getComputerList(results);
+
+		} catch (SQLException e) {
+			throw new DAOException("Error while trying to retrieve the computer page with offset " + offset + " and start index " + pageNumber, e);
+
+		} finally {
+			ConnectionCloser.silentClose(results, preparedStatement, connection);
+		}
+
+		return computerResult;
+	}
+
+	@Override
+	public int getNbComputer() throws DAOException {
+
+		ResultSet results = null;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		int nbComputer = 0;
+		
+		try {
+			connection = ConnectionFactory.getInstance().getConnection();
+
+			preparedStatement = connection.prepareStatement(GET_NB_COMPUTER);
+
+			results = preparedStatement.executeQuery();
+
+			if (results != null && results.next()) {
+				nbComputer = results.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			throw new DAOException("Error while trying to retrieve the number of computer", e);
+
+		} finally {
+			ConnectionCloser.silentClose(results, preparedStatement, connection);
+		}
+
+		return nbComputer;
+	}
+	
 }

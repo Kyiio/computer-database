@@ -39,5 +39,5 @@ public interface CompanyDAO{
 	 * @see Company
 	 */
 	public ArrayList<Company> listCompanies() throws DAOException;
-	
+		
 }

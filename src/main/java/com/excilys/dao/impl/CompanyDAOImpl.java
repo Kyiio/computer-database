@@ -10,7 +10,7 @@ import com.excilys.dao.CompanyDAO;
 import com.excilys.dao.ConnectionCloser;
 import com.excilys.dao.ConnectionFactory;
 import com.excilys.exception.DAOException;
-import com.excilys.mapper.ResultsMapper;
+import com.excilys.mapper.DAOMapper;
 import com.excilys.model.Company;
 
 public class CompanyDAOImpl implements CompanyDAO{
@@ -51,7 +51,7 @@ public class CompanyDAOImpl implements CompanyDAO{
  			
 			results = preparedStatement.executeQuery();
 		
-			ArrayList<Company> companyList = ResultsMapper.getCompanyList(results);
+			ArrayList<Company> companyList = DAOMapper.getCompanyList(results);
 			
 			if(companyList.size() > 0){
 				companyResult = companyList.get(0);
@@ -84,7 +84,7 @@ public class CompanyDAOImpl implements CompanyDAO{
  			
 			results = preparedStatement.executeQuery();
 					
-			companyResults = ResultsMapper.getCompanyList(results);
+			companyResults = DAOMapper.getCompanyList(results);
 			
 		} catch (SQLException e) {
 			throw new DAOException("Error retrieving company with name " + name, e);
@@ -112,7 +112,7 @@ public class CompanyDAOImpl implements CompanyDAO{
 
 			results = preparedStatement.executeQuery();
 					
-			companyResults = ResultsMapper.getCompanyList(results);
+			companyResults = DAOMapper.getCompanyList(results);
 			
 		} catch (SQLException e) {
 			throw new DAOException("Error retrieving company list", e);

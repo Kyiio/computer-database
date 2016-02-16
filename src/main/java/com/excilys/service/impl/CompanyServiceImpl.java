@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.excilys.dao.impl.CompanyDAOImpl;
 import com.excilys.model.Company;
 import com.excilys.service.CompanyService;
+import com.excilys.validator.CompanyValidator;
 
 public class CompanyServiceImpl implements CompanyService{
 
@@ -25,13 +26,13 @@ public class CompanyServiceImpl implements CompanyService{
 
 	@Override
 	public Company getById(int id) {
-		
+		CompanyValidator.checkId(id);
 		return CompanyDAOImpl.getInstance().getById(id);
 	}
 
 	@Override
 	public ArrayList<Company> getByName(String name) {
-
+		CompanyValidator.checkName(name);
 		return CompanyDAOImpl.getInstance().getByName(name);
 	}
 

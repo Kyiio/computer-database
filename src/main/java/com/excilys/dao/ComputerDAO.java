@@ -48,7 +48,7 @@ public interface ComputerDAO{
 	 * If the id doesn't match any existing id, null is returned
 	 * @param id The id of the computer we want to retrieve
 	 * @return The matching computer or null
-	 * @throws DAOException TODO
+	 * @throws DAOException
 	 * @see Computer
 	 */
 	public Computer getById(int id) throws DAOException;
@@ -58,15 +58,26 @@ public interface ComputerDAO{
 	 * If none are found, an empty list is returned
 	 * @param name
 	 * @return The list of matching computers
-	 * @throws DAOException TODO
+	 * @throws DAOException
 	 */
 	public ArrayList<Computer> getByName(String name) throws DAOException;
 	
 	/**
 	 * This method retrieves all the computer in the database and store them into a list
 	 * @return The list of all the computers in the database
-	 * @throws DAOException TODO
+	 * @throws DAOException
 	 */
 	public ArrayList<Computer> listComputers() throws DAOException;
 	
+	/**
+	 * This method retrieves {@code offset} from the database starting at the index {@code pageNumber * offset} 
+	 * 
+	 * @param offset
+	 * @param pageNumber
+	 * @return
+	 * @throws DAOException
+	 */
+	public ArrayList<Computer> getXComputersStartingAtIndexY(int offset, int pageNumber) throws DAOException;
+	
+	public int getNbComputer() throws DAOException;
 }

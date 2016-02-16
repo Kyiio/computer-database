@@ -9,10 +9,11 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.excilys.dao.impl.ComputerDAOImpl;
-import com.excilys.exception.InvalidInputException;
+import com.excilys.exception.ValidationException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.impl.CompanyServiceImpl;
+import com.excilys.validator.InputValidator;
 
 public abstract class AbstractCommand {
 
@@ -172,7 +173,7 @@ public abstract class AbstractCommand {
 		    		InputValidator.isDate(tmpDate);
 		    		localDateTime = new Timestamp(new SimpleDateFormat(format).parse(tmpDate).getTime()).toLocalDateTime();
 		    		
-				} catch (ParseException | InvalidInputException e ) {
+				} catch (ParseException | ValidationException e ) {
 					dateOk = false;
 					System.out.println("Wrong format entered, please retry :");
 					tmpDate = scanner.nextLine();
