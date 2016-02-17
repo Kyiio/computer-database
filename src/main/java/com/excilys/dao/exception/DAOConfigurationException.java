@@ -1,13 +1,14 @@
-package com.excilys.exception;
+package com.excilys.dao.exception;
 
-@SuppressWarnings("serial")
 /**
  * Exception that can be thrown by the ConnectionFactory when trying to connect to the database
  * @author Herbaut Bastien
  */
 public class DAOConfigurationException extends RuntimeException {
 
-    public DAOConfigurationException( String message ) {
+	private static final long serialVersionUID = 8499700685519784433L;
+
+	public DAOConfigurationException( String message ) {
         super( message );
     }
 

@@ -3,7 +3,7 @@ package com.excilys.dao;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import com.excilys.exception.DAOException;
+import com.excilys.dao.exception.DAOException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
@@ -71,13 +71,12 @@ public interface ComputerDAO{
 	
 	/**
 	 * This method retrieves {@code offset} from the database starting at the index {@code pageNumber * offset} 
-	 * 
-	 * @param offset
-	 * @param pageNumber
-	 * @return
+	 * @param offset 
+	 * @param pageNumber 
+	 * @return 
 	 * @throws DAOException
 	 */
 	public ArrayList<Computer> getXComputersStartingAtIndexY(int offset, int pageNumber) throws DAOException;
 	
-	public int getNbComputer() throws DAOException;
+	public int getCount() throws DAOException;
 }

@@ -1,9 +1,15 @@
 package com.excilys.exception;
 
-@SuppressWarnings("serial")
+/**
+ * Exception that can be thrown by the DTO service or the service (DAO)
+ * 
+ * @author B. Herbaut 
+ */
 public class ValidationException extends RuntimeException {
 
-    public ValidationException(String message) {
+	private static final long serialVersionUID = -2469410843259970165L;
+
+	public ValidationException(String message) {
         super(message);
     }
 

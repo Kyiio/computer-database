@@ -84,7 +84,7 @@ public class PaginationTag extends SimpleTagSupport {
 		if(numPage == this.pageNumber){
 			result = "#";
 		}else{
-			result = "dashboard?pageNumber=" + numPage + "&computerPerPage=" + computerPerPage ;
+			result = "dashboard?page-number=" + numPage + "&computer-per-page=" + computerPerPage ;
 		}
 		
 		return result;

@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import com.excilys.dao.ComputerDAO;
 import com.excilys.dao.ConnectionCloser;
 import com.excilys.dao.ConnectionFactory;
-import com.excilys.exception.DAOException;
-import com.excilys.mapper.DAOMapper;
+import com.excilys.dao.exception.DAOException;
+import com.excilys.dao.mapper.ComputerDAOMapper;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
@@ -209,7 +209,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 			results = preparedStatement.executeQuery();
 
-			ArrayList<Computer> computerList = DAOMapper.getComputerList(results);
+			ArrayList<Computer> computerList = ComputerDAOMapper.getComputerList(results);
 
 			if (computerList.size() > 0) {
 				computerResult = computerList.get(0);
@@ -241,7 +241,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 			results = preparedStatement.executeQuery();
 
-			computerResult = DAOMapper.getComputerList(results);
+			computerResult = ComputerDAOMapper.getComputerList(results);
 
 		} catch (SQLException e) {
 			throw new DAOException("Error while trying to retrieve computer with name :" + name, e);
@@ -266,7 +266,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			preparedStatement = connection.prepareStatement(LIST_ALL_QUERY);
 			results = preparedStatement.executeQuery();
 
-			computerResult = DAOMapper.getComputerList(results);
+			computerResult = ComputerDAOMapper.getComputerList(results);
 
 		} catch (SQLException e) {
 			throw new DAOException("Error while trying to retrieve the computer list", e);
@@ -294,7 +294,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			
 			results = preparedStatement.executeQuery();
 
-			computerResult = DAOMapper.getComputerList(results);
+			computerResult = ComputerDAOMapper.getComputerList(results);
 
 		} catch (SQLException e) {
 			throw new DAOException("Error while trying to retrieve the computer page with offset " + offset + " and start index " + pageNumber, e);
@@ -307,7 +307,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public int getNbComputer() throws DAOException {
+	public int getCount() throws DAOException {
 
 		ResultSet results = null;
 		Connection connection = null;

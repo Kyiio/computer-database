@@ -2,7 +2,7 @@ package com.excilys.command;
 
 import java.util.Scanner;
 
-import com.excilys.exception.ServiceException;
+import com.excilys.command.exception.CommandException;
 import com.excilys.model.Computer;
 import com.excilys.service.impl.ComputerServiceImpl;
 
@@ -39,7 +39,7 @@ public class UpdateComputerCommand extends AbstractCommand{
 	    try {
 	    	ComputerServiceImpl.getInstance().updateComputer(oldComputer);
 	    	System.out.println("Update succeeded!");
-		} catch (ServiceException se) {
+		} catch (CommandException se) {
 			System.out.println("Inconsistant data entered (Issue with the name or with the dates)\nUpdate aborted!");
 		}	    	    
 	}

@@ -1,14 +1,12 @@
 package com.excilys.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.dto.ComputerDTO;
 import com.excilys.model.Page;
 import com.excilys.service.impl.ComputerDTOServiceImpl;
 
@@ -30,27 +28,26 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String pageNumberParameter = request.getParameter("pageNumber");
-		String offsetParameter = request.getParameter("computerPerPage");
+		String pageNumberParameter = request.getParameter("page-number");
+		String offsetParameter = request.getParameter("computer-per-page");
 	
-		Page page = Page.getInstance();
+		Page page = new Page();
 				
 		int parsedInt;
 	
 		if(offsetParameter != null){
 			parsedInt = Integer.parseInt(offsetParameter);
-			Page.setComputerPerPage(parsedInt);
+			page.setComputerPerPage(parsedInt);
 		}
 		
 		if(pageNumberParameter != null){
 			parsedInt = Integer.parseInt(pageNumberParameter);
 			page.setPageNumber(parsedInt);
 		}
+
+		ComputerDTOServiceImpl.getInstance().setPageContent(page);
 		
-		ArrayList<ComputerDTO> computerDTOList = page.getContent();
-		
-		request.setAttribute("computerList", computerDTOList);
-		request.setAttribute("totalComputerFound", ComputerDTOServiceImpl.getInstance().getNbComputer());
+		request.setAttribute("totalComputerFound", ComputerDTOServiceImpl.getInstance().getCount());
 		request.setAttribute("page", page);
 		request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
 	}

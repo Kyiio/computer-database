@@ -35,7 +35,7 @@ public class ComputerPerPageTag extends SimpleTagSupport {
 				out.print("href=\"#\" class=\"btn disabled\"");
 			}
 			else{
-				out.print("href=\"dashboard?computerPerPage="+ currentPageNumber + "\" class=\"btn btn-default\"");
+				out.print("href=\"dashboard?computer-per-page="+ currentPageNumber + "\" class=\"btn btn-default\"");
 			}
 			
 			out.print(">"+currentPageNumber+"</a>");

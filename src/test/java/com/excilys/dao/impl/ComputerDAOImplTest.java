@@ -21,7 +21,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import com.excilys.dao.ComputerDAO;
 import com.excilys.dao.ConnectionFactory;
 import com.excilys.dao.DBTestConnector;
-import com.excilys.exception.DAOException;
+import com.excilys.dao.exception.DAOException;
 import com.excilys.model.Computer;
 
 @RunWith(PowerMockRunner.class)

@@ -87,17 +87,20 @@ function checkDate(dateStr, inputDate, errorDiv){
 
 function checkDateConsistency(){
 	
-	console.log("checkDateConsistency");
-	
 	var introducedStr = $.trim($('#introduced').val());
-	var discontinuedStr = $.trim($('#discontionued').val());
+	var discontinuedStr = $.trim($('#discontinued').val());
 	
 	if(discontinuedStr === '' && introducedStr === ''){
+		$('#introducedErr').removeClass("alert alert-danger");
+		$('#introducedErr').text("");
 		return true;
-	}else if(introducedStr === ''){
+	}else if(introducedStr !== '' && discontinuedStr === ''){
+		$('#introducedErr').removeClass("alert alert-danger");
+		$('#introducedErr').text("");
 		return true;
 	}
-	else if(discontinuedStr !== ''){	
+	else if(discontinuedStr !== '' && introducedStr === ''){
+		$('#introducedErr').addClass("alert alert-danger");
 		$('#introducedErr').text("The introduced value must be specified if you put the discontinued one");
 		return false;
 	}
@@ -108,9 +111,16 @@ function checkDateConsistency(){
 	var introducedDate = new Date(parseInt(introducedData[0]), parseInt(introducedData[1])-1, parseInt(introducedData[2]));
 	var discontinuedDate = new Date(parseInt(discontinuedData[0]), parseInt(discontinuedData[1])-1, parseInt(discontinuedData[2]));
 	
-	console.log("introduced date : " + introducedDate);
-	console.log("discontinued date : " + discontinuedDate);
+	console.log("Date consistence : " + introducedDate.getTime() >= discontinuedDate.getTime());
 	
+	if(introducedDate.getTime() >= discontinuedDate.getTime()){
+		$('#introducedErr').addClass("alert alert-danger");
+		$('#introducedErr').text("The introduced value must be set before the discontinued one !");
+		return false;
+	}
+	
+	$('#introducedErr').removeClass("alert alert-danger");
+	$('#introducedErr').text("");
 	return true;
 	
 }
@@ -140,9 +150,9 @@ function updateSubmit(){
 	
 	var dateConsistence = false;
 	
-	/*if(introducedOk == true && discontinuedOk == true){
+	 if(introducedOk == true && discontinuedOk == true){
 		checkDateConsistency();
-	}*/
+	}
 	
 	if(nameOk == true && checkDateConsistency()){
 		$("#addComputerSubmit").attr('disabled',false);

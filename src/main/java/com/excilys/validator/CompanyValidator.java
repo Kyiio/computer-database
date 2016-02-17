@@ -12,7 +12,7 @@ public class CompanyValidator {
 	
 	public static void checkId(String idString){
 		if(idString == null || idString.length() == 0){
-			throw new ValidationException("The company id must be an int ! Given id is " + idString);
+			throw new ValidationException("The company id must be set ! Given id is " + idString);
 		}
 		
 		int id = 0;

@@ -82,8 +82,8 @@ public class ComputerServiceImpl implements ComputerService{
 	}
 
 	@Override
-	public int getNbComputer() {
-		return ComputerDAOImpl.getInstance().getNbComputer();
+	public int getCount() {
+		return ComputerDAOImpl.getInstance().getCount();
 	}
 
 }

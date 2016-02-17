@@ -2,7 +2,7 @@ package com.excilys.dao;
 
 import java.util.ArrayList;
 
-import com.excilys.exception.DAOException;
+import com.excilys.dao.exception.DAOException;
 import com.excilys.model.Company;
 
 /**

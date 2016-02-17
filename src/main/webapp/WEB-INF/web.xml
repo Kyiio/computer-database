@@ -28,11 +28,11 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>AddComputerServlet</servlet-name>
-		<url-pattern>/addComputer</url-pattern>
+		<url-pattern>/add-computer</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>EditComputerServlet</servlet-name>
-		<url-pattern>/editComputer</url-pattern>
+		<url-pattern>/edit-computer</url-pattern>
 	</servlet-mapping>
 	<error-page>
 		<exception-type>java.lang.Exception</exception-type>

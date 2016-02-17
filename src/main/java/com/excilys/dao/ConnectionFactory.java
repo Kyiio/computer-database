@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import com.excilys.exception.DAOConfigurationException;
+import com.excilys.dao.exception.DAOConfigurationException;
 
 
 /**

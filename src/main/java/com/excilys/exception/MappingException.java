@@ -1,13 +1,14 @@
 package com.excilys.exception;
 
-@SuppressWarnings("serial")
 /**
  * Exception that can be thrown by the mapping class when there is a mapping issue
- * @author Herbaut Bastien
+ * @author B. Herbaut
  */
 public class MappingException extends RuntimeException {
 
-    public MappingException(String message) {
+	private static final long serialVersionUID = -5441230150444670415L;
+
+	public MappingException(String message) {
         super(message);
     }
 

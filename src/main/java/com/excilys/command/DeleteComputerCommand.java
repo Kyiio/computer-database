@@ -2,8 +2,8 @@ package com.excilys.command;
 
 import java.util.Scanner;
 
-import com.excilys.exception.DAOException;
-import com.excilys.exception.ServiceException;
+import com.excilys.command.exception.CommandException;
+import com.excilys.dao.exception.DAOException;
 import com.excilys.model.Computer;
 import com.excilys.service.impl.ComputerServiceImpl;
 
@@ -23,7 +23,7 @@ public class DeleteComputerCommand extends AbstractCommand{
 			System.out.println("Delete complete !");
 		} catch (DAOException e) {
 			System.out.println("No matching found for the given id, delete aborted !");
-		} catch (ServiceException e){
+		} catch (CommandException e){
 			System.out.println("The id must be positive !");
 		}
 		

@@ -1,9 +1,10 @@
 package com.excilys.exception;
 
-@SuppressWarnings("serial")
 public class PageException extends RuntimeException {
 
-    public PageException(String message) {
+	private static final long serialVersionUID = -4843013553385554872L;
+
+	public PageException(String message) {
         super(message);
     }
 

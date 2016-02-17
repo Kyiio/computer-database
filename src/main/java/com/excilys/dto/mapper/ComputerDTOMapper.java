@@ -1,4 +1,4 @@
-package com.excilys.mapper;
+package com.excilys.dto.mapper;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -7,38 +7,26 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import com.excilys.dao.impl.CompanyDAOImpl;
-import com.excilys.dto.CompanyDTO;
 import com.excilys.dto.ComputerDTO;
 import com.excilys.exception.MappingException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
-public interface DTOMapper {
+public interface ComputerDTOMapper {
 
-	public static ArrayList<CompanyDTO> getCompanyDTOListFromCompanyList(ArrayList<Company> companyList) {
-
-		ArrayList<CompanyDTO> companyDTOList = new ArrayList<>();
-
-		for (Company company : companyList) {
-			companyDTOList.add(new CompanyDTO(company));
-		}
-
-		return companyDTOList;
-	}
-
-	public static ArrayList<ComputerDTO> getComputerDTOListFromComputerList(ArrayList<Computer> computerList) {
+	public static ArrayList<ComputerDTO> getComputerDTOList(ArrayList<Computer> computerList) {
 
 		ArrayList<ComputerDTO> computerDTOList = new ArrayList<>();
 
 		for (Computer computer : computerList) {
-			computerDTOList.add(getComputerDTOFromComputer(computer));
+			computerDTOList.add(getComputerDTO(computer));
 		}
 
 		return computerDTOList;
 	}
-
-	public static ComputerDTO getComputerDTOFromComputer(Computer computer){
 	
+	public static ComputerDTO getComputerDTO(Computer computer){
+		
 		String introducedString = "";
 		String discontinuedString = "";
 		String companyName = "";
@@ -65,11 +53,11 @@ public interface DTOMapper {
 		return new ComputerDTO(computer.getId(), computer.getName(), introducedString, discontinuedString, companyId, companyName);	
 	}
 	
-	public static Computer getComputerFromDTO(ComputerDTO computerDTO){
-		return getComputerFromDTO(computerDTO.getComputerId(), computerDTO.getComputerName(), computerDTO.getIntroducedDate(), computerDTO.getDiscontinuedDate(), computerDTO.getCompanyId());
+	public static Computer getComputer(ComputerDTO computerDTO){
+		return getComputer(computerDTO.getComputerId(), computerDTO.getComputerName(), computerDTO.getIntroducedDate(), computerDTO.getDiscontinuedDate(), computerDTO.getCompanyId());
 	}
 	
-	public static Computer getComputerFromDTO(int computerId, String computerName, String introduced, String discontinued, int companyId) {
+	public static Computer getComputer(int computerId, String computerName, String introduced, String discontinued, int companyId) {
 		
 		String format = "yyyy-MM-dd";
 		LocalDateTime introducedDate = null;
@@ -99,4 +87,5 @@ public interface DTOMapper {
 		
 		return new Computer(computerId, company, computerName, discontinuedDate, introducedDate);
 	}
+	
 }

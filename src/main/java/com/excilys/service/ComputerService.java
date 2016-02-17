@@ -75,5 +75,5 @@ public interface ComputerService {
 	 * @return The number of computer in the database
 	 * @see ComputerDAO
 	 */
-	public int getNbComputer();
+	public int getCount();
 }

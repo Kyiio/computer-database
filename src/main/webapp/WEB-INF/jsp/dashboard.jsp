@@ -17,7 +17,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard?pageNumber=1"> Application - Computer Database
+			<a class="navbar-brand" href="dashboard?page-number=1"> Application - Computer Database
 			</a>
 		</div>
 	</header>
@@ -36,8 +36,8 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
+					<a class="btn btn-success" id="addComputer" href="add-computer">Add
+						Computer</a> <a class="btn btn-default" id="editComputer" href="edit-computer"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
@@ -72,11 +72,11 @@
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-					<c:forEach items="${computerList}" var="computer">
+					<c:forEach items="${page.content}" var="computer">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="editComputer" onclick=""><c:out
+							<td><a href="edit-computer" onclick=""><c:out
 										value="${computer.computerName}" /></a></td>
 							<td>${computer.introducedDate}</td>
 							<td>${computer.discontinuedDate}</td>

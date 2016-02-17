@@ -1,14 +1,14 @@
-package com.excilys.exception;
+package com.excilys.dao.exception;
 
-
-@SuppressWarnings("serial")
 /**
  * Exception that can be thrown by the DAO classes when there is an issue with a query
  * @author Herbaut Bastien
  */
 public class DAOException extends RuntimeException {
 
-    public DAOException(String message) {
+	private static final long serialVersionUID = 265352034167176911L;
+
+	public DAOException(String message) {
         super(message);
     }
 
