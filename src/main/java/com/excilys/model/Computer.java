@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 /**
  * This class represents a computer from the database. A computer is identified by its id and must possess a name.
  * It can also possess other information like the company that owns it and the introduced and discontinued date
- * @author Bastien Herbaut
+ * @author B. Herbaut
  */
 public class Computer {
 

@@ -12,8 +12,23 @@ import com.excilys.exception.MappingException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
+/**
+ * Interface that offers methods to map from a Computer to a ComputerDTO and
+ * from a ComputerDTO to a Computer.
+ * 
+ * @author B. Herbaut
+ * @see Computer, ComputerDTO
+ */
 public interface ComputerDTOMapper {
 
+	/**
+	 * Method that maps an ArrayList of Computer into an ArrayList of
+	 * ComputerDTO.
+	 * 
+	 * @param computerList
+	 *            The Computer ArrayList that will be mapped
+	 * @return The ComputerDTO ArrayList
+	 */
 	public static ArrayList<ComputerDTO> getComputerDTOList(ArrayList<Computer> computerList) {
 
 		ArrayList<ComputerDTO> computerDTOList = new ArrayList<>();
@@ -24,9 +39,16 @@ public interface ComputerDTOMapper {
 
 		return computerDTOList;
 	}
-	
-	public static ComputerDTO getComputerDTO(Computer computer){
-		
+
+	/**
+	 * Method that maps a Computer into a ComputerDTO.
+	 * 
+	 * @param computer
+	 *            The computer that will be mapped.
+	 * @return The mapped ComputerDTO.
+	 */
+	public static ComputerDTO getComputerDTO(Computer computer) {
+
 		String introducedString = "";
 		String discontinuedString = "";
 		String companyName = "";
@@ -50,42 +72,64 @@ public interface ComputerDTOMapper {
 			companyId = company.getId();
 		}
 
-		return new ComputerDTO(computer.getId(), computer.getName(), introducedString, discontinuedString, companyId, companyName);	
+		return new ComputerDTO(computer.getId(), computer.getName(), introducedString, discontinuedString, companyId,
+				companyName);
 	}
-	
-	public static Computer getComputer(ComputerDTO computerDTO){
-		return getComputer(computerDTO.getComputerId(), computerDTO.getComputerName(), computerDTO.getIntroducedDate(), computerDTO.getDiscontinuedDate(), computerDTO.getCompanyId());
+
+	/**
+	 * Method that maps a ComputerDTO into a Computer.
+	 * 
+	 * @param computerDTO
+	 *            The ComputerDTO that will be mapped.
+	 * @return The mapped Computer.
+	 */
+	public static Computer getComputer(ComputerDTO computerDTO) {
+		return getComputer(computerDTO.getComputerId(), computerDTO.getComputerName(), computerDTO.getIntroducedDate(),
+				computerDTO.getDiscontinuedDate(), computerDTO.getCompanyId());
 	}
-	
-	public static Computer getComputer(int computerId, String computerName, String introduced, String discontinued, int companyId) {
-		
+
+	/**
+	 * Method that maps the content of a ComputerDTO into a Computer.
+	 * 
+	 * @param computerId
+	 * @param computerName
+	 * @param introduced
+	 * @param discontinued
+	 * @param companyId
+	 * @return The mapped Computer.
+	 */
+	public static Computer getComputer(int computerId, String computerName, String introduced, String discontinued,
+			int companyId) {
+
 		String format = "yyyy-MM-dd";
 		LocalDateTime introducedDate = null;
 		LocalDateTime discontinuedDate = null;
-		
-		if(introduced != null && introduced.length() > 0){
+
+		if (introduced != null && introduced.length() > 0) {
 			try {
-				introducedDate = new Timestamp(new SimpleDateFormat(format).parse(introduced).getTime()).toLocalDateTime();
+				introducedDate = new Timestamp(new SimpleDateFormat(format).parse(introduced).getTime())
+						.toLocalDateTime();
 			} catch (ParseException e) {
 				throw new MappingException("The given introduced date isn't matching the format : " + introduced);
 			}
 		}
-		
-		if(discontinued != null && discontinued.length() > 0){
+
+		if (discontinued != null && discontinued.length() > 0) {
 			try {
-				discontinuedDate = new Timestamp(new SimpleDateFormat(format).parse(discontinued).getTime()).toLocalDateTime();
+				discontinuedDate = new Timestamp(new SimpleDateFormat(format).parse(discontinued).getTime())
+						.toLocalDateTime();
 			} catch (ParseException e) {
 				throw new MappingException("The given discontinued date isn't matching the format : " + discontinued);
 			}
 		}
-		
+
 		Company company = null;
-		
-		if(companyId > 0){
+
+		if (companyId > 0) {
 			company = CompanyDAOImpl.getInstance().getById(companyId);
 		}
-		
+
 		return new Computer(computerId, company, computerName, discontinuedDate, introducedDate);
 	}
-	
+
 }

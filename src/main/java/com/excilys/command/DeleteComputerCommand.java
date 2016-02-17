@@ -7,6 +7,12 @@ import com.excilys.dao.exception.DAOException;
 import com.excilys.model.Computer;
 import com.excilys.service.impl.ComputerServiceImpl;
 
+/**
+ * Class that extends the AbstractCommand class and that is used in the CLI in
+ * order to handle the deletion of a computer in the database by the user.
+ * 
+ * @author B. Herbaut
+ */
 public class DeleteComputerCommand extends AbstractCommand{
 
 	public DeleteComputerCommand(Scanner scanner) {

@@ -6,6 +6,12 @@ import com.excilys.command.exception.CommandException;
 import com.excilys.model.Computer;
 import com.excilys.service.impl.ComputerServiceImpl;
 
+/**
+ * Class that extends the AbstractCommand class and that is used in the CLI in
+ * order to handle the insertion of a computer in the database by the user.
+ * 
+ * @author B. Herbaut
+ */
 public class InsertComputerCommand extends AbstractCommand{
 
 	public InsertComputerCommand(Scanner scanner) {

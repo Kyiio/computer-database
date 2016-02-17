@@ -2,7 +2,7 @@ package com.excilys.model;
 
 /**
  * This class represents a company from the database, a company is identified by its id and possess a name
- * @author Bastien Herbaut
+ * @author B. Herbaut
  */
 public class Company {
 

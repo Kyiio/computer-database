@@ -1,5 +1,10 @@
 package com.excilys.dto;
 
+/**
+ * DTO representation of the model class Computer
+ * @author B. Herbaut
+ * @see com.excilys.model.Computer
+ */
 public class ComputerDTO {
 
 	private int computerId;

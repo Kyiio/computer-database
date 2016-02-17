@@ -6,11 +6,11 @@ import com.excilys.dto.CompanyDTO;
 import com.excilys.model.Company;
 
 /**
+ * Interface that offers methods to map from a Company to a CompanyDTO and
+ * from a CompanyDTO to a Company.
  * 
- * Class that offer method to map a company into companyDTO
- * 
- * @author B. Herbaut 
- *
+ * @author B. Herbaut
+ * @see Company, CompanyDTO
  */
 public interface CompanyDTOMapper {
 

@@ -1,5 +1,10 @@
 package com.excilys.command;
 
+/**
+ * 
+ * @author B. Herbaut
+ *
+ */
 public class CommandInvoker {
 
 	AbstractCommand command;

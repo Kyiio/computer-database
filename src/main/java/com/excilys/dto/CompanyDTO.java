@@ -1,5 +1,10 @@
 package com.excilys.dto;
 
+/**
+ * DTO representation of the model class Company 
+ * @author B. Herbaut
+ * @see com.excilys.model.Company
+ */
 public class CompanyDTO {
 
 	private int id;

@@ -17,9 +17,10 @@ import com.excilys.model.Company;
 public interface CompanyDAOMapper {
 
 	/**
-	 * This function maps the results set into an ArrayList of Company
+	 * This function maps the resultSet into an ArrayList of Company
 	 * 
-	 * @param resultSet The results we want to map
+	 * @param resultSet
+	 *            The resultSet we want to map
 	 * @return The mapped company list
 	 */
 	public static ArrayList<Company> getCompanyList(ResultSet resultSet) {

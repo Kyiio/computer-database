@@ -20,10 +20,10 @@ import com.excilys.model.Computer;
 public interface ComputerDAOMapper {
 
 	/**
-	 * This method maps the results set into an ArrayList of Computer
+	 * This method maps the resultSet into an ArrayList of Computer
 	 * 
 	 * @param resultSet
-	 *            The results we want to map
+	 *            The resultSet we want to map
 	 * @return The mapped computer list
 	 */
 	public static ArrayList<Computer> getComputerList(ResultSet resultSet) {
