@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import com.excilys.dao.ComputerDAO;
-import com.excilys.dto.ComputerDTO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 

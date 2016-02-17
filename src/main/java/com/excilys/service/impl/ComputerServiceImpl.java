@@ -4,11 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import com.excilys.dao.impl.ComputerDAOImpl;
-import com.excilys.dto.ComputerDTO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.ComputerService;
-import com.excilys.servlets.DashboardServlet;
 import com.excilys.validator.ComputerValidator;
 
 public class ComputerServiceImpl implements ComputerService{

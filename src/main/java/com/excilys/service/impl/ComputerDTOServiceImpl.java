@@ -2,7 +2,6 @@ package com.excilys.service.impl;
 
 import java.util.ArrayList;
 
-import com.excilys.dao.impl.ComputerDAOImpl;
 import com.excilys.dto.ComputerDTO;
 import com.excilys.mapper.DTOMapper;
 import com.excilys.model.Computer;

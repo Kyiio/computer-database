@@ -8,15 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.dao.CompanyDAO;
-import com.excilys.dao.impl.CompanyDAOImpl;
 import com.excilys.dto.CompanyDTO;
 import com.excilys.dto.ComputerDTO;
-import com.excilys.mapper.DTOMapper;
-import com.excilys.model.Company;
 import com.excilys.service.impl.CompanyDTOServiceImpl;
 import com.excilys.service.impl.ComputerDTOServiceImpl;
-import com.excilys.service.impl.ComputerServiceImpl;
 
 /**
  * Servlet implementation class AddComputerServlet

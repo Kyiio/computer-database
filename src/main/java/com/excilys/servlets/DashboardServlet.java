@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.dto.ComputerDTO;
-import com.excilys.mapper.DTOMapper;
 import com.excilys.model.Page;
 import com.excilys.service.impl.ComputerDTOServiceImpl;
 

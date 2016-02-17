@@ -2,9 +2,7 @@ package com.excilys.service;
 
 import java.util.ArrayList;
 
-import com.excilys.dao.ComputerDAO;
 import com.excilys.dto.ComputerDTO;
-import com.excilys.model.Computer;
 
 
 /**
