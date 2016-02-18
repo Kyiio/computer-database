@@ -6,14 +6,10 @@
 <c:forEach items="10,50,100" var="computerPerPageValue">
 	<c:choose>
 		<c:when test="${computerPerPageValue == pageSize}">
-			<li class="active btn btn-default">
-				<links:link pageNumber="1" pageSize="${pageSize}" target="#" text="${computerPerPageValue}"></links:link>
-			</li>
+			<links:link pageNumber="1" pageSize="${pageSize}" target="#" text="${computerPerPageValue}" cssClass="btn btn-default disabled"></links:link>
 		</c:when>
 		<c:otherwise>
-			<li class="btn btn-default">
-				<links:link pageNumber="1" pageSize="${computerPerPageValue}" target="dashboard" text="${computerPerPageValue}"></links:link>
-			</li>
+			<links:link pageNumber="1" pageSize="${computerPerPageValue}" target="dashboard" text="${computerPerPageValue}" cssClass="btn btn-default"></links:link>
 		</c:otherwise>
 	</c:choose>
 </c:forEach>

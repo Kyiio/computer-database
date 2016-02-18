@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="pagination" tagdir="/WEB-INF/tags"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +16,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard?page-number=1"> Application - Computer Database </a>
+            <pagination:link pageNumber="1" pageSize="10" target="dashboard" text="Application - Computer Database" cssClass="navbar-brand"></pagination:link>
         </div>
     </header>
 

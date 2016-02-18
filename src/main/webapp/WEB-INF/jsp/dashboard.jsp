@@ -17,14 +17,13 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard?page-number=1">
-				Application - Computer Database </a>
+			<pagination:link pageNumber="1" pageSize="${page.pageSize}" target="dashboard" text="Application - Computer Database" cssClass="navbar-brand"></pagination:link>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${totalComputerFound} Computersfound</h1>
+			<h1 id="homeTitle">${totalComputerFound} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -37,8 +36,8 @@
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer" href="add-computer">Add
-						Computer</a> <a class="btn btn-default" id="editComputer"
-						href="edit-computer" onclick="$.fn.toggleEditMode();">Edit</a>
+						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
+						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
 		</div>
