@@ -3,7 +3,7 @@ package com.excilys.service;
 import java.util.ArrayList;
 
 import com.excilys.dto.ComputerDTO;
-import com.excilys.model.Page;
+import com.excilys.model.QueryParameters;
 
 /**
  * DTO service that allows access to the DAO service and that validates the data
@@ -74,12 +74,13 @@ public interface ComputerDTOService {
 	public ArrayList<ComputerDTO> listComputers();
 
 	/**
-	 * Method that calls the getXComputersStartingAtIndexY from ComputerService.
+	 * Method that calls the selectWithParameters from ComputerService.
 	 * 
-	 * @param page
+	 * @param queryParameters
+	 * @return The computerDTO list that match the criterias
 	 * @see ComputerDTO, ComputerService
 	 */
-	public void setPageContent(Page page);
+	public ArrayList<ComputerDTO> selectWithParameters(QueryParameters queryParameters);
 
 	/**
 	 * Method that calls the getNbComputer from the ComputerService.

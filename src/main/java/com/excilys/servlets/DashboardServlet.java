@@ -1,14 +1,18 @@
 package com.excilys.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.model.Page;
+import com.excilys.dto.ComputerDTO;
+import com.excilys.dto.PageDTO;
+import com.excilys.model.QueryParameters;
 import com.excilys.service.impl.ComputerDTOServiceImpl;
+import com.excilys.servlets.util.PageCreator;
 
 /**
  * Servlet implementation class DashboardServlet.
@@ -38,25 +42,32 @@ public class DashboardServlet extends HttpServlet {
 		// We first retrieve the page parameters
 
 		String pageNumberParameter = request.getParameter("page-number");
-		String offsetParameter = request.getParameter("computer-per-page");
+		String computerPerPageParameter = request.getParameter("computer-per-page");
 
-		// If they were in the URL we creata a page object if this informations
-		Page page = new Page();
+		// If they were in the URL we create a page object if this informations
+
+		QueryParameters queryParameters = new QueryParameters();
 
 		int parsedInt;
 
-		if (offsetParameter != null) {
-			parsedInt = Integer.parseInt(offsetParameter);
-			page.setComputerPerPage(parsedInt);
+		if (computerPerPageParameter != null) {
+			parsedInt = Integer.parseInt(computerPerPageParameter);
+			queryParameters.setPageSize(parsedInt);
 		}
 
 		if (pageNumberParameter != null) {
 			parsedInt = Integer.parseInt(pageNumberParameter);
-			page.setPageNumber(parsedInt);
+			queryParameters.setPageNumber(parsedInt);
 		}
 
-		// And we retrieve the needed computers from the database
-		ComputerDTOServiceImpl.getInstance().setPageContent(page);
+		// We retrieve the needed computers from the database
+		ArrayList<ComputerDTO> computerDTOList = ComputerDTOServiceImpl.getInstance()
+				.selectWithParameters(queryParameters);
+		
+		// We retrieve the number of computer in the database
+		int computerCount = ComputerDTOServiceImpl.getInstance().getCount();
+
+		PageDTO page = PageCreator.buildPage(queryParameters, computerDTOList, computerCount);
 
 		// Finally we send all this information to the JSP page
 		request.setAttribute("totalComputerFound", ComputerDTOServiceImpl.getInstance().getCount());

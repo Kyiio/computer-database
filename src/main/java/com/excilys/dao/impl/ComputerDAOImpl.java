@@ -16,6 +16,7 @@ import com.excilys.dao.exception.DAOException;
 import com.excilys.dao.mapper.ComputerDAOMapper;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+import com.excilys.model.QueryParameters;
 
 public class ComputerDAOImpl implements ComputerDAO {
 
@@ -24,10 +25,11 @@ public class ComputerDAOImpl implements ComputerDAO {
 	private final String DELETE_QUERY = "DELETE FROM computer WHERE ID=?";
 
 	private final String LIST_ALL_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID";
-	private final String GET_PAGE_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID LIMIT ? OFFSET ?";
 	private final String GET_BY_ID_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID WHERE computer.ID = ?";
-	private final String GET_BY_NAME_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID WHERE computer.AME = ?";
+	private final String GET_BY_NAME_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID WHERE computer.NAME = ?";
 	private final String GET_NB_COMPUTER = "SELECT COUNT(*) FROM computer";
+
+	private final String GET_PAGE_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID LIMIT ? OFFSET ?";
 
 	private static ComputerDAO INSTANCE;
 
@@ -41,18 +43,19 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	private ComputerDAOImpl() {
 	}
-	
+
 	@Override
-	public int insertComputer(Company company, LocalDateTime introduced, LocalDateTime discontinued, String name) throws DAOException{
+	public int insertComputer(Company company, LocalDateTime introduced, LocalDateTime discontinued, String name)
+			throws DAOException {
 
 		int newId = -1;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		if(name == null || name.length() <= 0){
+		if (name == null || name.length() <= 0) {
 			throw new DAOException("Then name of the computer must be set !");
 		}
-		
+
 		try {
 			connection = ConnectionFactory.getInstance().getConnection();
 			connection.setAutoCommit(false);
@@ -105,15 +108,14 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public void updateComputer(Computer computer) throws DAOException{
+	public void updateComputer(Computer computer) throws DAOException {
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
-		
-		if(computer == null){
+
+		if (computer == null) {
 			throw new DAOException("The given computer is null !");
 		}
-		
 
 		try {
 			connection = ConnectionFactory.getInstance().getConnection();
@@ -146,7 +148,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 			connection.commit();
 
 		} catch (SQLException e) {
-
 			try {
 				connection.rollback();
 			} catch (SQLException e1) {
@@ -221,7 +222,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 		} finally {
 			ConnectionCloser.silentClose(results, preparedStatement, connection);
 		}
-
 		return computerResult;
 	}
 
@@ -279,7 +279,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public ArrayList<Computer> getXComputersStartingAtIndexY(int offset, int pageNumber) throws DAOException {
+	public ArrayList<Computer> selectWithParameters(QueryParameters queryParameters) throws DAOException {
 
 		ResultSet results = null;
 		ArrayList<Computer> computerResult = null;
@@ -289,15 +289,18 @@ public class ComputerDAOImpl implements ComputerDAO {
 		try {
 			connection = ConnectionFactory.getInstance().getConnection();
 			preparedStatement = connection.prepareStatement(GET_PAGE_QUERY);
-			preparedStatement.setInt(1, offset);
-			preparedStatement.setInt(2, pageNumber*offset);
-			
+			preparedStatement.setInt(1, queryParameters.getPageSize());
+			preparedStatement.setInt(2, queryParameters.getLimit());
+
 			results = preparedStatement.executeQuery();
 
 			computerResult = ComputerDAOMapper.getComputerList(results);
 
 		} catch (SQLException e) {
-			throw new DAOException("Error while trying to retrieve the computer page with offset " + offset + " and start index " + pageNumber, e);
+			throw new DAOException(
+					"Error while trying to retrieve the computer page with offset " + queryParameters.getLimit()
+							+ " and start index " + queryParameters.getLimit() + queryParameters.getPageSize(),
+					e);
 
 		} finally {
 			ConnectionCloser.silentClose(results, preparedStatement, connection);
@@ -314,7 +317,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		PreparedStatement preparedStatement = null;
 
 		int nbComputer = 0;
-		
+
 		try {
 			connection = ConnectionFactory.getInstance().getConnection();
 
@@ -335,5 +338,5 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 		return nbComputer;
 	}
-	
+
 }

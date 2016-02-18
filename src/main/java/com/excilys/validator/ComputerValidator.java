@@ -119,31 +119,4 @@ public interface ComputerValidator {
 					+ introducedDate + " discontinued: " + discontinuedDate);
 		}
 	}
-
-	/**
-	 * Method that check if the given offset is positive.
-	 * 
-	 * If not it throws a ValidationException
-	 * 
-	 * @param offset
-	 */
-	public static void checkOffset(int offset) {
-		if (offset <= 0) {
-			throw new ValidationException("Negative offset: " + offset + " !");
-		}
-	}
-
-	/**
-	 * Method that check if the pageNumber is positive or 0.
-	 * 
-	 * If not it throws a ValidationException
-	 * 
-	 * @param pageNumber
-	 */
-	public static void checkPageNumber(int pageNumber) {
-		if (pageNumber < 0) {
-			throw new ValidationException(
-					"Page number can't be negative nor equals to 0 : page number : " + pageNumber);
-		}
-	}
 }

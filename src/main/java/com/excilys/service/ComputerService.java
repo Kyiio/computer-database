@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.excilys.dao.ComputerDAO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+import com.excilys.model.QueryParameters;
 
 /**
  * DAO Service that allows access to the database.
@@ -75,15 +76,14 @@ public interface ComputerService {
 	public ArrayList<Computer> listComputers();
 
 	/**
-	 * Method that calls the getXComputersStartingAtIndexY from Computer DAO
+	 * Method that calls the selectWithParameters from Computer DAO
+	 * @param queryParameters
 	 * 
-	 * @param offset
-	 * @param pageNumber
 	 * @return The list of company from the index pageNumber*offset to
 	 *         pageNumber*offset + offset
 	 * @see ComputerDAO
 	 */
-	public ArrayList<Computer> getXComputersStartingAtIndexY(int offset, int pageNumber);
+	public ArrayList<Computer> selectWithParameters(QueryParameters queryParameters);
 
 	/**
 	 * Method that calls the getNbComputer from the ComputerDAO

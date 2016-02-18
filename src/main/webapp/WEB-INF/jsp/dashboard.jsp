@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="/WEB-INF/paginationTagLib.tld" prefix="pagination"%>
+<%@ taglib prefix="pagination" tagdir="/WEB-INF/tags"%>
 <%@ page isELIgnored="false"%>
 <!DOCTYPE html>
 <html>
@@ -17,14 +17,14 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard?page-number=1"> Application - Computer Database
-			</a>
+			<a class="navbar-brand" href="dashboard?page-number=1">
+				Application - Computer Database </a>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${totalComputerFound} Computers found</h1>
+			<h1 id="homeTitle">${totalComputerFound} Computersfound</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -37,8 +37,8 @@
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer" href="add-computer">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="edit-computer"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+						Computer</a> <a class="btn btn-default" id="editComputer"
+						href="edit-computer" onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
 		</div>
@@ -89,14 +89,19 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-		<div class="container text-center" style="display:inline-block;"> <!-- margin-left: 20em;-->
+		<div class="container text-center" style="display: inline-block;">
+			<!-- margin-left: 20em;-->
 			<ul class="pagination">
-				<pagination:Page pageNumber="${page.pageNumber}" maxPageNumber="${page.maxPageNumber}" computerPerPage="${page.computerPerPage}"/>
+				<pagination:pagination pageSize="${page.pageSize}"
+					pageNumber="${page.pageNumber}"
+					maxPageNumber="${page.maxPageNumber}"></pagination:pagination>
 			</ul>
 		</div>
 
-		<div class="btn-group btn-group-sm pull-right" style="display:inline-block;" role="group">
-			<pagination:ComputerPerPage computerPerPage="${page.computerPerPage}"></pagination:ComputerPerPage>
+		<div class="btn-group btn-group-sm pull-right"
+			style="display: inline-block;" role="group">
+			<pagination:perPage pageSize="${page.pageSize}"></pagination:perPage>
+			
 		</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>

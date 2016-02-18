@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import com.excilys.dto.ComputerDTO;
 import com.excilys.dto.mapper.ComputerDTOMapper;
 import com.excilys.model.Computer;
-import com.excilys.model.Page;
+import com.excilys.model.QueryParameters;
 import com.excilys.service.ComputerDTOService;
 import com.excilys.validator.ComputerValidator;
+import com.excilys.validator.QueryParametersValidator;
 
 public class ComputerDTOServiceImpl implements ComputerDTOService {
 
@@ -82,17 +83,13 @@ public class ComputerDTOServiceImpl implements ComputerDTOService {
 	}
 
 	@Override
-	public void setPageContent(Page page) {
+	public ArrayList<ComputerDTO> selectWithParameters(QueryParameters queryParameters) {
 
-		int offset = page.getComputerPerPage();
-		int pageNumber = page.getPageNumber() - 1;
+		QueryParametersValidator.validateQueryParameters(queryParameters);
 
-		ComputerValidator.checkOffset(offset);
-		ComputerValidator.checkPageNumber(pageNumber);
+		ArrayList<Computer> computerList = ComputerServiceImpl.getInstance().selectWithParameters(queryParameters);
 
-		ArrayList<Computer> computerList = ComputerServiceImpl.getInstance().getXComputersStartingAtIndexY(offset, pageNumber);
-
-		page.setContent(ComputerDTOMapper.getComputerDTOList(computerList));
+		return ComputerDTOMapper.getComputerDTOList(computerList);
 	}
 
 	@Override

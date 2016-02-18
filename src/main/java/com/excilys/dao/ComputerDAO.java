@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.excilys.dao.exception.DAOException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+import com.excilys.model.QueryParameters;
 
 /**
  * This DAO offers different methods to access and modify the Computer table
@@ -93,13 +94,12 @@ public interface ComputerDAO {
 	/**
 	 * This method retrieves {@code offset} from the database starting at the
 	 * index {@code pageNumber * offset}
+	 * @param queryParameters
 	 * 
-	 * @param offset
-	 * @param pageNumber
 	 * @return
 	 * @throws DAOException
 	 */
-	public ArrayList<Computer> getXComputersStartingAtIndexY(int offset, int pageNumber) throws DAOException;
+	public ArrayList<Computer> selectWithParameters(QueryParameters queryParameters) throws DAOException;
 
 	/**
 	 * @return The number of Computer that are in the database.

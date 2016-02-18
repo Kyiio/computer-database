@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import com.excilys.dao.impl.ComputerDAOImpl;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+import com.excilys.model.QueryParameters;
 import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
+import com.excilys.validator.QueryParametersValidator;
 
 public class ComputerServiceImpl implements ComputerService{
 
@@ -73,12 +75,11 @@ public class ComputerServiceImpl implements ComputerService{
 	}
 
 	@Override
-	public ArrayList<Computer> getXComputersStartingAtIndexY(int offset, int pageNumber) {
+	public ArrayList<Computer> selectWithParameters(QueryParameters queryParameters) {
 		
-		ComputerValidator.checkOffset(offset);
-		ComputerValidator.checkPageNumber(pageNumber);
+		QueryParametersValidator.validateQueryParameters(queryParameters);
 				
-		return ComputerDAOImpl.getInstance().getXComputersStartingAtIndexY(offset, pageNumber);
+		return ComputerDAOImpl.getInstance().selectWithParameters(queryParameters);
 	}
 
 	@Override
