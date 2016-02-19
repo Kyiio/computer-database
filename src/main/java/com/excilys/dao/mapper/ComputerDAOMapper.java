@@ -3,7 +3,7 @@ package com.excilys.dao.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import com.excilys.exception.MappingException;
@@ -33,8 +33,8 @@ public interface ComputerDAOMapper {
 		Timestamp discontinuedTimestamp;
 		Timestamp introducedTimestamp;
 
-		LocalDateTime discontinuedLocalDateTime;
-		LocalDateTime introducedLocalDateTime;
+		LocalDate discontinuedLocalDate;
+		LocalDate introducedLocalDate;
 
 		try {
 			while (resultSet.next()) {
@@ -43,20 +43,20 @@ public interface ComputerDAOMapper {
 				introducedTimestamp = resultSet.getTimestamp("INTRODUCED");
 
 				if (discontinuedTimestamp == null) {
-					discontinuedLocalDateTime = null;
+					discontinuedLocalDate = null;
 				} else {
-					discontinuedLocalDateTime = discontinuedTimestamp.toLocalDateTime();
+					discontinuedLocalDate = discontinuedTimestamp.toLocalDateTime().toLocalDate();
 				}
 
 				if (introducedTimestamp == null) {
-					introducedLocalDateTime = null;
+					introducedLocalDate = null;
 				} else {
-					introducedLocalDateTime = introducedTimestamp.toLocalDateTime();
+					introducedLocalDate = introducedTimestamp.toLocalDateTime().toLocalDate();
 				}
 
 				convertedResults.add(new Computer(resultSet.getInt("computer.ID"),
 						new Company(resultSet.getInt("company.ID"), resultSet.getString("company.NAME")),
-						resultSet.getString("computer.NAME"), discontinuedLocalDateTime, introducedLocalDateTime));
+						resultSet.getString("computer.NAME"), discontinuedLocalDate, introducedLocalDate));
 			}
 
 		} catch (SQLException e) {

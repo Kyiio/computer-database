@@ -1,6 +1,6 @@
 package com.excilys.dao;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import com.excilys.dao.exception.DAOException;
@@ -32,7 +32,7 @@ public interface ComputerDAO {
 	 * 
 	 * @see Company
 	 */
-	public int insertComputer(Company company, LocalDateTime discontinued, LocalDateTime introduced, String name)
+	public int insertComputer(Company company, LocalDate discontinued, LocalDate introduced, String name)
 			throws DAOException;
 
 	/**

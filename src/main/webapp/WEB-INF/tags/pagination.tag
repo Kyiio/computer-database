@@ -3,8 +3,11 @@
 <%@ attribute name="pageNumber" required="true" type="java.lang.Integer" description="The page number" %>
 <%@ attribute name="pageSize" required="true" type="java.lang.Integer" description="The number of computer per page" %>
 <%@ attribute name="maxPageNumber" required="true" type="java.lang.Integer" description="The total number of pages" %>
+<%@ attribute name="searchName" required="false" type="java.lang.String" description="The name we will search for both computer and company" %>
+<%@ attribute name="orderBy" required="false" type="java.lang.String" description="The attribute we will to sort by " %>
+<%@ attribute name="orderType" required="false" type="java.lang.String" description="The sort type we will use" %>
 
-<c:set var="radius" value="${8}"/>
+<c:set var="radius" value="8"/>
 <c:set var="begin" value="${(pageNumber - radius > 1 ? pageNumber - radius : 1)}"/>
 <c:set var="end" value="${(pageNumber + radius < maxPageNumber ? pageNumber + radius : maxPageNumber)}"/>
 
@@ -12,12 +15,12 @@
 <c:choose>
 	<c:when test="${pageNumber > 1}">
 		<li>
-			<links:link pageNumber="${pageNumber-1}" pageSize="${pageSize}" target="dashboard" text="Previous"></links:link>
+			<links:link pageNumber="${pageNumber-1}" pageSize="${pageSize}" target="dashboard" text="Previous" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
 		</li>	
 	</c:when>
 	<c:otherwise>
 		<li class="disabled">
-			<links:link pageNumber="${pageNumber}" pageSize="${pageSize}" target="#" text="Previous"></links:link>
+			<links:link pageNumber="${pageNumber}" pageSize="${pageSize}" target="#" text="Previous" ></links:link>
 		</li>	
 	</c:otherwise>
 </c:choose>
@@ -26,7 +29,7 @@
 
 <c:if test="${begin > 1}">
 	<li>
-		<links:link pageNumber="${1}" pageSize="${pageSize}" target="dashboard" text="${1}"></links:link>
+		<links:link pageNumber="1" pageSize="${pageSize}" target="dashboard" text="1" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
 	</li>
 	<c:if test="${begin > 2}">
 		<li>
@@ -41,7 +44,7 @@
 <c:forEach var="i" begin="${begin}" end="${end}">
 
 	<li class="${((pageNumber == i)?'active':'')}">
-		<links:link pageNumber="${i}" pageSize="${pageSize}" target="dashboard" text="${i}"></links:link>
+		<links:link pageNumber="${i}" pageSize="${pageSize}" target="dashboard" text="${i}" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
 	</li>
 </c:forEach>
 
@@ -55,7 +58,7 @@
 		</li>
 	</c:if>
 	<li>
-		<links:link pageNumber="${maxPageNumber}" pageSize="${pageSize}" target="dashboard" text="${maxPageNumber}"></links:link>
+		<links:link pageNumber="${maxPageNumber}" pageSize="${pageSize}" target="dashboard" text="${maxPageNumber}" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
 	</li>
 </c:if>
 
@@ -64,7 +67,7 @@
 <c:choose>
 	<c:when test="${pageNumber < maxPageNumber}">
 		<li>
-			<links:link pageNumber="${pageNumber+1}" pageSize="${pageSize}" target="dashboard" text="Next"></links:link>
+			<links:link pageNumber="${pageNumber+1}" pageSize="${pageSize}" target="dashboard" text="Next" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
 		</li>	
 	</c:when>
 	<c:otherwise>

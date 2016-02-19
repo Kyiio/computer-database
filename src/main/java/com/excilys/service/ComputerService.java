@@ -1,6 +1,6 @@
 package com.excilys.service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import com.excilys.dao.ComputerDAO;
@@ -35,7 +35,7 @@ public interface ComputerService {
 	 * @return The id of the computer we just inserted
 	 * @see ComputerDAO
 	 */
-	public int insertComputer(Company company, LocalDateTime introduced, LocalDateTime discontinued, String name);
+	public int insertComputer(Company company, LocalDate introduced, LocalDate discontinued, String name);
 
 	/**
 	 * Method that calls the deleteComputer method from the Computer DAO

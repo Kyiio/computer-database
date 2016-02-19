@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import com.excilys.dao.ComputerDAO;
@@ -29,7 +29,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	private final String GET_BY_NAME_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID WHERE computer.NAME = ?";
 	private final String GET_NB_COMPUTER = "SELECT COUNT(*) FROM computer";
 
-	private final String GET_PAGE_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID LIMIT ? OFFSET ?";
+	private final String GET_PAGE_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID WHERE computer.NAME IN ? OR company.NAME IN ? LIMIT ? OFFSET ? ORDER BY ? ?";
 
 	private static ComputerDAO INSTANCE;
 
@@ -45,7 +45,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public int insertComputer(Company company, LocalDateTime introduced, LocalDateTime discontinued, String name)
+	public int insertComputer(Company company, LocalDate introduced, LocalDate discontinued, String name)
 			throws DAOException {
 
 		int newId = -1;
@@ -70,13 +70,13 @@ public class ComputerDAOImpl implements ComputerDAO {
 			if (discontinued == null) {
 				preparedStatement.setNull(2, java.sql.Types.TIMESTAMP);
 			} else {
-				preparedStatement.setTimestamp(2, Timestamp.valueOf(discontinued));
+				preparedStatement.setTimestamp(2, Timestamp.valueOf(discontinued.atStartOfDay()));
 			}
 
 			if (introduced == null) {
 				preparedStatement.setNull(3, java.sql.Types.TIMESTAMP);
 			} else {
-				preparedStatement.setTimestamp(3, Timestamp.valueOf(introduced));
+				preparedStatement.setTimestamp(3, Timestamp.valueOf(introduced.atStartOfDay()));
 			}
 
 			preparedStatement.setString(4, name);
@@ -131,13 +131,13 @@ public class ComputerDAOImpl implements ComputerDAO {
 			if (computer.getDiscontinued() == null) {
 				preparedStatement.setNull(2, java.sql.Types.TIMESTAMP);
 			} else {
-				preparedStatement.setTimestamp(2, Timestamp.valueOf(computer.getDiscontinued()));
+				preparedStatement.setTimestamp(2, Timestamp.valueOf(computer.getDiscontinued().atStartOfDay()));
 			}
 
 			if (computer.getIntroduced() == null) {
 				preparedStatement.setNull(3, java.sql.Types.TIMESTAMP);
 			} else {
-				preparedStatement.setTimestamp(3, Timestamp.valueOf(computer.getIntroduced()));
+				preparedStatement.setTimestamp(3, Timestamp.valueOf(computer.getIntroduced().atStartOfDay()));
 			}
 
 			preparedStatement.setString(4, computer.getName());
@@ -289,8 +289,12 @@ public class ComputerDAOImpl implements ComputerDAO {
 		try {
 			connection = ConnectionFactory.getInstance().getConnection();
 			preparedStatement = connection.prepareStatement(GET_PAGE_QUERY);
-			preparedStatement.setInt(1, queryParameters.getPageSize());
-			preparedStatement.setInt(2, queryParameters.getLimit());
+			preparedStatement.setString(1, queryParameters.getSearch());
+			preparedStatement.setString(2, queryParameters.getSearch());
+			preparedStatement.setInt(3, queryParameters.getPageSize());
+			preparedStatement.setInt(4, queryParameters.getLimit());
+			preparedStatement.setString(5, queryParameters.getBy());
+			preparedStatement.setString(6, queryParameters.getOrder());
 
 			results = preparedStatement.executeQuery();
 
@@ -299,7 +303,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			throw new DAOException(
 					"Error while trying to retrieve the computer page with offset " + queryParameters.getLimit()
-							+ " and start index " + queryParameters.getLimit() + queryParameters.getPageSize(),
+							+ " and start index " + (queryParameters.getLimit() + queryParameters.getPageSize()),
 					e);
 
 		} finally {

@@ -12,13 +12,17 @@ import org.dbunit.operation.DatabaseOperation;
 import org.h2.jdbcx.JdbcDataSource;
 import org.h2.tools.RunScript;
 
+import com.excilys.dao.exception.DAOException;
+
 public class DBTestConnector {
 	
 	private ConnectionFactory connectionFactory;
 	private IDatabaseTester databaseTester;
 	private JdbcDataSource dataSource;
 	
-	
+	public DBTestConnector() {
+		initConnection();
+	}
 
 	public void initDataSource(){
 		
@@ -32,12 +36,12 @@ public class DBTestConnector {
 		
 		try {
 			RunScript.execute(connectionFactory.getUrl(), connectionFactory.getUsername(), connectionFactory.getPassword(), pathToSqlSchema, Charset.forName("UTF8"), false);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			throw new DAOException("Fail to init database schema",e);
 		}
 	}
 	
-	public void initConnection(){
+	private void initConnection(){
 		connectionFactory = ConnectionFactory.getInstance();
 	}
 		

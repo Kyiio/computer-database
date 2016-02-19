@@ -1,6 +1,6 @@
 package com.excilys.service.impl;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import com.excilys.dao.impl.ComputerDAOImpl;
@@ -39,7 +39,7 @@ public class ComputerServiceImpl implements ComputerService{
 	}
 
 	@Override
-	public int insertComputer(Company company, LocalDateTime introduced, LocalDateTime discontinued, String name) {
+	public int insertComputer(Company company, LocalDate introduced, LocalDate discontinued, String name) {
 		
 		ComputerValidator.checkName(name);
 		ComputerValidator.checkDateConsitency(introduced, discontinued);

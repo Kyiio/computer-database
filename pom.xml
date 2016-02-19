@@ -4,7 +4,7 @@
 	<groupId>com.excilys</groupId>
 	<artifactId>computerdatabase</artifactId>
 	<packaging>war</packaging>
-	<version>0.3.0-RELEASE</version>
+	<version>0.3.1-SNAPSHOT</version>
 	<name>computerdatabase Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
@@ -22,6 +22,7 @@
 		<javax.servlet-api-version>3.1.0</javax.servlet-api-version>
 		<jsp-api-version>2.1</jsp-api-version>
 		<jstl-version>1.2</jstl-version>
+		<bonecp-version>0.8.0.RELEASE</bonecp-version>
 	</properties>
 
 	<dependencies>
@@ -48,14 +49,14 @@
 		</dependency>
 		<dependency>
 			<groupId>org.powermock</groupId>
-			<artifactId>powermock-module-junit4</artifactId>
-			<version>${powermock-module-junit4-version}</version>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>${powermock-api-mockito-version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.powermock</groupId>
-			<artifactId>powermock-api-mockito</artifactId>
-			<version>${powermock-api-mockito-version}</version>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>${powermock-module-junit4-version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -114,6 +115,12 @@
 			<artifactId>jstl</artifactId>
 			<version>${jstl-version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.jolbox</groupId>
+			<artifactId>bonecp</artifactId>
+			<version>${bonecp-version}</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>computerdatabase</finalName>

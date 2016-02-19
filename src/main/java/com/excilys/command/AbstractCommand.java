@@ -3,7 +3,7 @@ package com.excilys.command;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -207,7 +207,7 @@ public abstract class AbstractCommand {
 	 * @param dateType
 	 * @return The LocalDateTime object created from the user input.
 	 */
-	protected LocalDateTime askForDate(String dateType) {
+	protected LocalDate askForDate(String dateType) {
 
 		String format = "yyyy-MM-dd";
 
@@ -215,7 +215,7 @@ public abstract class AbstractCommand {
 
 		String tmpDate = scanner.nextLine();
 
-		LocalDateTime localDateTime = null;
+		LocalDate localDate = null;
 
 		if (tmpDate.length() > 0) {
 
@@ -225,8 +225,8 @@ public abstract class AbstractCommand {
 					dateOk = true;
 
 					InputValidator.isDate(tmpDate);
-					localDateTime = new Timestamp(new SimpleDateFormat(format).parse(tmpDate).getTime())
-							.toLocalDateTime();
+					localDate = new Timestamp(new SimpleDateFormat(format).parse(tmpDate).getTime())
+							.toLocalDateTime().toLocalDate();
 
 				} catch (ParseException | ValidationException e) {
 					dateOk = false;
@@ -236,7 +236,7 @@ public abstract class AbstractCommand {
 			}
 		}
 
-		return localDateTime;
+		return localDate;
 	}
 
 }

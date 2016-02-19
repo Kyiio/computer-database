@@ -1,6 +1,6 @@
 package com.excilys.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  * This class represents a computer from the database. A computer is identified by its id and must possess a name.
@@ -14,14 +14,14 @@ public class Computer {
 	
 	private String name;
 	
-	private LocalDateTime discontinued;
-	private LocalDateTime introduced;
+	private LocalDate discontinued;
+	private LocalDate introduced;
 	
 	public Computer() {
 		
 	}
 	
-	public Computer(int id, Company company, String name, LocalDateTime discontinued, LocalDateTime introduced) {
+	public Computer(int id, Company company, String name, LocalDate discontinued, LocalDate introduced) {
 		this.id = id;
 		this.company = company;
 		this.name = name;
@@ -61,19 +61,19 @@ public class Computer {
 		this.name = name;
 	}
 	
-	public LocalDateTime getDiscontinued() {
+	public LocalDate getDiscontinued() {
 		return discontinued;
 	}
 	
-	public void setDiscontinued(LocalDateTime discontinued) {
+	public void setDiscontinued(LocalDate discontinued) {
 		this.discontinued = discontinued;
 	}
 	
-	public LocalDateTime getIntroduced() {
+	public LocalDate getIntroduced() {
 		return introduced;
 	}
 	
-	public void setIntroduced(LocalDateTime introduced) {
+	public void setIntroduced(LocalDate introduced) {
 		this.introduced = introduced;
 	}
 

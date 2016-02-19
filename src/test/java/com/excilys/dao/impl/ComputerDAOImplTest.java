@@ -14,18 +14,12 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.excilys.dao.ComputerDAO;
-import com.excilys.dao.ConnectionFactory;
 import com.excilys.dao.DBTestConnector;
 import com.excilys.dao.exception.DAOException;
 import com.excilys.model.Computer;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(ConnectionFactory.class)
 public class ComputerDAOImplTest {
 
 	private static DBTestConnector cfm;
@@ -35,7 +29,6 @@ public class ComputerDAOImplTest {
 	public static void init() {
 
 		cfm = new DBTestConnector();
-		cfm.initConnection();
 		cfm.initSchema("config/db_test/Test_SCHEMA.sql");
 		cfm.initDataSource();
 

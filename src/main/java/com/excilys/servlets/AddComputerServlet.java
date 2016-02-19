@@ -54,8 +54,6 @@ public class AddComputerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		doGet(request, response);
-
 		// We retrieve the information given by the user in the form
 		String computerName = request.getParameter("computerName");
 		String introduced = request.getParameter("introduced");
@@ -66,6 +64,8 @@ public class AddComputerServlet extends HttpServlet {
 				Integer.parseInt(companyId), "");
 
 		ComputerDTOServiceImpl.getInstance().insertComputer(computerDTO);
+		
+		response.sendRedirect("dashboard");
 	}
 
 }

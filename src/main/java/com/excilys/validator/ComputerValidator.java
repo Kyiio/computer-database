@@ -3,7 +3,7 @@ package com.excilys.validator;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.excilys.exception.ValidationException;
 
@@ -112,7 +112,7 @@ public interface ComputerValidator {
 	 * @param discontinuedDate
 	 *            Discontinued date of the computer
 	 */
-	public static void checkDateConsitency(LocalDateTime introducedDate, LocalDateTime discontinuedDate) {
+	public static void checkDateConsitency(LocalDate introducedDate, LocalDate discontinuedDate) {
 		if ((discontinuedDate != null && introducedDate == null)
 				|| (introducedDate != null && discontinuedDate != null && introducedDate.isAfter(discontinuedDate))) {
 			throw new ValidationException("The discontinued date is before the introduced one ! introduced: "

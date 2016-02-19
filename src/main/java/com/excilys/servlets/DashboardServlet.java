@@ -13,6 +13,7 @@ import com.excilys.dto.PageDTO;
 import com.excilys.model.QueryParameters;
 import com.excilys.service.impl.ComputerDTOServiceImpl;
 import com.excilys.servlets.util.PageCreator;
+import com.excilys.servlets.util.QueryParametersBuilder;
 
 /**
  * Servlet implementation class DashboardServlet.
@@ -39,31 +40,13 @@ public class DashboardServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// We first retrieve the page parameters
-
-		String pageNumberParameter = request.getParameter("page-number");
-		String computerPerPageParameter = request.getParameter("computer-per-page");
-
-		// If they were in the URL we create a page object if this informations
-
-		QueryParameters queryParameters = new QueryParameters();
-
-		int parsedInt;
-
-		if (computerPerPageParameter != null) {
-			parsedInt = Integer.parseInt(computerPerPageParameter);
-			queryParameters.setPageSize(parsedInt);
-		}
-
-		if (pageNumberParameter != null) {
-			parsedInt = Integer.parseInt(pageNumberParameter);
-			queryParameters.setPageNumber(parsedInt);
-		}
+		// We build the query parameters by retrieving the data in the url
+		QueryParameters queryParameters = QueryParametersBuilder.createQueryParameters(request);
 
 		// We retrieve the needed computers from the database
 		ArrayList<ComputerDTO> computerDTOList = ComputerDTOServiceImpl.getInstance()
 				.selectWithParameters(queryParameters);
-		
+
 		// We retrieve the number of computer in the database
 		int computerCount = ComputerDTOServiceImpl.getInstance().getCount();
 
@@ -81,7 +64,16 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		doGet(request, response);
+
+		String idsString = request.getParameter("selection");
+
+		String[] idStrTab = idsString.split(",");
+
+		for (int i = 0; i < idStrTab.length; ++i) {
+			ComputerDTOServiceImpl.getInstance().deleteComputer(Integer.parseInt(idStrTab[i]));
+		}
+
+		response.sendRedirect("dashboard");
 	}
 
 }

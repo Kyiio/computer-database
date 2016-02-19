@@ -3,11 +3,12 @@ package com.excilys.dao;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
 import com.excilys.dao.exception.DAOConfigurationException;
+import com.jolbox.bonecp.BoneCP;
+import com.jolbox.bonecp.BoneCPConfig;
 
 /**
  * Class that instantiate the connection with the database by using the
@@ -30,10 +31,13 @@ public class ConnectionFactory {
 	private String username;
 	private String password;
 	private String driver;
+	
+	private BoneCP connectionPool;
 
-	private ConnectionFactory(String url, String username, String password, String driver) {
+	private ConnectionFactory(BoneCP connectionPool, String url, String userName, String password, String driver) {
+		this.connectionPool = connectionPool;
 		this.url = url;
-		this.username = username;
+		this.username = userName;
 		this.password = password;
 		this.driver = driver;
 	}
@@ -49,14 +53,14 @@ public class ConnectionFactory {
 		String driver;
 		String userName;
 		String password;
-
+		
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		InputStream fichierProperties = classLoader.getResourceAsStream(FILE_PROPERTIES);
 
 		if (fichierProperties == null) {
 			throw new DAOConfigurationException("The properties file " + FILE_PROPERTIES + " can't be found");
 		}
-
+		
 		try {
 			properties.load(fichierProperties);
 			url = properties.getProperty(PROPERTY_URL);
@@ -73,12 +77,37 @@ public class ConnectionFactory {
 		} catch (ClassNotFoundException e) {
 			throw new DAOConfigurationException("Can't find the driver", e);
 		}
+		
+		BoneCP connectionPool = null;
+		
+		try{
+			BoneCPConfig config = new BoneCPConfig();
 
-		INSTANCE = new ConnectionFactory(url, userName, password, driver);
+	        // We give the connection information to the BoneCP config
+	        config.setJdbcUrl(url);
+	        config.setUsername(userName);
+	        config.setPassword(password);
+
+	        // We set the size of the connection pool
+	        
+	        //The min connection per partition is the number of connection that will be open when we create the connection pool
+	        config.setMinConnectionsPerPartition(5);
+	        //The max connection per partition is the maximum number of connection that will be open 
+	        config.setMaxConnectionsPerPartition(10);
+	        //The partition count is the number of partition
+	        config.setPartitionCount(2);
+	        
+	        connectionPool = new BoneCP(config);
+		}catch(SQLException e){
+			e.printStackTrace();
+			throw new DAOConfigurationException("Error while instantiating the connection pool",e);
+		}
+                
+		INSTANCE = new ConnectionFactory(connectionPool, url, userName, password, driver);
 	}
 
 	/**
-	 * This method give the instance of connection
+	 * This method give the instance of connectionFactory
 	 * 
 	 * @return The ConnectionFactory instance
 	 * @throws DAOConfigurationException
@@ -88,11 +117,13 @@ public class ConnectionFactory {
 	}
 
 	/**
+	 * Method that returns a connection from the connection pool.
+	 * 
 	 * @return A connection to the database
 	 * @throws SQLException
 	 */
 	public Connection getConnection() throws SQLException {
-		return DriverManager.getConnection(url, username, password);
+		return connectionPool.getConnection();
 	}
 
 	public String getUrl() {

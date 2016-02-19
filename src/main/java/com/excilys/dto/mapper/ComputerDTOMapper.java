@@ -3,7 +3,7 @@ package com.excilys.dto.mapper;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import com.excilys.dao.impl.CompanyDAOImpl;
@@ -56,8 +56,8 @@ public interface ComputerDTOMapper {
 
 		Company company = computer.getCompany();
 
-		LocalDateTime introducedDate = computer.getIntroduced();
-		LocalDateTime discontinuedDate = computer.getDiscontinued();
+		LocalDate introducedDate = computer.getIntroduced();
+		LocalDate discontinuedDate = computer.getDiscontinued();
 
 		if (introducedDate != null) {
 			introducedString = introducedDate.toString();
@@ -102,13 +102,13 @@ public interface ComputerDTOMapper {
 			int companyId) {
 
 		String format = "yyyy-MM-dd";
-		LocalDateTime introducedDate = null;
-		LocalDateTime discontinuedDate = null;
+		LocalDate introducedDate = null;
+		LocalDate discontinuedDate = null;
 
 		if (introduced != null && introduced.length() > 0) {
 			try {
 				introducedDate = new Timestamp(new SimpleDateFormat(format).parse(introduced).getTime())
-						.toLocalDateTime();
+						.toLocalDateTime().toLocalDate();
 			} catch (ParseException e) {
 				throw new MappingException("The given introduced date isn't matching the format : " + introduced);
 			}
@@ -117,7 +117,7 @@ public interface ComputerDTOMapper {
 		if (discontinued != null && discontinued.length() > 0) {
 			try {
 				discontinuedDate = new Timestamp(new SimpleDateFormat(format).parse(discontinued).getTime())
-						.toLocalDateTime();
+						.toLocalDateTime().toLocalDate();
 			} catch (ParseException e) {
 				throw new MappingException("The given discontinued date isn't matching the format : " + discontinued);
 			}

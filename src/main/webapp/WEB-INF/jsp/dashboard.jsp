@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="pagination" tagdir="/WEB-INF/tags"%>
-<%@ page isELIgnored="false"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +16,9 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<pagination:link pageNumber="1" pageSize="${page.pageSize}" target="dashboard" text="Application - Computer Database" cssClass="navbar-brand"></pagination:link>
+			<pagination:link pageNumber="1" pageSize="${page.pageSize}"
+				target="dashboard" text="Application - Computer Database"
+				cssClass="navbar-brand"></pagination:link>
 		</div>
 	</header>
 
@@ -42,7 +43,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" action="./dashboard" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -60,13 +61,12 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
+						<th><pagination:link pageNumber="1" pageSize="${pageSize}" target="dashboard" text="Computer name" orderBy="COMPANY_NAME"></pagination:link></th>
+						<th><pagination:link pageNumber="1" pageSize="${pageSize}" target="dashboard" text="Introduced date" orderBy="INTRODUCED"></pagination:link></th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th><pagination:link pageNumber="1" pageSize="${pageSize}" target="dashboard" text="Discontinued date" orderBy="DISCONTINUED"></pagination:link></th>
 						<!-- Table header for Company -->
-						<th>Company</th>
-
+						<th><pagination:link pageNumber="1" pageSize="${pageSize}" target="dashboard" text="Company" orderBy="COMPANY_NAME"></pagination:link></th>
 					</tr>
 				</thead>
 				<!-- Browse attribute computers -->
@@ -74,9 +74,10 @@
 					<c:forEach items="${page.content}" var="computer">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="0"></td>
-							<td><a href="edit-computer" onclick=""><c:out
-										value="${computer.computerName}" /></a></td>
+								class="cb" value="${computer.computerId}"></td>
+							<td><a
+								href="#"
+								onclick=""><c:out value="${computer.computerName}" /></a></td>
 							<td>${computer.introducedDate}</td>
 							<td>${computer.discontinuedDate}</td>
 							<td>${computer.companyName}</td>
@@ -93,14 +94,14 @@
 			<ul class="pagination">
 				<pagination:pagination pageSize="${page.pageSize}"
 					pageNumber="${page.pageNumber}"
-					maxPageNumber="${page.maxPageNumber}"></pagination:pagination>
+					maxPageNumber="${page.maxPageNumber}" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></pagination:pagination>
 			</ul>
 		</div>
 
 		<div class="btn-group btn-group-sm pull-right"
 			style="display: inline-block;" role="group">
-			<pagination:perPage pageSize="${page.pageSize}"></pagination:perPage>
-			
+			<pagination:perPage pageSize="${page.pageSize}" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></pagination:perPage>
+
 		</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
