@@ -93,9 +93,9 @@ public class ComputerDTOServiceImpl implements ComputerDTOService {
 	}
 
 	@Override
-	public int getCount() {
+	public int getCount(QueryParameters queryParameters) {
 
-		return ComputerServiceImpl.getInstance().getCount();
+		return ComputerServiceImpl.getInstance().getCount(queryParameters);
 	}
 
 }

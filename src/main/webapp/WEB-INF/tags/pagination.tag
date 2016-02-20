@@ -7,7 +7,7 @@
 <%@ attribute name="orderBy" required="false" type="java.lang.String" description="The attribute we will to sort by " %>
 <%@ attribute name="orderType" required="false" type="java.lang.String" description="The sort type we will use" %>
 
-<c:set var="radius" value="8"/>
+<c:set var="radius" value="4"/>
 <c:set var="begin" value="${(pageNumber - radius > 1 ? pageNumber - radius : 1)}"/>
 <c:set var="end" value="${(pageNumber + radius < maxPageNumber ? pageNumber + radius : maxPageNumber)}"/>
 

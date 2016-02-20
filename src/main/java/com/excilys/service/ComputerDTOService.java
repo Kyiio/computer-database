@@ -84,9 +84,10 @@ public interface ComputerDTOService {
 
 	/**
 	 * Method that calls the getNbComputer from the ComputerService.
+	 * @param queryParameters TODO
 	 * 
 	 * @return The number of computer in the database.
 	 * @see ComputerService
 	 */
-	public int getCount();
+	public int getCount(QueryParameters queryParameters);
 }

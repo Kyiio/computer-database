@@ -24,13 +24,13 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${totalComputerFound} Computers found</h1>
+			<h1 id="homeTitle">${page.totalNumberOfComputer} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="#" method="GET" class="form-inline">
+					<form id="searchForm" action="./dashboard?computer-per-page=${page.pageSize}" method="GET" class="form-inline">
 
-						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
+						<input type="search" id="search-name" name="search-name"
+							class="form-control" placeholder="Search name" value="${((page.searchName != '%')? page.searchName:'')}"/> <input
 							type="submit" id="searchsubmit" value="Filter by name"
 							class="btn btn-primary" />
 					</form>
@@ -61,12 +61,12 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><pagination:link pageNumber="1" pageSize="${page.pageSize}" target="dashboard" text="Computer name" orderBy="COMPUTER_NAME" orderType="${((page.orderBy == 'COMPUTER_NAME' && page.orderType == 'ASC' ) ? 'DESC' : 'ASC')}"></pagination:link></th>
-						<th><pagination:link pageNumber="1" pageSize="${page.pageSize}" target="dashboard" text="Introduced date" orderBy="INTRODUCED" orderType="${((page.orderBy == 'INTRODUCED' && page.orderType == 'ASC' ) ? 'DESC' : 'ASC')}"></pagination:link></th>
+						<th><pagination:link pageNumber="1" pageSize="${page.pageSize}" target="dashboard" text="Computer name" searchName="${page.searchName}" orderBy="COMPUTER_NAME" orderType="${((page.orderBy == 'COMPUTER_NAME' && page.orderType == 'ASC' ) ? 'DESC' : 'ASC')}"></pagination:link></th>
+						<th><pagination:link pageNumber="1" pageSize="${page.pageSize}" target="dashboard" text="Introduced date" searchName="${page.searchName}" orderBy="INTRODUCED" orderType="${((page.orderBy == 'INTRODUCED' && page.orderType == 'ASC' ) ? 'DESC' : 'ASC')}"></pagination:link></th>
 						<!-- Table header for Discontinued Date -->
-						<th><pagination:link pageNumber="1" pageSize="${page.pageSize}" target="dashboard" text="Discontinued date" orderBy="DISCONTINUED" orderType="${((page.orderBy == 'DISCONTINUED' && page.orderType == 'ASC' ) ? 'DESC' : 'ASC')}"></pagination:link></th>
+						<th><pagination:link pageNumber="1" pageSize="${page.pageSize}" target="dashboard" text="Discontinued date" searchName="${page.searchName}" orderBy="DISCONTINUED" orderType="${((page.orderBy == 'DISCONTINUED' && page.orderType == 'ASC' ) ? 'DESC' : 'ASC')}"></pagination:link></th>
 						<!-- Table header for Company -->
-						<th><pagination:link pageNumber="1" pageSize="${page.pageSize}" target="dashboard" text="Company" orderBy="COMPANY_NAME" orderType="${((page.orderBy == 'COMPANY_NAME' && page.orderType == 'ASC' ) ? 'DESC' : 'ASC')}"></pagination:link></th>
+						<th><pagination:link pageNumber="1" pageSize="${page.pageSize}" target="dashboard" text="Company" searchName="${page.searchName}" orderBy="COMPANY_NAME" orderType="${((page.orderBy == 'COMPANY_NAME' && page.orderType == 'ASC' ) ? 'DESC' : 'ASC')}"></pagination:link></th>
 					</tr>
 				</thead>
 				<!-- Browse attribute computers -->
@@ -76,7 +76,7 @@
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.computerId}"></td>
 							<td><a
-								href="#"
+								href="edit-computer?computer-id=${computer.computerId}"
 								onclick=""><c:out value="${computer.computerName}" /></a></td>
 							<td>${computer.introducedDate}</td>
 							<td>${computer.discontinuedDate}</td>

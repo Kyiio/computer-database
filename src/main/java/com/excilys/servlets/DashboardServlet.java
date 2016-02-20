@@ -48,12 +48,11 @@ public class DashboardServlet extends HttpServlet {
 				.selectWithParameters(queryParameters);
 
 		// We retrieve the number of computer in the database
-		int computerCount = ComputerDTOServiceImpl.getInstance().getCount();
+		int computerCount = ComputerDTOServiceImpl.getInstance().getCount(queryParameters);
 
 		PageDTO page = PageCreator.buildPage(queryParameters, computerDTOList, computerCount);
 
 		// Finally we send all this information to the JSP page
-		request.setAttribute("totalComputerFound", ComputerDTOServiceImpl.getInstance().getCount());
 		request.setAttribute("page", page);
 		request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
 	}

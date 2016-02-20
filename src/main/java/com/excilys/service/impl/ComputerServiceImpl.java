@@ -83,8 +83,8 @@ public class ComputerServiceImpl implements ComputerService{
 	}
 
 	@Override
-	public int getCount() {
-		return ComputerDAOImpl.getInstance().getCount();
+	public int getCount(QueryParameters queryParameters) {
+		return ComputerDAOImpl.getInstance().getCount(queryParameters);
 	}
 
 }

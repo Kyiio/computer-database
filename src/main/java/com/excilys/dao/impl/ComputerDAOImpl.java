@@ -18,6 +18,7 @@ import com.excilys.dao.util.QueryParameterMapper;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
+import com.excilys.servlets.util.QueryParametersBuilder;
 
 public class ComputerDAOImpl implements ComputerDAO {
 
@@ -315,19 +316,19 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public int getCount() throws DAOException {
+	public int getCount(QueryParameters queryParameters) throws DAOException {
 
 		ResultSet results = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
 		int nbComputer = 0;
-
+		String query = QueryParameterMapper.getCountQuery(queryParameters); 
+		
 		try {
 			connection = ConnectionFactory.getInstance().getConnection();
 
-			preparedStatement = connection.prepareStatement(GET_NB_COMPUTER);
-
+			preparedStatement = connection.prepareStatement(query);
 			results = preparedStatement.executeQuery();
 
 			if (results != null && results.next()) {
@@ -335,7 +336,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			throw new DAOException("Error while trying to retrieve the number of computer", e);
+			throw new DAOException("Error while trying to retrieve the number of computer. Query : " + query, e);
 
 		} finally {
 			ConnectionCloser.silentClose(results, preparedStatement, connection);

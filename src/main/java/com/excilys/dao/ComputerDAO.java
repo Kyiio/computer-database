@@ -102,8 +102,9 @@ public interface ComputerDAO {
 	public ArrayList<Computer> selectWithParameters(QueryParameters queryParameters) throws DAOException;
 
 	/**
+	 * @param queryParameter TODO
 	 * @return The number of Computer that are in the database.
 	 * @throws DAOException
 	 */
-	public int getCount() throws DAOException;
+	public int getCount(QueryParameters queryParameter) throws DAOException;
 }

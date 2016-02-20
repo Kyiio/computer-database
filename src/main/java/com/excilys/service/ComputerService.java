@@ -87,9 +87,10 @@ public interface ComputerService {
 
 	/**
 	 * Method that calls the getNbComputer from the ComputerDAO
+	 * @param queryParameters TODO
 	 * 
 	 * @return The number of computer in the database
 	 * @see ComputerDAO
 	 */
-	public int getCount();
+	public int getCount(QueryParameters queryParameters);
 }

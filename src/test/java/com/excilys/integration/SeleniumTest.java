@@ -25,6 +25,7 @@ public class SeleniumTest {
 		driver = new FirefoxDriver();
 		baseUrl = "http://localhost:8080/";
 		driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+		driver.manage().window().maximize();
 	}
 
 	@Test
@@ -62,15 +63,15 @@ public class SeleniumTest {
 		int rowCounts = driver.findElements(By.xpath("//tbody[@id='results']/tr")).size();
 		assertEquals(10, rowCounts);
 
-		driver.findElement(By.linkText("50")).click();
+		driver.findElement(By.xpath("//a[contains(@class, 'btn btn-default') and text()='50']")).click();
 		rowCounts = driver.findElements(By.xpath("//tbody[@id='results']/tr")).size();
 		assertEquals(50, rowCounts);
 		
-		driver.findElement(By.linkText("100")).click();
+		driver.findElement(By.xpath("//a[contains(@class, 'btn btn-default') and text()='100']")).click();
 		rowCounts = driver.findElements(By.xpath("//tbody[@id='results']/tr")).size();
 		assertEquals(100, rowCounts);
 		
-		driver.findElement(By.linkText("10")).click();
+		driver.findElement(By.xpath("//a[contains(@class, 'btn btn-default') and text()='10']")).click();
 		rowCounts = driver.findElements(By.xpath("//tbody[@id='results']/tr")).size();
 		assertEquals(10, rowCounts);
 	}
