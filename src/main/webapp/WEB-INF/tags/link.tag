@@ -10,7 +10,7 @@
 
 <c:choose>
 	<c:when test="${target != '#'}">
-		<a class="${cssClass}" href="${target}?computer-per-page=${pageSize}&page-number=${pageNumber}&orderBy=${orderBy}&orderType=${orderType}&searchName=${searchName}">${text}</a>
+		<a class="${cssClass}" href="${target}?computer-per-page=${pageSize}&page-number=${pageNumber}&order-by=${orderBy}&order-type=${orderType}&search-name=${searchName}">${text}</a>
 	</c:when>
 	<c:otherwise>
 		<a class="${cssClass}" href="#">${text}</a>

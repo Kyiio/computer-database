@@ -21,20 +21,20 @@ public interface QueryParametersBuilder {
 	
 		String pageNumberParameter = request.getParameter("page-number");
 		String computerPerPageParameter = request.getParameter("computer-per-page");
-		String search = request.getParameter("search");
-		String order = request.getParameter("order");
+		String search = request.getParameter("search-name");
+		String order = request.getParameter("order-type");
 		String by = request.getParameter("order-by");
 		
 		int parsedInt;
 		int pageSize = 10;
 		int pageNumber = 1;
 
-		if (computerPerPageParameter != null) {
+		if (computerPerPageParameter != null && computerPerPageParameter.length() > 0) {
 			parsedInt = Integer.parseInt(computerPerPageParameter);
 			pageSize = parsedInt;
 		}
 
-		if (pageNumberParameter != null) {
+		if (pageNumberParameter != null && pageNumberParameter.length() > 0) {
 			parsedInt = Integer.parseInt(pageNumberParameter);
 			pageNumber = parsedInt;
 		}

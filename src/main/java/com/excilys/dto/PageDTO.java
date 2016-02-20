@@ -18,13 +18,20 @@ public class PageDTO {
 	private int pageNumber;
 	private int totalNumberOfComputer;
 
+	private String searchName;
+	private String orederBy;
+	private String orderType;
+
 	public PageDTO(int pageSize, int pageNumber, int totalNumberOfComputer, int maxPageNumber,
-			ArrayList<ComputerDTO> content) {
+			ArrayList<ComputerDTO> content, String searchName, String orderBy, String orderType) {
 		this.pageSize = pageSize;
 		this.pageNumber = pageNumber;
 		this.totalNumberOfComputer = totalNumberOfComputer;
 		this.maxPageNumber = maxPageNumber;
 		this.content = content;
+		this.searchName = searchName;
+		this.orederBy = orderBy;
+		this.orderType = orderType;
 	}
 
 	public ArrayList<ComputerDTO> getContent() {
@@ -45,5 +52,17 @@ public class PageDTO {
 
 	public int getTotalNumberOfComputer() {
 		return totalNumberOfComputer;
+	}
+
+	public String getSearchName() {
+		return searchName;
+	}
+
+	public String getOrderBy(){
+		return orederBy;
+	}
+
+	public String getOrderType() {
+		return orderType;
 	}
 }

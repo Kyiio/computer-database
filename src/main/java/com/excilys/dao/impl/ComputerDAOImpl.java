@@ -14,6 +14,7 @@ import com.excilys.dao.ConnectionCloser;
 import com.excilys.dao.ConnectionFactory;
 import com.excilys.dao.exception.DAOException;
 import com.excilys.dao.mapper.ComputerDAOMapper;
+import com.excilys.dao.util.QueryParameterMapper;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
@@ -286,15 +287,17 @@ public class ComputerDAOImpl implements ComputerDAO {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
+		String query = QueryParameterMapper.getPageQuery(queryParameters);
+		
 		try {
 			connection = ConnectionFactory.getInstance().getConnection();
-			preparedStatement = connection.prepareStatement(GET_PAGE_QUERY);
-			preparedStatement.setString(1, queryParameters.getSearch());
+			preparedStatement = connection.prepareStatement(query);
+			/*preparedStatement.setString(1, queryParameters.getSearch());
 			preparedStatement.setString(2, queryParameters.getSearch());
 			preparedStatement.setInt(3, queryParameters.getPageSize());
-			preparedStatement.setInt(4, queryParameters.getLimit());
+			preparedStatement.setInt(4, queryParameters.getOffset());
 			preparedStatement.setString(5, queryParameters.getBy());
-			preparedStatement.setString(6, queryParameters.getOrder());
+			preparedStatement.setString(6, queryParameters.getOrder());*/
 
 			results = preparedStatement.executeQuery();
 
@@ -302,9 +305,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 		} catch (SQLException e) {
 			throw new DAOException(
-					"Error while trying to retrieve the computer page with offset " + queryParameters.getLimit()
-							+ " and start index " + (queryParameters.getLimit() + queryParameters.getPageSize()),
-					e);
+					"Error while trying to retrieve the computer page with parameters : " + queryParameters + " query : " + query, e);
 
 		} finally {
 			ConnectionCloser.silentClose(results, preparedStatement, connection);

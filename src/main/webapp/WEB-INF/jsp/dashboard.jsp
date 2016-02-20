@@ -61,12 +61,12 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><pagination:link pageNumber="1" pageSize="${pageSize}" target="dashboard" text="Computer name" orderBy="COMPANY_NAME"></pagination:link></th>
-						<th><pagination:link pageNumber="1" pageSize="${pageSize}" target="dashboard" text="Introduced date" orderBy="INTRODUCED"></pagination:link></th>
+						<th><pagination:link pageNumber="1" pageSize="${page.pageSize}" target="dashboard" text="Computer name" orderBy="COMPUTER_NAME" orderType="${((page.orderBy == 'COMPUTER_NAME' && page.orderType == 'ASC' ) ? 'DESC' : 'ASC')}"></pagination:link></th>
+						<th><pagination:link pageNumber="1" pageSize="${page.pageSize}" target="dashboard" text="Introduced date" orderBy="INTRODUCED" orderType="${((page.orderBy == 'INTRODUCED' && page.orderType == 'ASC' ) ? 'DESC' : 'ASC')}"></pagination:link></th>
 						<!-- Table header for Discontinued Date -->
-						<th><pagination:link pageNumber="1" pageSize="${pageSize}" target="dashboard" text="Discontinued date" orderBy="DISCONTINUED"></pagination:link></th>
+						<th><pagination:link pageNumber="1" pageSize="${page.pageSize}" target="dashboard" text="Discontinued date" orderBy="DISCONTINUED" orderType="${((page.orderBy == 'DISCONTINUED' && page.orderType == 'ASC' ) ? 'DESC' : 'ASC')}"></pagination:link></th>
 						<!-- Table header for Company -->
-						<th><pagination:link pageNumber="1" pageSize="${pageSize}" target="dashboard" text="Company" orderBy="COMPANY_NAME"></pagination:link></th>
+						<th><pagination:link pageNumber="1" pageSize="${page.pageSize}" target="dashboard" text="Company" orderBy="COMPANY_NAME" orderType="${((page.orderBy == 'COMPANY_NAME' && page.orderType == 'ASC' ) ? 'DESC' : 'ASC')}"></pagination:link></th>
 					</tr>
 				</thead>
 				<!-- Browse attribute computers -->
@@ -94,13 +94,13 @@
 			<ul class="pagination">
 				<pagination:pagination pageSize="${page.pageSize}"
 					pageNumber="${page.pageNumber}"
-					maxPageNumber="${page.maxPageNumber}" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></pagination:pagination>
+					maxPageNumber="${page.maxPageNumber}" searchName="${page.searchName}" orderType="${page.orderType}" orderBy="${page.orderBy}"></pagination:pagination>
 			</ul>
 		</div>
 
 		<div class="btn-group btn-group-sm pull-right"
 			style="display: inline-block;" role="group">
-			<pagination:perPage pageSize="${page.pageSize}" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></pagination:perPage>
+			<pagination:perPage pageSize="${page.pageSize}" searchName="${page.searchName}" orderType="${page.orderType}" orderBy="${page.orderBy}"></pagination:perPage>
 
 		</div>
 	</footer>
