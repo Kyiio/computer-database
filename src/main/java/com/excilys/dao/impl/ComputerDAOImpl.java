@@ -283,19 +283,19 @@ public class ComputerDAOImpl implements ComputerDAO {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		String query = QueryParameterMapper.getPageQuery(queryParameters);
-
 		try {
 			connection = ConnectionFactory.getInstance().getConnection();
-			preparedStatement = connection.prepareStatement(query);
+
+			preparedStatement = QueryParameterMapper.createPageQueryAndGetPreparedStatement(queryParameters,
+					connection);
 
 			results = preparedStatement.executeQuery();
 
 			computerResult = ComputerDAOMapper.getComputerList(results);
 
 		} catch (SQLException e) {
-			throw new DAOException("Error while trying to retrieve the computer page with parameters : "
-					+ queryParameters + " query : " + query, e);
+			throw new DAOException(
+					"Error while trying to retrieve the computer page with parameters : " + queryParameters, e);
 
 		} finally {
 			ConnectionCloser.silentClose(results, preparedStatement, connection);
@@ -312,12 +312,12 @@ public class ComputerDAOImpl implements ComputerDAO {
 		PreparedStatement preparedStatement = null;
 
 		int nbComputer = 0;
-		String query = QueryParameterMapper.getCountQuery(queryParameters);
 
 		try {
 			connection = ConnectionFactory.getInstance().getConnection();
 
-			preparedStatement = connection.prepareStatement(query);
+			preparedStatement = QueryParameterMapper.createCountQueryAndGetPreparedStatement(queryParameters,
+					connection);
 			results = preparedStatement.executeQuery();
 
 			if (results != null && results.next()) {
@@ -325,7 +325,8 @@ public class ComputerDAOImpl implements ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			throw new DAOException("Error while trying to retrieve the number of computer. Query : " + query, e);
+			throw new DAOException(
+					"Error while trying to retrieve the number of computer. Query parameters : " + queryParameters, e);
 
 		} finally {
 			ConnectionCloser.silentClose(results, preparedStatement, connection);

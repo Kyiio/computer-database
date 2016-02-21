@@ -10,6 +10,7 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
 import com.excilys.service.ComputerService;
+import com.excilys.service.exception.ServiceException;
 import com.excilys.validator.CompanyValidator;
 import com.excilys.validator.ComputerValidator;
 import com.excilys.validator.QueryParametersValidator;
@@ -61,6 +62,11 @@ public class ComputerServiceImpl implements ComputerService {
 	public void deleteComputerAssociatedToCompany(int companyId, Connection connection) {
 
 		CompanyValidator.checkId(companyId);
+		
+		if(connection == null){
+			throw new ServiceException("Can't delete the computers because the given connection is null !");
+		}
+		
 		computerDAO.deleteComputersForCompanyId(companyId, connection);
 		
 	}

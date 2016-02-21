@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.excilys.dao.CompanyDAO;
+import com.excilys.dao.ConnectionCloser;
 import com.excilys.dao.ConnectionFactory;
 import com.excilys.dao.exception.DAOException;
 import com.excilys.dao.impl.CompanyDAOImpl;
@@ -79,6 +80,8 @@ public class CompanyServiceImpl implements CompanyService {
 		} catch (SQLException e) {
 			throw new ServiceException(
 					"Can't retrieve the connection to delete the company and the associated computers !", e);
+		} finally {
+			ConnectionCloser.silentClose(connection);
 		}
 
 	}

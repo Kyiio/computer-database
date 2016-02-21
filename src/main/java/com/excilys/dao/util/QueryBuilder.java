@@ -38,12 +38,12 @@ public class QueryBuilder {
 		return this;
 	}
 
-	public QueryBuilder offset(int offset) {
+	public QueryBuilder offset(String offset) {
 		queryContent.append("OFFSET ").append(offset).append(" ");
 		return this;
 	}
 
-	public QueryBuilder limit(int limit) {
+	public QueryBuilder limit(String limit) {
 		queryContent.append("LIMIT ").append(limit).append(" ");
 		return this;
 	}
