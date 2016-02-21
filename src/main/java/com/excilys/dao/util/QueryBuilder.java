@@ -13,6 +13,11 @@ public class QueryBuilder {
 		return this;
 	}
 
+	public QueryBuilder deleteFrom(String table){
+		queryContent.append("DELETE FROM ").append(table).append(" ");
+		return this;
+	}
+	
 	public QueryBuilder leftJoin(String table, String on) {
 		queryContent.append("LEFT JOIN ").append(table).append(" ON ").append(on).append(" ");
 		return this;
@@ -45,6 +50,11 @@ public class QueryBuilder {
 
 	public QueryBuilder append(String str) {
 		queryContent.append(str);
+		return this;
+	}
+	
+	public QueryBuilder append(int number) {
+		queryContent.append(number);
 		return this;
 	}
 

@@ -3,6 +3,7 @@ package com.excilys.UI;
 import java.util.Scanner;
 
 import com.excilys.command.CommandInvoker;
+import com.excilys.command.DeleteCompanyCommand;
 import com.excilys.command.DeleteComputerCommand;
 import com.excilys.command.InsertComputerCommand;
 import com.excilys.command.ListCompaniesCommand;
@@ -18,7 +19,7 @@ import com.excilys.command.UpdateComputerCommand;
 public class CommandLineInterface {
 
 	enum CommandType {
-		INSERT_COMPUTER, DELETE_COMPUTER, UPDATE_COMPUTER, LIST_COMPUTER, LIST_COMPANIES, HELP, QUIT, UNKNOWN_COMMAND
+		INSERT_COMPUTER, DELETE_COMPUTER, DELETE_COMPANY, UPDATE_COMPUTER, LIST_COMPUTER, LIST_COMPANIES, HELP, QUIT, UNKNOWN_COMMAND
 	}
 
 	public CommandLineInterface() {
@@ -35,6 +36,7 @@ public class CommandLineInterface {
 		System.out.println("Type " + CommandType.DELETE_COMPUTER + " to delete computer");
 		System.out.println("Type " + CommandType.UPDATE_COMPUTER + " to update computer");
 		System.out.println("Type " + CommandType.LIST_COMPUTER + " to list computer");
+		System.out.println("Type " + CommandType.DELETE_COMPANY + " to delete a company and all associated computers");
 		System.out.println("Type " + CommandType.LIST_COMPANIES + " to list companies\n");
 
 		System.out.println("Type " + CommandType.HELP + " to review the command list !");
@@ -64,12 +66,12 @@ public class CommandLineInterface {
 
 			System.out.print("CDB_Project >> ");
 
-			CommandType line = CommandType.UNKNOWN_COMMAND;
+			CommandType line;
 
 			try {
 				line = CommandType.valueOf(scanner.nextLine().trim());
 			} catch (IllegalArgumentException e) {
-
+				line = CommandType.UNKNOWN_COMMAND;
 			}
 
 			switch (line) {
@@ -84,7 +86,11 @@ public class CommandLineInterface {
 			case DELETE_COMPUTER:
 				commandInvoker.setCommand(new DeleteComputerCommand(scanner));
 				break;
-
+			
+			case DELETE_COMPANY:
+				commandInvoker.setCommand(new DeleteCompanyCommand(scanner));
+				break;
+				
 			case LIST_COMPANIES:
 				commandInvoker.setCommand(new ListCompaniesCommand(scanner));
 				break;

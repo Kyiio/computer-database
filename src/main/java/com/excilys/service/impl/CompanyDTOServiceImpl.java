@@ -6,12 +6,14 @@ import com.excilys.dto.CompanyDTO;
 import com.excilys.dto.mapper.CompanyDTOMapper;
 import com.excilys.model.Company;
 import com.excilys.service.CompanyDTOService;
+import com.excilys.service.CompanyService;
 import com.excilys.validator.CompanyValidator;
 
 public class CompanyDTOServiceImpl implements CompanyDTOService {
 
 	public static CompanyDTOService INSTANCE;
-
+	public CompanyService companyService;
+	
 	static {
 		INSTANCE = new CompanyDTOServiceImpl();
 	}
@@ -21,13 +23,13 @@ public class CompanyDTOServiceImpl implements CompanyDTOService {
 	}
 
 	private CompanyDTOServiceImpl() {
-
+		companyService = CompanyServiceImpl.getInstance();
 	}
 
 	@Override
 	public CompanyDTO getById(int id) {
 		CompanyValidator.checkId(id);
-		Company company = CompanyServiceImpl.getInstance().getById(id);
+		Company company = companyService.getById(id);
 
 		return CompanyDTOMapper.getCompanyDTO(company);
 	}
@@ -35,14 +37,14 @@ public class CompanyDTOServiceImpl implements CompanyDTOService {
 	@Override
 	public ArrayList<CompanyDTO> getByName(String name) {
 		CompanyValidator.checkName(name);
-		ArrayList<Company> companyList = CompanyServiceImpl.getInstance().getByName(name);
+		ArrayList<Company> companyList = companyService.getByName(name);
 
 		return CompanyDTOMapper.getCompanyDTOList(companyList);
 	}
 
 	@Override
 	public ArrayList<CompanyDTO> listCompanies() {
-		ArrayList<Company> companyList = CompanyServiceImpl.getInstance().listCompanies();
+		ArrayList<Company> companyList = companyService.listCompanies();
 
 		return CompanyDTOMapper.getCompanyDTOList(companyList);
 	}

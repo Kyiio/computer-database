@@ -55,14 +55,14 @@ public class ConnectionFactory {
 		String password;
 		
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		InputStream fichierProperties = classLoader.getResourceAsStream(FILE_PROPERTIES);
+		InputStream propertiesFile = classLoader.getResourceAsStream(FILE_PROPERTIES);
 
-		if (fichierProperties == null) {
+		if (propertiesFile == null) {
 			throw new DAOConfigurationException("The properties file " + FILE_PROPERTIES + " can't be found");
 		}
 		
 		try {
-			properties.load(fichierProperties);
+			properties.load(propertiesFile);
 			url = properties.getProperty(PROPERTY_URL);
 			driver = properties.getProperty(PROPERTY_DRIVER);
 			userName = properties.getProperty(PROPERTY_USER_NAME);

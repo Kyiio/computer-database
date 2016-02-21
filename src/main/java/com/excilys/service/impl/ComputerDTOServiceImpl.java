@@ -7,12 +7,14 @@ import com.excilys.dto.mapper.ComputerDTOMapper;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
 import com.excilys.service.ComputerDTOService;
+import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
 import com.excilys.validator.QueryParametersValidator;
 
 public class ComputerDTOServiceImpl implements ComputerDTOService {
 
 	public static ComputerDTOService INSTANCE;
+	public ComputerService computerService;
 
 	static {
 		INSTANCE = new ComputerDTOServiceImpl();
@@ -23,7 +25,7 @@ public class ComputerDTOServiceImpl implements ComputerDTOService {
 	}
 
 	private ComputerDTOServiceImpl() {
-
+		computerService = ComputerServiceImpl.getInstance();
 	}
 
 	@Override
@@ -36,7 +38,7 @@ public class ComputerDTOServiceImpl implements ComputerDTOService {
 
 		Computer computer = ComputerDTOMapper.getComputer(computerDTO);
 
-		ComputerServiceImpl.getInstance().updateComputer(computer);
+		computerService.updateComputer(computer);
 	}
 
 	@Override
@@ -48,7 +50,7 @@ public class ComputerDTOServiceImpl implements ComputerDTOService {
 
 		Computer computer = ComputerDTOMapper.getComputer(computerDTO);
 
-		return ComputerServiceImpl.getInstance().insertComputer(computer.getCompany(), computer.getIntroduced(),
+		return computerService.insertComputer(computer.getCompany(), computer.getIntroduced(),
 				computer.getDiscontinued(), computer.getName());
 	}
 
@@ -56,14 +58,14 @@ public class ComputerDTOServiceImpl implements ComputerDTOService {
 	public void deleteComputer(int id) {
 
 		ComputerValidator.checkId(id);
-		ComputerServiceImpl.getInstance().deleteComputer(id);
+		computerService.deleteComputer(id);
 	}
 
 	@Override
 	public ComputerDTO getById(int id) {
 
 		ComputerValidator.checkId(id);
-		Computer computer = ComputerServiceImpl.getInstance().getById(id);
+		Computer computer = computerService.getById(id);
 		return ComputerDTOMapper.getComputerDTO(computer);
 	}
 
@@ -71,14 +73,14 @@ public class ComputerDTOServiceImpl implements ComputerDTOService {
 	public ArrayList<ComputerDTO> getByName(String name) {
 
 		ComputerValidator.checkName(name);
-		ArrayList<Computer> computerList = ComputerServiceImpl.getInstance().getByName(name);
+		ArrayList<Computer> computerList = computerService.getByName(name);
 		return ComputerDTOMapper.getComputerDTOList(computerList);
 	}
 
 	@Override
 	public ArrayList<ComputerDTO> listComputers() {
 
-		ArrayList<Computer> computerList = ComputerServiceImpl.getInstance().listComputers();
+		ArrayList<Computer> computerList = computerService.listComputers();
 		return ComputerDTOMapper.getComputerDTOList(computerList);
 	}
 
@@ -87,7 +89,7 @@ public class ComputerDTOServiceImpl implements ComputerDTOService {
 
 		QueryParametersValidator.validateQueryParameters(queryParameters);
 
-		ArrayList<Computer> computerList = ComputerServiceImpl.getInstance().selectWithParameters(queryParameters);
+		ArrayList<Computer> computerList = computerService.selectWithParameters(queryParameters);
 
 		return ComputerDTOMapper.getComputerDTOList(computerList);
 	}
@@ -95,7 +97,7 @@ public class ComputerDTOServiceImpl implements ComputerDTOService {
 	@Override
 	public int getCount(QueryParameters queryParameters) {
 
-		return ComputerServiceImpl.getInstance().getCount(queryParameters);
+		return computerService.getCount(queryParameters);
 	}
 
 }

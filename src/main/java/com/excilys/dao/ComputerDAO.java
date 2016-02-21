@@ -1,5 +1,6 @@
 package com.excilys.dao;
 
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -92,8 +93,9 @@ public interface ComputerDAO {
 	public ArrayList<Computer> listComputers() throws DAOException;
 
 	/**
-	 * This method retrieves {@code offset} from the database starting at the
-	 * index {@code pageNumber * offset}
+	 * This method retrieves all the computer that matches the parameters
+	 * specified in the given {@link QueryParameters} object.
+	 * 
 	 * @param queryParameters
 	 * 
 	 * @return
@@ -102,9 +104,20 @@ public interface ComputerDAO {
 	public ArrayList<Computer> selectWithParameters(QueryParameters queryParameters) throws DAOException;
 
 	/**
-	 * @param queryParameter TODO
-	 * @return The number of Computer that are in the database.
+	 * Method that returns the number of computer that match the parameters
+	 * specified in the given {@link QueryParameters} object.
+	 * 
+	 * @param queryParameter
+	 * @return The number of Computer that match the query parameters.
 	 * @throws DAOException
 	 */
 	public int getCount(QueryParameters queryParameter) throws DAOException;
+
+	/**
+	 * Method that deletes all the computers associated to the given companyId
+	 * 
+	 * @param companyId
+	 * @param connection The connection to the database
+	 */
+	public void deleteComputersForCompanyId(int companyId, Connection connection);
 }

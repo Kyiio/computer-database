@@ -32,10 +32,5 @@ public class DeleteComputerCommand extends AbstractCommand{
 		} catch (CommandException e){
 			System.out.println("The id must be positive !");
 		}
-		
-		
-		
-		
 	}
-	
 }

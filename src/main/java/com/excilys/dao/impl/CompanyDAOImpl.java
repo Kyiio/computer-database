@@ -18,6 +18,8 @@ public class CompanyDAOImpl implements CompanyDAO{
 	private final String LIST_ALL_QUERY  	= "SELECT * FROM company";
 	private final String GET_BY_ID_QUERY 	= "SELECT * FROM company WHERE ID = ?";
 	private final String GET_BY_NAME_QUERY 	= "SELECT * FROM company WHERE NAME = ?";
+	
+	private final String DELETE_QUERY = "DELETE FROM company WHERE ID=?";
 
 	private static CompanyDAO INSTANCE;
 	
@@ -124,4 +126,20 @@ public class CompanyDAOImpl implements CompanyDAO{
 		return companyResults;
 	}
 
+	@Override
+	public void deleteCompany(int id, Connection connection) {
+
+		PreparedStatement preparedStatement = null;
+		
+		try {
+			preparedStatement = connection.prepareStatement(DELETE_QUERY);
+			preparedStatement.setInt(1, id);
+			
+			preparedStatement.executeUpdate();
+			
+		} catch (SQLException e) {
+			throw new DAOException("Error trying to delete the company with id : " + id, e);
+		}
+	}
+	
 }

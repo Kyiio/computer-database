@@ -34,4 +34,11 @@ public interface CompanyService {
 	 */
 	public ArrayList<Company> listCompanies();
 
+	/**
+	 * This method delete the company with the given id and all the computer associated to it.
+	 * 
+	 * @param id
+	 */
+	public void deleteCompany(int id);
+	
 }

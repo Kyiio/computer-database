@@ -14,11 +14,11 @@ import com.excilys.dao.ConnectionCloser;
 import com.excilys.dao.ConnectionFactory;
 import com.excilys.dao.exception.DAOException;
 import com.excilys.dao.mapper.ComputerDAOMapper;
+import com.excilys.dao.util.QueryBuilder;
 import com.excilys.dao.util.QueryParameterMapper;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
-import com.excilys.servlets.util.QueryParametersBuilder;
 
 public class ComputerDAOImpl implements ComputerDAO {
 
@@ -29,9 +29,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 	private final String LIST_ALL_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID";
 	private final String GET_BY_ID_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID WHERE computer.ID = ?";
 	private final String GET_BY_NAME_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID WHERE computer.NAME = ?";
-	private final String GET_NB_COMPUTER = "SELECT COUNT(*) FROM computer";
-
-	private final String GET_PAGE_QUERY = "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID WHERE computer.NAME IN ? OR company.NAME IN ? LIMIT ? OFFSET ? ORDER BY ? ?";
 
 	private static ComputerDAO INSTANCE;
 
@@ -84,7 +81,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 			preparedStatement.setString(4, name);
 
 			preparedStatement.executeUpdate();
-
 			ResultSet resultSet = preparedStatement.getGeneratedKeys();
 
 			if (resultSet.next()) {
@@ -160,7 +156,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 		} finally {
 			ConnectionCloser.silentClose(preparedStatement, connection);
 		}
-
 	}
 
 	@Override
@@ -289,24 +284,18 @@ public class ComputerDAOImpl implements ComputerDAO {
 		PreparedStatement preparedStatement = null;
 
 		String query = QueryParameterMapper.getPageQuery(queryParameters);
-		
+
 		try {
 			connection = ConnectionFactory.getInstance().getConnection();
 			preparedStatement = connection.prepareStatement(query);
-			/*preparedStatement.setString(1, queryParameters.getSearch());
-			preparedStatement.setString(2, queryParameters.getSearch());
-			preparedStatement.setInt(3, queryParameters.getPageSize());
-			preparedStatement.setInt(4, queryParameters.getOffset());
-			preparedStatement.setString(5, queryParameters.getBy());
-			preparedStatement.setString(6, queryParameters.getOrder());*/
 
 			results = preparedStatement.executeQuery();
 
 			computerResult = ComputerDAOMapper.getComputerList(results);
 
 		} catch (SQLException e) {
-			throw new DAOException(
-					"Error while trying to retrieve the computer page with parameters : " + queryParameters + " query : " + query, e);
+			throw new DAOException("Error while trying to retrieve the computer page with parameters : "
+					+ queryParameters + " query : " + query, e);
 
 		} finally {
 			ConnectionCloser.silentClose(results, preparedStatement, connection);
@@ -323,8 +312,8 @@ public class ComputerDAOImpl implements ComputerDAO {
 		PreparedStatement preparedStatement = null;
 
 		int nbComputer = 0;
-		String query = QueryParameterMapper.getCountQuery(queryParameters); 
-		
+		String query = QueryParameterMapper.getCountQuery(queryParameters);
+
 		try {
 			connection = ConnectionFactory.getInstance().getConnection();
 
@@ -345,4 +334,26 @@ public class ComputerDAOImpl implements ComputerDAO {
 		return nbComputer;
 	}
 
+	@Override
+	public void deleteComputersForCompanyId(int companyId, Connection connection) {
+
+		QueryBuilder queryBuilder = new QueryBuilder();
+		queryBuilder.deleteFrom("computer").where("COMPANY_ID =").append(companyId);
+		String query = queryBuilder.getQuery();
+
+		PreparedStatement preparedStatement = null;
+
+		try {
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.executeUpdate();
+
+		} catch (SQLException e) {
+
+			throw new DAOException(
+					"Error while trying to delete the computers associated to the company id : " + companyId, e);
+
+		} finally {
+			ConnectionCloser.silentClose(preparedStatement);
+		}
+	}
 }

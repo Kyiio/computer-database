@@ -1,5 +1,6 @@
 package com.excilys.dao;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import com.excilys.dao.exception.DAOException;
@@ -47,5 +48,13 @@ public interface CompanyDAO {
 	 * @see Company
 	 */
 	public ArrayList<Company> listCompanies() throws DAOException;
+
+	/**
+	 * This method delete the company with the given id.
+	 * 
+	 * @param id
+	 * @param connection The connection we need to perform this operation
+	 */
+	public void deleteCompany(int id, Connection connection);
 
 }

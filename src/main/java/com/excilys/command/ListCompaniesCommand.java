@@ -20,7 +20,7 @@ public class ListCompaniesCommand extends AbstractCommand {
 	@Override
 	public void execute() {
 
-		System.out.println("Here is the list of all the company's computer :");
+		System.out.println("Here is the list of all the company :");
 
 		for (Company company : CompanyServiceImpl.getInstance().listCompanies()) {
 			System.out.println(company);
