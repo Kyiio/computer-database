@@ -7,17 +7,17 @@ package com.excilys.exception;
  */
 public class ValidationException extends RuntimeException {
 
-	private static final long serialVersionUID = -2469410843259970165L;
+  private static final long serialVersionUID = -2469410843259970165L;
 
-	public ValidationException(String message) {
-		super(message);
-	}
+  public ValidationException(String message) {
+    super(message);
+  }
 
-	public ValidationException(String message, Throwable cause) {
-		super(message, cause);
-	}
+  public ValidationException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
-	public ValidationException(Throwable cause) {
-		super(cause);
-	}
+  public ValidationException(Throwable cause) {
+    super(cause);
+  }
 }

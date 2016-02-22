@@ -1,5 +1,10 @@
 package com.excilys.servlets;
 
+import com.excilys.dto.CompanyDto;
+import com.excilys.dto.ComputerDto;
+import com.excilys.service.impl.CompanyDtoServiceImpl;
+import com.excilys.service.impl.ComputerDtoServiceImpl;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -8,65 +13,85 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.dto.CompanyDTO;
-import com.excilys.dto.ComputerDTO;
-import com.excilys.service.impl.CompanyDTOServiceImpl;
-import com.excilys.service.impl.ComputerDTOServiceImpl;
-
 /**
- * Servlet implementation class editComputer
+ * Servlet implementation class editComputer.
  */
 public class EditComputerServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public EditComputerServlet() {
-		super();
-	}
+  /** The Constant serialVersionUID. */
+  private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+  /**
+   * Instantiates a new edits the computer servlet.
+   *
+   * @see HttpServlet#HttpServlet()
+   */
+  public EditComputerServlet() {
+    super();
+  }
 
-		String computerId = request.getParameter("computer-id");
+  /**
+   * Do get.
+   *
+   * @param request
+   *          the request
+   * @param response
+   *          the response
+   * @throws ServletException
+   *           the servlet exception
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
+   * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+   */
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
 
-		if (computerId != null) {
+    String computerId = request.getParameter("computer-id");
 
-			ComputerDTO computerDTO = ComputerDTOServiceImpl.getInstance().getById(Integer.parseInt(computerId));
-			ArrayList<CompanyDTO> companyDTOList = CompanyDTOServiceImpl.getInstance().listCompanies();
+    if (computerId != null) {
 
-			request.setAttribute("computer", computerDTO);
-			request.setAttribute("companyList", companyDTOList);
-			request.getRequestDispatcher("/WEB-INF/jsp/editComputer.jsp").forward(request, response);
-		} else {
-			response.sendRedirect("dashboard");
-		}
-	}
+      ComputerDto computerDto =
+          ComputerDtoServiceImpl.getInstance().getById(Integer.parseInt(computerId));
+      ArrayList<CompanyDto> companyDtoList = CompanyDtoServiceImpl.getInstance().listCompanies();
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+      request.setAttribute("computer", computerDto);
+      request.setAttribute("companyList", companyDtoList);
+      request.getRequestDispatcher("/WEB-INF/jsp/editComputer.jsp").forward(request, response);
+    } else {
+      response.sendRedirect("dashboard");
+    }
+  }
 
-		String computerId = request.getParameter("computerId");
-		String computerName = request.getParameter("computerName");
-		String introduced = request.getParameter("introduced");
-		String discontinued = request.getParameter("discontinued");
-		String companyId = request.getParameter("companyId");
-		
-		ComputerDTO computerDTO = new ComputerDTO(Integer.parseInt(computerId), computerName, introduced, discontinued,
-				Integer.parseInt(companyId), "");
+  /**
+   * Do post.
+   *
+   * @param request
+   *          the request
+   * @param response
+   *          the response
+   * @throws ServletException
+   *           the servlet exception
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
+   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+   */
+  @Override
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
 
-		ComputerDTOServiceImpl.getInstance().updateComputer(computerDTO);
-		
-		response.sendRedirect("dashboard");
-	}
+    String computerId = request.getParameter("computerId");
+    String computerName = request.getParameter("computerName");
+    String introduced = request.getParameter("introduced");
+    String discontinued = request.getParameter("discontinued");
+    String companyId = request.getParameter("companyId");
+
+    ComputerDto computerDto = new ComputerDto(Integer.parseInt(computerId), computerName,
+        introduced, discontinued, Integer.parseInt(companyId), "");
+
+    ComputerDtoServiceImpl.getInstance().updateComputer(computerDto);
+
+    response.sendRedirect("dashboard");
+  }
 
 }

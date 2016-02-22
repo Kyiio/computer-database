@@ -1,11 +1,7 @@
 package com.excilys.service.impl;
 
-import java.sql.Connection;
-import java.time.LocalDate;
-import java.util.ArrayList;
-
-import com.excilys.dao.ComputerDAO;
-import com.excilys.dao.impl.ComputerDAOImpl;
+import com.excilys.dao.ComputerDao;
+import com.excilys.dao.impl.ComputerDaoImpl;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
@@ -15,93 +11,99 @@ import com.excilys.validator.CompanyValidator;
 import com.excilys.validator.ComputerValidator;
 import com.excilys.validator.QueryParametersValidator;
 
+import java.sql.Connection;
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 public class ComputerServiceImpl implements ComputerService {
 
-	public static ComputerService INSTANCE;
-	public ComputerDAO computerDAO;
+  public static ComputerService INSTANCE;
+  public ComputerDao computerDao;
 
-	static {
-		INSTANCE = new ComputerServiceImpl();
-	}
+  static {
+    INSTANCE = new ComputerServiceImpl();
+  }
 
-	public static ComputerService getInstance() {
-		return INSTANCE;
-	}
+  public static ComputerService getInstance() {
+    return INSTANCE;
+  }
 
-	private ComputerServiceImpl() {
-		computerDAO = ComputerDAOImpl.getInstance();
-	}
+  private ComputerServiceImpl() {
+    computerDao = ComputerDaoImpl.getInstance();
+  }
 
-	@Override
-	public void updateComputer(Computer computer) {
+  @Override
+  public void updateComputer(Computer computer) {
 
-		ComputerValidator.checkId(computer.getId());
-		ComputerValidator.checkName(computer.getName());
-		ComputerValidator.checkDateConsitency(computer.getIntroduced(), computer.getDiscontinued());
+    ComputerValidator.checkId(computer.getId());
+    ComputerValidator.checkName(computer.getName());
+    ComputerValidator.checkDateConsitency(computer.getIntroduced(), computer.getDiscontinued());
 
-		computerDAO.updateComputer(computer);
-	}
+    computerDao.updateComputer(computer);
+  }
 
-	@Override
-	public int insertComputer(Company company, LocalDate introduced, LocalDate discontinued, String name) {
+  @Override
+  public int insertComputer(Company company, LocalDate introduced, LocalDate discontinued,
+      String name) {
 
-		ComputerValidator.checkName(name);
-		ComputerValidator.checkDateConsitency(introduced, discontinued);
+    ComputerValidator.checkName(name);
+    ComputerValidator.checkDateConsitency(introduced, discontinued);
 
-		return computerDAO.insertComputer(company, discontinued, introduced, name);
-	}
+    return computerDao.insertComputer(company, discontinued, introduced, name);
+  }
 
-	@Override
-	public void deleteComputer(int id) {
+  @Override
+  public void deleteComputer(int id) {
 
-		ComputerValidator.checkId(id);
-		computerDAO.deleteComputer(id);
-	}
+    ComputerValidator.checkId(id);
+    computerDao.deleteComputer(id);
+  }
 
-	@Override
-	public void deleteComputerAssociatedToCompany(int companyId, Connection connection) {
+  @Override
+  public void deleteComputerAssociatedToCompany(int companyId, Connection connection) {
 
-		CompanyValidator.checkId(companyId);
-		
-		if(connection == null){
-			throw new ServiceException("Can't delete the computers because the given connection is null !");
-		}
-		
-		computerDAO.deleteComputersForCompanyId(companyId, connection);
-		
-	}
-	
-	@Override
-	public Computer getById(int id) {
+    CompanyValidator.checkId(companyId);
 
-		ComputerValidator.checkId(id);
-		return computerDAO.getById(id);
-	}
+    if (connection == null) {
+      throw new ServiceException(
+          "Can't delete the computers because the given connection is null !");
+    }
 
-	@Override
-	public ArrayList<Computer> getByName(String name) {
+    computerDao.deleteComputersForCompanyId(companyId, connection);
 
-		ComputerValidator.checkName(name);
-		return computerDAO.getByName(name);
-	}
+  }
 
-	@Override
-	public ArrayList<Computer> listComputers() {
+  @Override
+  public Computer getById(int id) {
 
-		return computerDAO.listComputers();
-	}
+    ComputerValidator.checkId(id);
+    return computerDao.getById(id);
+  }
 
-	@Override
-	public ArrayList<Computer> selectWithParameters(QueryParameters queryParameters) {
+  @Override
+  public ArrayList<Computer> getByName(String name) {
 
-		QueryParametersValidator.validateQueryParameters(queryParameters);
+    ComputerValidator.checkName(name);
+    return computerDao.getByName(name);
+  }
 
-		return computerDAO.selectWithParameters(queryParameters);
-	}
+  @Override
+  public ArrayList<Computer> listComputers() {
 
-	@Override
-	public int getCount(QueryParameters queryParameters) {
-		return computerDAO.getCount(queryParameters);
-	}
+    return computerDao.listComputers();
+  }
+
+  @Override
+  public ArrayList<Computer> selectWithParameters(QueryParameters queryParameters) {
+
+    QueryParametersValidator.validateQueryParameters(queryParameters);
+
+    return computerDao.selectWithParameters(queryParameters);
+  }
+
+  @Override
+  public int getCount(QueryParameters queryParameters) {
+    return computerDao.getCount(queryParameters);
+  }
 
 }
