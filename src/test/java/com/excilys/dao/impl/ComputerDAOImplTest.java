@@ -4,7 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.dbunit.dataset.DataSetException;
@@ -18,6 +21,7 @@ import org.junit.Test;
 import com.excilys.dao.ComputerDAO;
 import com.excilys.dao.DBTestConnector;
 import com.excilys.dao.exception.DAOException;
+import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
 public class ComputerDAOImplTest {
@@ -34,16 +38,16 @@ public class ComputerDAOImplTest {
 
 		computerDAO = ComputerDAOImpl.getInstance();
 	}
-	
+
 	@AfterClass
-	public static void end(){
+	public static void end() {
 		cfm = null;
 		computerDAO = null;
 	}
 
 	@Before
 	public void importDataSet() {
-		
+
 		IDataSet dataSet;
 		try {
 			dataSet = cfm.readDataSet("src/test/resources/ComputerDAOImpl_dataset.xml");
@@ -54,91 +58,80 @@ public class ComputerDAOImplTest {
 	}
 
 	@Test
-	public void testInsertComputer() {
+	public void testInsertComputer() throws Exception {
 
 		int newId = computerDAO.insertComputer(null, null, null, "Toto's computer");
 
-		try {
+		ITable computerTable = cfm.getDatabaseTester().getConnection().createDataSet().getTable("computer");
+		int id = Integer.valueOf(computerTable.getValue(computerTable.getRowCount() - 1, "ID").toString());
+		String computerName = (String) computerTable.getValue(computerTable.getRowCount() - 1, "NAME");
 
-			ITable computerTable = cfm.getDatabaseTester().getConnection().createDataSet().getTable("computer");
-			int id = Integer.valueOf(computerTable.getValue(computerTable.getRowCount() - 1, "ID").toString());
-			String computerName = (String) computerTable.getValue(computerTable.getRowCount() - 1, "NAME");
-
-			assertEquals("Toto's computer", computerName);
-			assertEquals(newId, id);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		assertEquals("Toto's computer", computerName);
+		assertEquals(newId, id);
 	}
-	
+
 	@Test
+	public void testInsertComputer2() throws Exception {
+
+		int newId = computerDAO.insertComputer(new Company(1, "Company's name"), LocalDate.of(2000, 10, 10),
+				LocalDate.of(2016, 10, 10), "Toto's computer");
+
+		ITable computerTable = cfm.getDatabaseTester().getConnection().createDataSet().getTable("computer");
+		int id = Integer.valueOf(computerTable.getValue(computerTable.getRowCount() - 1, "ID").toString());
+		String computerName = (String) computerTable.getValue(computerTable.getRowCount() - 1, "NAME");
+
+		assertEquals("Toto's computer", computerName);
+		assertEquals(newId, id);
+	}
+
+	@Test(expected = DAOException.class)
 	public void testInsertComputerNull() {
+		computerDAO.insertComputer(null, null, null, null);
+	}
 
-		try {
-			computerDAO.insertComputer(null, null, null, null);
-			assertTrue(false);
-		} catch (DAOException e) {
-			assertTrue(true);
-		}
+	@Test(expected = DAOException.class)
+	public void testInsertComputerNameEmpty() {
+		computerDAO.insertComputer(null, null, null, "");
 	}
 
 	@Test
-	public void testDeleteComputer() {
+	public void testDeleteComputer() throws SQLException, Exception {
 
-		try {
+		IDataSet dataSet = cfm.getDatabaseTester().getConnection().createDataSet();
+		int oldNumberOfLine = dataSet.getTable("computer").getRowCount();
 
-			IDataSet dataSet = cfm.getDatabaseTester().getConnection().createDataSet();
-			int oldNumberOfLine = dataSet.getTable("computer").getRowCount();
-			
-			computerDAO.deleteComputer(1);
-			
-			assertEquals(oldNumberOfLine-1, dataSet.getTable("computer").getRowCount());
+		computerDAO.deleteComputer(1);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		assertEquals(oldNumberOfLine - 1, dataSet.getTable("computer").getRowCount());
 	}
-	
+
 	@Test
-	public void testDeleteComputerFakeId() {
+	public void testDeleteComputerFakeId() throws SQLException, Exception {
 
 		int oldNumberOfLine = -1;
 		IDataSet dataSet = null;
-		
-		try {
-			dataSet = cfm.getDatabaseTester().getConnection().createDataSet();
-			oldNumberOfLine = dataSet.getTable("computer").getRowCount();
-			
-			computerDAO.deleteComputer(-200);
-			
-		} catch (DAOException e) {
-			try {
-				assertEquals(oldNumberOfLine, dataSet.getTable("computer").getRowCount());
-			} catch (DataSetException e1) {
-				e1.printStackTrace();
-			}
-		} catch(Exception e){
-			e.printStackTrace();
-		}
-	}	
-	
-	@Test
-	public void testListComputer() {
-		
-		ArrayList<Computer> listComputer = computerDAO.listComputers();
-		try {
-			assertEquals(listComputer.size(), cfm.readDataSet("src/test/resources/ComputerDAOImpl_dataset.xml").getTable("computer").getRowCount());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
+		dataSet = cfm.getDatabaseTester().getConnection().createDataSet();
+		oldNumberOfLine = dataSet.getTable("computer").getRowCount();
+
+		computerDAO.deleteComputer(-200);
+
+		assertEquals(oldNumberOfLine, dataSet.getTable("computer").getRowCount());
 	}
-	
+
+	@Test
+	public void testListComputer() throws DataSetException, Exception {
+
+		ArrayList<Computer> listComputer = computerDAO.listComputers();
+		assertEquals(listComputer.size(),
+				cfm.readDataSet("src/test/resources/ComputerDAOImpl_dataset.xml").getTable("computer").getRowCount());
+	}
+
 	@Test
 	public void testGetComputerById() {
 
 		Computer computer = computerDAO.getById(1);
-		assertEquals(computer.getId(),1);
+		assertEquals(computer.getId(), 1);
 	}
 
 	@Test
@@ -147,35 +140,24 @@ public class ComputerDAOImplTest {
 		Computer computer = computerDAO.getById(-1);
 		assertNull(computer);
 	}
-	
-	
-	@Test
-	public void testUpdateComputerNull() {
 
-		try {
-			computerDAO.updateComputer(null);
-			assertTrue(false);
-		} catch (DAOException e) {
-			assertTrue(true);
-		}
+	@Test(expected = DAOException.class)
+	public void testUpdateComputerNull() {
+		computerDAO.updateComputer(null);
 	}
-	
+
 	@Test
 	public void testUpdateComputer() {
 
-		try {
-			Computer computer = computerDAO.getById(1);
-			Computer cp = new Computer(computer);
-			
-			computer.setName("new computer name");
-			computerDAO.updateComputer(computer);
-			
-			computer = null;
-			computer = computerDAO.getById(1);
-			
-			assertNotEquals(computer, cp);
-		} catch (DAOException e) {
-			assertTrue(true);
-		}
+		Computer computer = computerDAO.getById(1);
+		Computer cp = new Computer(computer);
+
+		computer.setName("new computer name");
+		computerDAO.updateComputer(computer);
+
+		computer = null;
+		computer = computerDAO.getById(1);
+
+		assertNotEquals(computer, cp);
 	}
 }

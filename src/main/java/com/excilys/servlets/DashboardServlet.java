@@ -72,7 +72,8 @@ public class DashboardServlet extends HttpServlet {
 			ComputerDTOServiceImpl.getInstance().deleteComputer(Integer.parseInt(idStrTab[i]));
 		}
 
-		response.sendRedirect("dashboard");
+		//response.sendRedirect("dashboard");
+		doGet(request, response);
 	}
 
 }

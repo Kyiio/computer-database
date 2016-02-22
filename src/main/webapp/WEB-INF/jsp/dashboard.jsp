@@ -27,8 +27,8 @@
 			<h1 id="homeTitle">${page.totalNumberOfComputer} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="./dashboard?computer-per-page=${page.pageSize}" method="GET" class="form-inline">
-
+					<form id="searchForm" action="./dashboard" method="GET" class="form-inline">
+						<input type="hidden" name="computer-per-page"  value="${page.pageSize}" />
 						<input type="search" id="search-name" name="search-name"
 							class="form-control" placeholder="Search name" value="${((page.searchName != '%')? page.searchName:'')}"/> <input
 							type="submit" id="searchsubmit" value="Filter by name"
@@ -45,6 +45,8 @@
 
 		<form id="deleteForm" action="./dashboard" method="POST">
 			<input type="hidden" name="selection" value="">
+			<input type="hidden" name="computer-per-page"  value="${page.pageSize}" />
+			<input type="hidden" name="search-name"  value="${page.searchName}" />
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
