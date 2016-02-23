@@ -1,6 +1,7 @@
 package com.excilys.integration;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -30,10 +31,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class AddComputerIntegrationTest {
 
-  private WebDriver       driver;
-  private String          baseUrl;
-  private boolean         acceptNextAlert    = true;
-  private StringBuffer    verificationErrors = new StringBuffer();
+  private WebDriver                driver;
+  private String                   baseUrl;
+  private boolean                  acceptNextAlert    = true;
+  private StringBuffer             verificationErrors = new StringBuffer();
 
   private static ComputerService   computerServiceDao = ComputerServiceImpl.getInstance();
   private static ConnectionManager connectionManager;
@@ -66,7 +67,7 @@ public class AddComputerIntegrationTest {
     driver = new FirefoxDriver();
     baseUrl = "http://localhost:6060/";
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-    // connectionManager.startTransaction();
+    connectionManager.startTransaction();
   }
 
   /**
@@ -74,8 +75,8 @@ public class AddComputerIntegrationTest {
    */
   @After
   public void after() {
-    // connectionManager.rollback();
-    // connectionManager.closeConnection();
+    connectionManager.rollback();
+    connectionManager.closeConnection();
 
     driver.quit();
     String verificationErrorString = verificationErrors.toString();
@@ -154,7 +155,7 @@ public class AddComputerIntegrationTest {
 
     ArrayList<Computer> computerList = computerServiceDao.getByName("Toto integration test");
 
-    assertEquals(1, computerList.size());
+    assertNotEquals(0, computerList.size());
 
     // And we check the insertion went well for all fields
 
@@ -182,7 +183,6 @@ public class AddComputerIntegrationTest {
    * "^Are you sure you want to delete the selected computers[\\s\\S]$"));
    * 
    */
-
 
   /**
    * Close alert and get its text.

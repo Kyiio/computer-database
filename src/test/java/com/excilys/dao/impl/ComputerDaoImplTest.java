@@ -12,7 +12,6 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
 
-import org.dbunit.dataset.DataSetException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -174,7 +173,7 @@ public class ComputerDaoImplTest {
    *           the exception
    */
   @Test
-  public void testListComputer() throws DataSetException, Exception {
+  public void testListComputer() throws Exception {
 
     ArrayList<Computer> listComputer = computerDAO.listComputers();
 

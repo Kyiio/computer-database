@@ -40,12 +40,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.dbunit</groupId>
-			<artifactId>dbunit</artifactId>
-			<version>${dbunit-version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>${org-mokito-all-version}</version>
@@ -61,12 +55,6 @@
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
 			<version>${powermock-module-junit4-version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>${h2-version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -131,13 +119,11 @@
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
 			</resource>
 		</resources>
 		<testResources>
 			<testResource>
-				<directory>src/test/resources</directory>
-				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
 			</testResource>
 		</testResources>
 		<plugins>
@@ -172,6 +158,9 @@
 					<includes>
 						<include>${selenium-test-suite}</include>
 					</includes>
+					<excludes>
+						<exclude>${junit-test-suite}</exclude>
+					</excludes>
 				</configuration>
 				<executions>
 					<execution>
