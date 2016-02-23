@@ -8,7 +8,7 @@ package com.excilys.dto;
  */
 public class CompanyDto {
 
-  private int id;
+  private int    id;
   private String name;
 
   public CompanyDto(int id, String name) {

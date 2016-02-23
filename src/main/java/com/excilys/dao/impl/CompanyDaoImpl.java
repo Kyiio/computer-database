@@ -2,7 +2,7 @@ package com.excilys.dao.impl;
 
 import com.excilys.dao.CompanyDao;
 import com.excilys.dao.ConnectionCloser;
-import com.excilys.dao.ConnectionFactory;
+import com.excilys.dao.ConnectionManager;
 import com.excilys.dao.exception.DaoException;
 import com.excilys.dao.mapper.CompanyDaoMapper;
 import com.excilys.model.Company;
@@ -15,26 +15,26 @@ import java.util.ArrayList;
 
 public class CompanyDaoImpl implements CompanyDao {
 
-  private static final String LIST_ALL_QUERY = "SELECT * FROM company";
-  private static final String GET_BY_ID_QUERY = "SELECT * FROM company WHERE ID = ?";
+  private static final String LIST_ALL_QUERY    = "SELECT * FROM company";
+  private static final String GET_BY_ID_QUERY   = "SELECT * FROM company WHERE ID = ?";
   private static final String GET_BY_NAME_QUERY = "SELECT * FROM company WHERE NAME = ?";
 
-  private static final String DELETE_QUERY = "DELETE FROM company WHERE ID=?";
+  private static final String DELETE_QUERY      = "DELETE FROM company WHERE ID=?";
 
-  private static CompanyDao INSTANCE;
+  private static CompanyDao   INSTANCE;
 
-  private ConnectionFactory connectionFactory;
+  private ConnectionManager   connectionManager;
 
   static {
-    INSTANCE = new CompanyDaoImpl(ConnectionFactory.getInstance());
+    INSTANCE = new CompanyDaoImpl(ConnectionManager.getInstance());
   }
 
   public static CompanyDao getInstance() {
     return INSTANCE;
   }
 
-  private CompanyDaoImpl(ConnectionFactory connectionFactory) {
-    this.connectionFactory = connectionFactory;
+  private CompanyDaoImpl(ConnectionManager connectionManager) {
+    this.connectionManager = connectionManager;
   }
 
   @Override
@@ -42,12 +42,10 @@ public class CompanyDaoImpl implements CompanyDao {
 
     ResultSet results = null;
     Company companyResult = null;
-    Connection connection = null;
     PreparedStatement preparedStatement = null;
+    Connection connection = connectionManager.getConnection();
 
     try {
-      connection = connectionFactory.getConnection();
-
       preparedStatement = connection.prepareStatement(GET_BY_ID_QUERY);
       preparedStatement.setInt(1, id);
 
@@ -61,9 +59,9 @@ public class CompanyDaoImpl implements CompanyDao {
 
     } catch (SQLException e) {
       throw new DaoException("Error retrieving company with id " + id, e);
-
     } finally {
-      ConnectionCloser.silentClose(results, preparedStatement, connection);
+      connectionManager.closeConnection();
+      ConnectionCloser.silentClose(results, preparedStatement);
     }
 
     return companyResult;
@@ -73,13 +71,11 @@ public class CompanyDaoImpl implements CompanyDao {
   public ArrayList<Company> getByName(String name) throws DaoException {
 
     ResultSet results = null;
-    Connection connection = null;
     ArrayList<Company> companyResults = null;
     PreparedStatement preparedStatement = null;
+    Connection connection = connectionManager.getConnection();
 
     try {
-      connection = connectionFactory.getConnection();
-
       preparedStatement = connection.prepareStatement(GET_BY_NAME_QUERY);
       preparedStatement.setString(1, name);
 
@@ -89,26 +85,23 @@ public class CompanyDaoImpl implements CompanyDao {
 
     } catch (SQLException e) {
       throw new DaoException("Error retrieving company with name " + name, e);
-
     } finally {
-      ConnectionCloser.silentClose(results, preparedStatement, connection);
+      connectionManager.closeConnection();
+      ConnectionCloser.silentClose(results, preparedStatement);
     }
 
     return companyResults;
-
   }
 
   @Override
   public ArrayList<Company> listCompanies() throws DaoException {
 
     ResultSet results = null;
-    Connection connection = null;
     ArrayList<Company> companyResults = null;
     PreparedStatement preparedStatement = null;
+    Connection connection = connectionManager.getConnection();
 
     try {
-      connection = connectionFactory.getConnection();
-
       preparedStatement = connection.prepareStatement(LIST_ALL_QUERY);
 
       results = preparedStatement.executeQuery();
@@ -119,16 +112,18 @@ public class CompanyDaoImpl implements CompanyDao {
       throw new DaoException("Error retrieving company list", e);
 
     } finally {
-      ConnectionCloser.silentClose(results, preparedStatement, connection);
+      connectionManager.closeConnection();
+      ConnectionCloser.silentClose(results, preparedStatement);
     }
 
     return companyResults;
   }
 
   @Override
-  public void deleteCompany(int id, Connection connection) {
+  public void deleteCompany(int id) {
 
     PreparedStatement preparedStatement = null;
+    Connection connection = connectionManager.getConnection();
 
     try {
       preparedStatement = connection.prepareStatement(DELETE_QUERY);
@@ -138,6 +133,9 @@ public class CompanyDaoImpl implements CompanyDao {
 
     } catch (SQLException e) {
       throw new DaoException("Error trying to delete the company with id : " + id, e);
+    } finally {
+      connectionManager.closeConnection();
+      ConnectionCloser.silentClose(preparedStatement);
     }
   }
 

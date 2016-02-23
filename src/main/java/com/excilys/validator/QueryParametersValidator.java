@@ -24,8 +24,7 @@ public interface QueryParametersValidator {
   }
 
   /**
-   * Method that check if the pageNumber isn't inferior to 1
-   * If not it throws a ValidationException.
+   * Method that check if the pageNumber isn't inferior to 1 If not it throws a ValidationException.
    *
    * @param pageNumber
    *          the page number

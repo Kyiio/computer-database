@@ -8,24 +8,29 @@ package com.excilys.dto;
  */
 public class ComputerDto {
 
-  private int computerId;
+  private int    computerId;
   private String computerName;
   private String introducedDate;
   private String discontinuedDate;
 
-  private int companyId;
+  private int    companyId;
   private String companyName;
 
-  
   /**
    * Instantiates a new computer dto.
    *
-   * @param computerId the computer id
-   * @param computerName the computer name
-   * @param introducedDate the introduced date
-   * @param discontinuedDate the discontinued date
-   * @param companyId the company id
-   * @param companyName the company name
+   * @param computerId
+   *          the computer id
+   * @param computerName
+   *          the computer name
+   * @param introducedDate
+   *          the introduced date
+   * @param discontinuedDate
+   *          the discontinued date
+   * @param companyId
+   *          the company id
+   * @param companyName
+   *          the company name
    */
   public ComputerDto(int computerId, String computerName, String introducedDate,
       String discontinuedDate, int companyId, String companyName) {

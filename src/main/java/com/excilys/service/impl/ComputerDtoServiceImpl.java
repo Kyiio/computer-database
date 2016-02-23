@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class ComputerDtoServiceImpl implements ComputerDtoService {
 
   public static ComputerDtoService INSTANCE;
-  public ComputerService computerService;
+  public ComputerService           computerService;
 
   static {
     INSTANCE = new ComputerDtoServiceImpl();

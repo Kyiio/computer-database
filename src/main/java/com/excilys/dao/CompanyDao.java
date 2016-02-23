@@ -2,7 +2,6 @@ package com.excilys.dao;
 
 import com.excilys.model.Company;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 
 /**
@@ -46,9 +45,7 @@ public interface CompanyDao {
    * 
    * @param id
    *          The id of the company we want to delete
-   * @param connection
-   *          The connection we need to perform this operation
    */
-  public void deleteCompany(int id, Connection connection);
+  public void deleteCompany(int id);
 
 }

@@ -5,7 +5,6 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
 
-import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -50,10 +49,8 @@ public interface ComputerService {
    *
    * @param companyId
    *          The id of the company for witch we have to delete the computers
-   * @param connection
-   *          The connection to the database
    */
-  public void deleteComputerAssociatedToCompany(int companyId, Connection connection);
+  public void deleteComputerAssociatedToCompany(int companyId);
 
   /**
    * Method that calls the getById method from the {@link ComputerDao}.

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class CompanyDtoServiceImpl implements CompanyDtoService {
 
   public static CompanyDtoService INSTANCE;
-  public CompanyService companyService;
+  public CompanyService           companyService;
 
   static {
     INSTANCE = new CompanyDtoServiceImpl();

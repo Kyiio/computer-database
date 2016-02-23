@@ -2,7 +2,7 @@ package com.excilys.dao.impl;
 
 import com.excilys.dao.ComputerDao;
 import com.excilys.dao.ConnectionCloser;
-import com.excilys.dao.ConnectionFactory;
+import com.excilys.dao.ConnectionManager;
 import com.excilys.dao.exception.DaoException;
 import com.excilys.dao.mapper.ComputerDaoMapper;
 import com.excilys.dao.util.QueryBuilder;
@@ -22,30 +22,32 @@ import java.util.ArrayList;
 
 public class ComputerDaoImpl implements ComputerDao {
 
-  private static final String INSERT_QUERY =
+  private static final String INSERT_QUERY      =
       "INSERT INTO computer(COMPANY_ID, DISCONTINUED, INTRODUCED, NAME) VALUES (?, ?, ?, ?);";
-  private static final String UPDATE_QUERY =
+  private static final String UPDATE_QUERY      =
       "UPDATE computer SET COMPANY_ID=?, DISCONTINUED=?, INTRODUCED=?, NAME=? WHERE ID=?";
-  private static final String DELETE_QUERY = "DELETE FROM computer WHERE ID=?";
+  private static final String DELETE_QUERY      = "DELETE FROM computer WHERE ID=?";
 
-  private static final String LIST_ALL_QUERY =
+  private static final String LIST_ALL_QUERY    =
       "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID";
-  private static final String GET_BY_ID_QUERY =
+  private static final String GET_BY_ID_QUERY   =
       "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID WHERE computer.ID = ?";
   private static final String GET_BY_NAME_QUERY =
       "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID WHERE computer.NAME = ?";
 
-  private static ComputerDao INSTANCE;
+  private static ComputerDao  INSTANCE;
+  private ConnectionManager   connectionManager;
 
   static {
-    INSTANCE = new ComputerDaoImpl();
+    INSTANCE = new ComputerDaoImpl(ConnectionManager.getInstance());
   }
 
   public static ComputerDao getInstance() {
     return INSTANCE;
   }
 
-  private ComputerDaoImpl() {
+  private ComputerDaoImpl(ConnectionManager connectionManager) {
+    this.connectionManager = connectionManager;
   }
 
   @Override
@@ -53,19 +55,18 @@ public class ComputerDaoImpl implements ComputerDao {
       String name) throws DaoException {
 
     int newId = -1;
-    Connection connection = null;
     PreparedStatement preparedStatement = null;
+    Connection connection = connectionManager.getConnection();
 
     if (name == null || name.length() <= 0) {
       throw new DaoException("Then name of the computer must be set !");
     }
 
     try {
-      connection = ConnectionFactory.getInstance().getConnection();
-      connection.setAutoCommit(false);
 
       preparedStatement =
           connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
+
       if (company == null) {
         preparedStatement.setNull(1, java.sql.Types.BIGINT);
       } else {
@@ -92,20 +93,11 @@ public class ComputerDaoImpl implements ComputerDao {
       if (resultSet.next()) {
         newId = resultSet.getInt(1);
       }
-
-      connection.commit();
-
     } catch (SQLException e) {
-
-      try {
-        connection.rollback();
-      } catch (SQLException e1) {
-        throw new DaoException("Error rollback on connection while inserting ", e);
-      }
       throw new DaoException("Error while inserting in Computer table", e);
-
     } finally {
-      ConnectionCloser.silentClose(preparedStatement, connection);
+      connectionManager.closeConnection();
+      ConnectionCloser.silentClose(preparedStatement);
     }
 
     return newId;
@@ -114,16 +106,14 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public void updateComputer(Computer computer) throws DaoException {
 
-    Connection connection = null;
     PreparedStatement preparedStatement = null;
+    Connection connection = connectionManager.getConnection();
 
     if (computer == null) {
       throw new DaoException("The given computer is null !");
     }
 
     try {
-      connection = ConnectionFactory.getInstance().getConnection();
-      connection.setAutoCommit(false);
 
       preparedStatement = connection.prepareStatement(UPDATE_QUERY);
       if (computer.getCompany() == null) {
@@ -151,51 +141,32 @@ public class ComputerDaoImpl implements ComputerDao {
 
       preparedStatement.executeUpdate();
 
-      connection.commit();
-
     } catch (SQLException e) {
-      try {
-        connection.rollback();
-      } catch (SQLException e1) {
-        throw new DaoException("Error rollback while updating", e);
-      }
       throw new DaoException("Error while updating" + computer + " in Computer table", e);
-
     } finally {
-      ConnectionCloser.silentClose(preparedStatement, connection);
+      connectionManager.closeConnection();
+      ConnectionCloser.silentClose(preparedStatement);
     }
   }
 
   @Override
   public void deleteComputer(int id) throws DaoException {
 
-    Connection connection = null;
+    Connection connection = connectionManager.getConnection();
     PreparedStatement preparedStatement = null;
 
     try {
-      connection = ConnectionFactory.getInstance().getConnection();
-      connection.setAutoCommit(false);
-
       preparedStatement = connection.prepareStatement(DELETE_QUERY);
       preparedStatement.setInt(1, id);
 
       preparedStatement.executeUpdate();
 
-      connection.commit();
-
     } catch (SQLException e) {
-
-      try {
-        connection.rollback();
-      } catch (SQLException e1) {
-        throw new DaoException("Error rollback while deleting", e);
-      }
-
       throw new DaoException("Error while trying to delete the computer with the folling id" + id
           + " from Computer table", e);
-
     } finally {
-      ConnectionCloser.silentClose(preparedStatement, connection);
+      connectionManager.closeConnection();
+      ConnectionCloser.silentClose(preparedStatement);
     }
   }
 
@@ -204,12 +175,10 @@ public class ComputerDaoImpl implements ComputerDao {
 
     ResultSet results = null;
     Computer computerResult = null;
-    Connection connection = null;
     PreparedStatement preparedStatement = null;
+    Connection connection = connectionManager.getConnection();
 
     try {
-      connection = ConnectionFactory.getInstance().getConnection();
-
       preparedStatement = connection.prepareStatement(GET_BY_ID_QUERY);
       preparedStatement.setInt(1, id);
 
@@ -223,9 +192,9 @@ public class ComputerDaoImpl implements ComputerDao {
 
     } catch (SQLException e) {
       throw new DaoException("Error while trying to retrieve computer with id :" + id, e);
-
     } finally {
-      ConnectionCloser.silentClose(results, preparedStatement, connection);
+      connectionManager.closeConnection();
+      ConnectionCloser.silentClose(results, preparedStatement);
     }
     return computerResult;
   }
@@ -233,14 +202,13 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public ArrayList<Computer> getByName(String name) throws DaoException {
 
+
     ResultSet results = null;
     ArrayList<Computer> computerResult = null;
-    Connection connection = null;
     PreparedStatement preparedStatement = null;
+    Connection connection = connectionManager.getConnection();
 
     try {
-      connection = ConnectionFactory.getInstance().getConnection();
-
       preparedStatement = connection.prepareStatement(GET_BY_NAME_QUERY);
       preparedStatement.setString(1, name);
 
@@ -250,9 +218,9 @@ public class ComputerDaoImpl implements ComputerDao {
 
     } catch (SQLException e) {
       throw new DaoException("Error while trying to retrieve computer with name :" + name, e);
-
     } finally {
-      ConnectionCloser.silentClose(results, preparedStatement, connection);
+      connectionManager.closeConnection();
+      ConnectionCloser.silentClose(results, preparedStatement);
     }
 
     return computerResult;
@@ -263,11 +231,10 @@ public class ComputerDaoImpl implements ComputerDao {
 
     ResultSet results = null;
     ArrayList<Computer> computerResult = null;
-    Connection connection = null;
     PreparedStatement preparedStatement = null;
+    Connection connection = connectionManager.getConnection();
 
     try {
-      connection = ConnectionFactory.getInstance().getConnection();
       preparedStatement = connection.prepareStatement(LIST_ALL_QUERY);
       results = preparedStatement.executeQuery();
 
@@ -275,9 +242,9 @@ public class ComputerDaoImpl implements ComputerDao {
 
     } catch (SQLException e) {
       throw new DaoException("Error while trying to retrieve the computer list", e);
-
     } finally {
-      ConnectionCloser.silentClose(results, preparedStatement, connection);
+      connectionManager.closeConnection();
+      ConnectionCloser.silentClose(results, preparedStatement);
     }
 
     return computerResult;
@@ -289,12 +256,10 @@ public class ComputerDaoImpl implements ComputerDao {
 
     ResultSet results = null;
     ArrayList<Computer> computerResult = null;
-    Connection connection = null;
     PreparedStatement preparedStatement = null;
+    Connection connection = connectionManager.getConnection();
 
     try {
-      connection = ConnectionFactory.getInstance().getConnection();
-
       preparedStatement =
           QueryParameterMapper.createPageQueryAndGetPreparedStatement(queryParameters, connection);
 
@@ -306,9 +271,9 @@ public class ComputerDaoImpl implements ComputerDao {
       throw new DaoException(
           "Error while trying to retrieve the computer page with parameters : " + queryParameters,
           e);
-
     } finally {
-      ConnectionCloser.silentClose(results, preparedStatement, connection);
+      connectionManager.closeConnection();
+      ConnectionCloser.silentClose(results, preparedStatement);
     }
 
     return computerResult;
@@ -317,14 +282,12 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public int getCount(QueryParameters queryParameters) throws DaoException {
 
-    ResultSet results = null;
-    Connection connection = null;
-    PreparedStatement preparedStatement = null;
-
     int nbComputer = 0;
+    ResultSet results = null;
+    PreparedStatement preparedStatement = null;
+    Connection connection = connectionManager.getConnection();
 
     try {
-      connection = ConnectionFactory.getInstance().getConnection();
 
       preparedStatement =
           QueryParameterMapper.createCountQueryAndGetPreparedStatement(queryParameters, connection);
@@ -333,28 +296,28 @@ public class ComputerDaoImpl implements ComputerDao {
       if (results != null && results.next()) {
         nbComputer = results.getInt(1);
       }
-
     } catch (SQLException e) {
       throw new DaoException(
           "Error while trying to retrieve the number of computer. Query parameters : "
               + queryParameters,
           e);
-
     } finally {
-      ConnectionCloser.silentClose(results, preparedStatement, connection);
+      connectionManager.closeConnection();
+      ConnectionCloser.silentClose(results, preparedStatement);
     }
 
     return nbComputer;
   }
 
   @Override
-  public void deleteComputersForCompanyId(int companyId, Connection connection) {
+  public void deleteComputersForCompanyId(int companyId) {
 
     QueryBuilder queryBuilder = new QueryBuilder();
     queryBuilder.deleteFrom("computer").where("COMPANY_ID =").append(companyId);
     String query = queryBuilder.getQuery();
 
     PreparedStatement preparedStatement = null;
+    Connection connection = connectionManager.getConnection();
 
     try {
       preparedStatement = connection.prepareStatement(query);
@@ -367,6 +330,7 @@ public class ComputerDaoImpl implements ComputerDao {
           e);
 
     } finally {
+      connectionManager.closeConnection();
       ConnectionCloser.silentClose(preparedStatement);
     }
   }

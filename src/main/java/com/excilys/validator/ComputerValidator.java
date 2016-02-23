@@ -11,7 +11,6 @@ import java.time.LocalDate;
  * Interface that provides methods to check if the data in a computer are consistent.
  * 
  * @author B. Herbaut
- *
  */
 public interface ComputerValidator {
 

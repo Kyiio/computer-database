@@ -8,7 +8,7 @@ package com.excilys.model;
  */
 public class Company {
 
-  private int id;
+  private int    id;
   private String name;
 
   public Company() {

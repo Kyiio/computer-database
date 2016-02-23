@@ -5,7 +5,6 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
 
-import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -32,7 +31,7 @@ public interface ComputerDao {
    *           the dao exception
    * @see Company
    */
-  public int insertComputer(Company company, LocalDate discontinued, LocalDate introduced,
+  public int insertComputer(Company company, LocalDate introduced, LocalDate discontinued,
       String name) throws DaoException;
 
   /**
@@ -106,8 +105,6 @@ public interface ComputerDao {
    *
    * @param companyId
    *          The id of the company
-   * @param connection
-   *          The connection to the database
    */
-  public void deleteComputersForCompanyId(int companyId, Connection connection);
+  public void deleteComputersForCompanyId(int companyId);
 }

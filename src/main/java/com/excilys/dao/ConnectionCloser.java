@@ -73,6 +73,11 @@ public class ConnectionCloser {
     silentClose(connection);
   }
 
+  public static void silentClose(ResultSet resultSet, Statement statement) {
+    silentClose(statement);
+    silentClose(resultSet);
+  }
+
   /**
    * Method that close the resultSet, the statement and the connection.
    * 

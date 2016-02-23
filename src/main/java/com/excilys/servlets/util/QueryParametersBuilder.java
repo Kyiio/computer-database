@@ -9,11 +9,16 @@ public interface QueryParametersBuilder {
   /**
    * Creates the query parameters.
    *
-   * @param pageSize the page size
-   * @param pageNumber the page number
-   * @param search the search
-   * @param order the order
-   * @param by the by
+   * @param pageSize
+   *          the page size
+   * @param pageNumber
+   *          the page number
+   * @param search
+   *          the search
+   * @param order
+   *          the order
+   * @param by
+   *          the by
    * @return the query parameters
    */
   public static QueryParameters createQueryParameters(int pageSize, int pageNumber, String search,
@@ -30,7 +35,8 @@ public interface QueryParametersBuilder {
   /**
    * Creates the query parameters.
    *
-   * @param request the request
+   * @param request
+   *          the request
    * @return the query parameters
    */
   public static QueryParameters createQueryParameters(HttpServletRequest request) {

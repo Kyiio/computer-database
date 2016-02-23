@@ -2,17 +2,18 @@ package com.excilys.dao.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.excilys.dao.ComputerDao;
-import com.excilys.dao.DbTestConnector;
+import com.excilys.dao.ConnectionManager;
 import com.excilys.dao.exception.DaoException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+import com.excilys.model.QueryParameters;
 
 import org.dbunit.dataset.DataSetException;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ITable;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -27,23 +28,16 @@ import java.util.ArrayList;
  */
 public class ComputerDaoImplTest {
 
-  /** The cfm. */
-  private static DbTestConnector cfm;
-
-  /** The computer dao. */
-  private static ComputerDao     computerDAO;
+  private static ComputerDao       computerDAO;
+  private static ConnectionManager connectionManager;
 
   /**
    * Inits the.
    */
   @BeforeClass
   public static void init() {
-
-    cfm = new DbTestConnector();
-    cfm.initSchema("config/db_test/Test_SCHEMA.sql");
-    cfm.initDataSource();
-
     computerDAO = ComputerDaoImpl.getInstance();
+    connectionManager = ConnectionManager.getInstance();
   }
 
   /**
@@ -51,23 +45,19 @@ public class ComputerDaoImplTest {
    */
   @AfterClass
   public static void end() {
-    cfm = null;
     computerDAO = null;
+    connectionManager = null;
   }
 
-  /**
-   * Import data set.
-   */
   @Before
-  public void importDataSet() {
+  public void before() {
+    connectionManager.startTransaction();
+  }
 
-    IDataSet dataSet;
-    try {
-      dataSet = cfm.readDataSet("src/test/resources/ComputerDAOImpl_dataset.xml");
-      cfm.cleanlyInsert(dataSet);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+  @After
+  public void after() {
+    connectionManager.rollback();
+    connectionManager.closeConnection();
   }
 
   /**
@@ -81,14 +71,13 @@ public class ComputerDaoImplTest {
 
     int newId = computerDAO.insertComputer(null, null, null, "Toto's computer");
 
-    ITable computerTable =
-        cfm.getDatabaseTester().getConnection().createDataSet().getTable("computer");
-    int id =
-        Integer.valueOf(computerTable.getValue(computerTable.getRowCount() - 1, "ID").toString());
-    String computerName = (String) computerTable.getValue(computerTable.getRowCount() - 1, "NAME");
+    Computer computer = computerDAO.getById(newId);
+    assertNotNull(computer);
 
-    assertEquals("Toto's computer", computerName);
-    assertEquals(newId, id);
+    assertEquals("Toto's computer", computer.getName());
+    assertEquals(newId, computer.getId());
+
+    computerDAO.deleteComputer(computer.getId());
   }
 
   /**
@@ -100,17 +89,19 @@ public class ComputerDaoImplTest {
   @Test
   public void testInsertComputer2() throws Exception {
 
-    int newId = computerDAO.insertComputer(new Company(1, "Company's name"),
-        LocalDate.of(2000, 10, 10), LocalDate.of(2016, 10, 10), "Toto's computer");
+    int newId = computerDAO.insertComputer(new Company(1, "Apple Inc."), LocalDate.of(2000, 10, 10),
+        LocalDate.of(2016, 10, 10), "Toto's computer");
 
-    ITable computerTable =
-        cfm.getDatabaseTester().getConnection().createDataSet().getTable("computer");
-    int id =
-        Integer.valueOf(computerTable.getValue(computerTable.getRowCount() - 1, "ID").toString());
-    String computerName = (String) computerTable.getValue(computerTable.getRowCount() - 1, "NAME");
+    Computer computer = computerDAO.getById(newId);
 
-    assertEquals("Toto's computer", computerName);
-    assertEquals(newId, id);
+    assertNotNull(computer);
+    assertEquals(computer.getName(), "Toto's computer");
+    assertEquals(computer.getIntroduced(), LocalDate.of(2000, 10, 10));
+    assertEquals(computer.getDiscontinued(), LocalDate.of(2016, 10, 10));
+    assertEquals(computer.getCompany().getName(), "Apple Inc.");
+    assertEquals(newId, computer.getId());
+
+    computerDAO.deleteComputer(computer.getId());
   }
 
   /**
@@ -140,12 +131,19 @@ public class ComputerDaoImplTest {
   @Test
   public void testDeleteComputer() throws SQLException, Exception {
 
-    IDataSet dataSet = cfm.getDatabaseTester().getConnection().createDataSet();
-    int oldNumberOfLine = dataSet.getTable("computer").getRowCount();
+    QueryParameters queryParameters = new QueryParameters();
+    int oldNumberOfLine = computerDAO.getCount(queryParameters);
 
+    final Computer computer = computerDAO.getById(1);
     computerDAO.deleteComputer(1);
 
-    assertEquals(oldNumberOfLine - 1, dataSet.getTable("computer").getRowCount());
+    assertEquals(oldNumberOfLine - 1, computerDAO.getCount(queryParameters));
+
+    Computer computer2 = computerDAO.getById(1);
+    assertNull(computer2);
+
+    computerDAO.insertComputer(computer.getCompany(), computer.getDiscontinued(),
+        computer.getIntroduced(), computer.getName());
   }
 
   /**
@@ -159,15 +157,12 @@ public class ComputerDaoImplTest {
   @Test
   public void testDeleteComputerFakeId() throws SQLException, Exception {
 
-    int oldNumberOfLine = -1;
-    IDataSet dataSet = null;
-
-    dataSet = cfm.getDatabaseTester().getConnection().createDataSet();
-    oldNumberOfLine = dataSet.getTable("computer").getRowCount();
+    QueryParameters queryParameters = new QueryParameters();
+    int oldNumberOfLine = computerDAO.getCount(queryParameters);
 
     computerDAO.deleteComputer(-200);
 
-    assertEquals(oldNumberOfLine, dataSet.getTable("computer").getRowCount());
+    assertEquals(oldNumberOfLine, computerDAO.getCount(queryParameters));
   }
 
   /**
@@ -182,9 +177,11 @@ public class ComputerDaoImplTest {
   public void testListComputer() throws DataSetException, Exception {
 
     ArrayList<Computer> listComputer = computerDAO.listComputers();
-    assertEquals(listComputer.size(),
-        cfm.readDataSet("src/test/resources/ComputerDAOImpl_dataset.xml").getTable("computer")
-            .getRowCount());
+
+    QueryParameters queryParameters = new QueryParameters();
+    int nbComputerInDatabase = computerDAO.getCount(queryParameters);
+
+    assertEquals(listComputer.size(), nbComputerInDatabase);
   }
 
   /**
@@ -224,8 +221,8 @@ public class ComputerDaoImplTest {
   public void testUpdateComputer() {
 
     Computer computer = computerDAO.getById(1);
-    
-    Computer cp = new Computer(computer);
+
+    final Computer cp = new Computer(computer);
 
     computer.setName("new computer name");
     computerDAO.updateComputer(computer);

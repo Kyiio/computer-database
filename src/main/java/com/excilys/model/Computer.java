@@ -11,10 +11,10 @@ import java.time.LocalDate;
  */
 public class Computer {
 
-  private int id;
-  private Company company;
+  private int       id;
+  private Company   company;
 
-  private String name;
+  private String    name;
 
   private LocalDate discontinued;
   private LocalDate introduced;
@@ -26,11 +26,16 @@ public class Computer {
   /**
    * Instantiates a new computer.
    *
-   * @param id the id
-   * @param company the company
-   * @param name the name
-   * @param discontinued the discontinued
-   * @param introduced the introduced
+   * @param id
+   *          the id
+   * @param company
+   *          the company
+   * @param name
+   *          the name
+   * @param discontinued
+   *          the discontinued
+   * @param introduced
+   *          the introduced
    */
   public Computer(int id, Company company, String name, LocalDate discontinued,
       LocalDate introduced) {
@@ -44,7 +49,8 @@ public class Computer {
   /**
    * Instantiates a new computer.
    *
-   * @param computer the computer
+   * @param computer
+   *          the computer
    */
   public Computer(Computer computer) {
     this.id = computer.id;

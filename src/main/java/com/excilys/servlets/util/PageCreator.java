@@ -17,9 +17,12 @@ public interface PageCreator {
   /**
    * Builds the page.
    *
-   * @param queryParameters the query parameters
-   * @param computerDtoList the computer dto list
-   * @param totalNumberOfComputer the total number of computer
+   * @param queryParameters
+   *          the query parameters
+   * @param computerDtoList
+   *          the computer dto list
+   * @param totalNumberOfComputer
+   *          the total number of computer
    * @return the page dto
    */
   public static PageDto buildPage(QueryParameters queryParameters,

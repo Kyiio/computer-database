@@ -111,7 +111,7 @@ function checkDateConsistency(){
 	}
 	else if(discontinuedStr !== '' && introducedStr === ''){
 		setErrorText($('#introducedErr'),"The introduced value must be specified if you put the discontinued one !");
-		setErrorText($('#discontinuedErr'),"");
+		setErrorText($('#discontinuedErr'),"You can't specify the discontinued date if you don't set the introduced one !");
 		setError($('#introduced'));
 		setError($('#discontinued'));
 		return false;
@@ -130,7 +130,7 @@ function checkDateConsistency(){
 	}
 	
 	removeErrorText($('#introducedErr'));
-	removeErrorText($('#introducedDiscontinued'));
+	removeErrorText($('#discontinuedErr'));
 	setSuccess($('#introduced'));
 	setSuccess($('#discontinued'));
 	return true;

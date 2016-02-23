@@ -14,9 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class AddComputerServlet
- * This class is used to manage the addComputer JSP page, it shows the form to add a computer and
- * make the insertion in the database by calling the DTO service.
+ * Servlet implementation class AddComputerServlet This class is used to manage the addComputer JSP
+ * page, it shows the form to add a computer and make the insertion in the database by calling the
+ * DTO service.
  * 
  * @author B. Herbaut
  */
@@ -81,6 +81,7 @@ public class AddComputerServlet extends HttpServlet {
     String introduced = request.getParameter("introduced");
     String discontinued = request.getParameter("discontinued");
     String companyId = request.getParameter("companyId");
+
 
     ComputerDto computerDto =
         new ComputerDto(0, computerName, introduced, discontinued, Integer.parseInt(companyId), "");

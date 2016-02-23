@@ -26,12 +26,12 @@ public class QueryParameters {
     DESC
   }
 
-  int offset;
-  int pageSize;
-  int pageNumber;
+  int     offset;
+  int     pageSize;
+  int     pageNumber;
 
-  String search;
-  Order order;
+  String  search;
+  Order   order;
   OrderBy by;
 
   public QueryParameters() {

@@ -6,7 +6,6 @@ import com.excilys.exception.ValidationException;
  * Interface that provides methods to check if the data in a company are consistent.
  * 
  * @author B. Herbaut
- *
  */
 public class CompanyValidator {
 

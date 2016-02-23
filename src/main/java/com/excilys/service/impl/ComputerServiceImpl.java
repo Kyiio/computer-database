@@ -6,12 +6,10 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
 import com.excilys.service.ComputerService;
-import com.excilys.service.exception.ServiceException;
 import com.excilys.validator.CompanyValidator;
 import com.excilys.validator.ComputerValidator;
 import com.excilys.validator.QueryParametersValidator;
 
-import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -49,7 +47,7 @@ public class ComputerServiceImpl implements ComputerService {
     ComputerValidator.checkName(name);
     ComputerValidator.checkDateConsitency(introduced, discontinued);
 
-    return computerDao.insertComputer(company, discontinued, introduced, name);
+    return computerDao.insertComputer(company, introduced, discontinued, name);
   }
 
   @Override
@@ -60,17 +58,11 @@ public class ComputerServiceImpl implements ComputerService {
   }
 
   @Override
-  public void deleteComputerAssociatedToCompany(int companyId, Connection connection) {
+  public void deleteComputerAssociatedToCompany(int companyId) {
 
     CompanyValidator.checkId(companyId);
 
-    if (connection == null) {
-      throw new ServiceException(
-          "Can't delete the computers because the given connection is null !");
-    }
-
-    computerDao.deleteComputersForCompanyId(companyId, connection);
-
+    computerDao.deleteComputersForCompanyId(companyId);
   }
 
   @Override

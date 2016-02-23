@@ -13,39 +13,47 @@ public class PageDto {
 
   /** The content. */
   private ArrayList<ComputerDto> content;
-  
+
   /** The page size. */
-  private int pageSize;
-  
+  private int                    pageSize;
+
   /** The max page number. */
-  private int maxPageNumber;
-  
+  private int                    maxPageNumber;
+
   /** The page number. */
-  private int pageNumber;
-  
+  private int                    pageNumber;
+
   /** The total number of computer. */
-  private int totalNumberOfComputer;
+  private int                    totalNumberOfComputer;
 
   /** The search name. */
-  private String searchName;
-  
+  private String                 searchName;
+
   /** The oreder by. */
-  private String orederBy;
-  
+  private String                 orederBy;
+
   /** The order type. */
-  private String orderType;
+  private String                 orderType;
 
   /**
    * Instantiates a new page dto.
    *
-   * @param pageSize the page size
-   * @param pageNumber the page number
-   * @param totalNumberOfComputer the total number of computer
-   * @param maxPageNumber the max page number
-   * @param content the content
-   * @param searchName the search name
-   * @param orderBy the order by
-   * @param orderType the order type
+   * @param pageSize
+   *          the page size
+   * @param pageNumber
+   *          the page number
+   * @param totalNumberOfComputer
+   *          the total number of computer
+   * @param maxPageNumber
+   *          the max page number
+   * @param content
+   *          the content
+   * @param searchName
+   *          the search name
+   * @param orderBy
+   *          the order by
+   * @param orderType
+   *          the order type
    */
   public PageDto(int pageSize, int pageNumber, int totalNumberOfComputer, int maxPageNumber,
       ArrayList<ComputerDto> content, String searchName, String orderBy, String orderType) {

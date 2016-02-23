@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class DashboardServlet.
- * This class shows the list of all the computer in pages. It also manage the deletion of computer.
+ * Servlet implementation class DashboardServlet. This class shows the list of all the computer in
+ * pages. It also manage the deletion of computer.
  * 
  * @author B. Herbaut
  */
