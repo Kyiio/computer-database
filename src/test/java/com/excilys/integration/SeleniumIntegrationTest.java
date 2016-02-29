@@ -37,7 +37,7 @@ public class SeleniumIntegrationTest {
   @Before
   public void setUp() throws Exception {
     driver = new FirefoxDriver();
-    baseUrl = "http://localhost:6060";
+    baseUrl = "http://127.0.0.1:6060";
     driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
     driver.manage().window().maximize();
   }
