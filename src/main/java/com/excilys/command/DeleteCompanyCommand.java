@@ -18,12 +18,13 @@ public class DeleteCompanyCommand extends AbstractCommand {
     Company company = askForExistingCompanyByAskingName();
 
     try {
+      if (company == null) {
+        throw new CommandException("");
+      }
       companyService.deleteCompany(company.getId());
       System.out.println("Delete complete !");
-    } catch (DaoException e) {
-      System.out.println("No matching found for the given id, delete aborted !");
-    } catch (CommandException e) {
-      System.out.println("The id must be positive !");
+    } catch (DaoException | CommandException e) {
+      System.out.println("No matching found for the given name, delete aborted !");
     }
   }
 }

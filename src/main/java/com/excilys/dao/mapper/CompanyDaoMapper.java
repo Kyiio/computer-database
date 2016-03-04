@@ -4,6 +4,7 @@ import com.excilys.exception.MappingException;
 import com.excilys.model.Company;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
  *
  * @author B. Herbaut
  */
+@Service
 public class CompanyDaoMapper implements RowMapper<Company> {
 
   /**

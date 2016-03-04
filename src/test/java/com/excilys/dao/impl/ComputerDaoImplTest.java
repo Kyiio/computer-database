@@ -11,9 +11,9 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
 
+import org.dbunit.dataset.DataSetException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+import javax.annotation.Resource;
 
 /**
  * The Class ComputerDaoImplTest.
@@ -32,7 +34,7 @@ import java.util.ArrayList;
 @Rollback(true)
 public class ComputerDaoImplTest {
 
-  @Autowired
+  @Resource(name = "computerDao")
   private ComputerDao computerDao;
 
   /**
@@ -71,7 +73,7 @@ public class ComputerDaoImplTest {
     assertEquals(computer.getName(), "Toto's computer");
     assertEquals(computer.getIntroduced(), LocalDate.of(2000, 10, 10));
     assertEquals(computer.getDiscontinued(), LocalDate.of(2016, 10, 10));
-    assertEquals(computer.getCompany().getName(), "Apple Inc.");
+    assertEquals("Apple Inc.", computer.getCompany().getName());
     assertEquals(newId, computer.getId());
 
     computerDao.deleteComputer(computer.getId());

@@ -42,7 +42,8 @@ public class ComputerDaoImpl implements ComputerDao {
 
   @Autowired
   private JdbcTemplate        jdbcTemplate;
-  private ComputerDaoMapper   computerDaoMapper = new ComputerDaoMapper();
+  @Autowired
+  private ComputerDaoMapper   computerDaoMapper;
 
   @Override
   public long insertComputer(Company company, LocalDate introduced, LocalDate discontinued,
@@ -56,29 +57,36 @@ public class ComputerDaoImpl implements ComputerDao {
 
     jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
-      public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-        PreparedStatement preparedStatement =
-            connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
+      public PreparedStatement createPreparedStatement(Connection connection) {
+        PreparedStatement preparedStatement;
+        try {
+          preparedStatement =
+              connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
 
-        if (company == null) {
-          preparedStatement.setNull(1, java.sql.Types.BIGINT);
-        } else {
-          preparedStatement.setLong(1, company.getId());
+          if (company == null) {
+            preparedStatement.setNull(1, java.sql.Types.BIGINT);
+          } else {
+            preparedStatement.setLong(1, company.getId());
+          }
+
+          if (discontinued == null) {
+            preparedStatement.setNull(2, java.sql.Types.TIMESTAMP);
+          } else {
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(discontinued.atStartOfDay()));
+          }
+
+          if (introduced == null) {
+            preparedStatement.setNull(3, java.sql.Types.TIMESTAMP);
+          } else {
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(introduced.atStartOfDay()));
+          }
+
+          preparedStatement.setString(4, name);
+
+        } catch (SQLException e) {
+
+          throw new DaoException("Error while trying to create the insert computer statement", e);
         }
-
-        if (discontinued == null) {
-          preparedStatement.setNull(2, java.sql.Types.TIMESTAMP);
-        } else {
-          preparedStatement.setTimestamp(2, Timestamp.valueOf(discontinued.atStartOfDay()));
-        }
-
-        if (introduced == null) {
-          preparedStatement.setNull(3, java.sql.Types.TIMESTAMP);
-        } else {
-          preparedStatement.setTimestamp(3, Timestamp.valueOf(introduced.atStartOfDay()));
-        }
-
-        preparedStatement.setString(4, name);
 
         return preparedStatement;
       }
@@ -96,31 +104,39 @@ public class ComputerDaoImpl implements ComputerDao {
 
     jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
-      public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY);
+      public PreparedStatement createPreparedStatement(Connection connection) {
 
-        if (computer.getCompany() == null) {
-          preparedStatement.setNull(1, java.sql.Types.BIGINT);
-        } else {
-          preparedStatement.setLong(1, computer.getCompany().getId());
+        PreparedStatement preparedStatement;
+        try {
+          preparedStatement = connection.prepareStatement(UPDATE_QUERY);
+
+          if (computer.getCompany() == null) {
+            preparedStatement.setNull(1, java.sql.Types.BIGINT);
+          } else {
+            preparedStatement.setLong(1, computer.getCompany().getId());
+          }
+
+          if (computer.getDiscontinued() == null) {
+            preparedStatement.setNull(2, java.sql.Types.TIMESTAMP);
+          } else {
+            preparedStatement.setTimestamp(2,
+                Timestamp.valueOf(computer.getDiscontinued().atStartOfDay()));
+          }
+
+          if (computer.getIntroduced() == null) {
+            preparedStatement.setNull(3, java.sql.Types.TIMESTAMP);
+          } else {
+            preparedStatement.setTimestamp(3,
+                Timestamp.valueOf(computer.getIntroduced().atStartOfDay()));
+          }
+
+          preparedStatement.setString(4, computer.getName());
+          preparedStatement.setLong(5, computer.getId());
+
+        } catch (SQLException e) {
+
+          throw new DaoException("Error while trying to create the update computer statement", e);
         }
-
-        if (computer.getDiscontinued() == null) {
-          preparedStatement.setNull(2, java.sql.Types.TIMESTAMP);
-        } else {
-          preparedStatement.setTimestamp(2,
-              Timestamp.valueOf(computer.getDiscontinued().atStartOfDay()));
-        }
-
-        if (computer.getIntroduced() == null) {
-          preparedStatement.setNull(3, java.sql.Types.TIMESTAMP);
-        } else {
-          preparedStatement.setTimestamp(3,
-              Timestamp.valueOf(computer.getIntroduced().atStartOfDay()));
-        }
-
-        preparedStatement.setString(4, computer.getName());
-        preparedStatement.setLong(5, computer.getId());
 
         return preparedStatement;
       }
@@ -180,7 +196,7 @@ public class ComputerDaoImpl implements ComputerDao {
   }
 
   @Override
-  public long getCount(QueryParameters queryParameters) throws DaoException {
+  public long getCount(QueryParameters queryParameters) {
 
     String search = "%" + queryParameters.getSearch() + "%";
 
@@ -195,7 +211,7 @@ public class ComputerDaoImpl implements ComputerDao {
   public void deleteComputersForCompanyId(long companyId) {
 
     QueryBuilder queryBuilder = new QueryBuilder();
-    queryBuilder.deleteFrom("computer").where("COMPANY_ID =").append(companyId);
+    queryBuilder.deleteFrom("computer").where("COMPANY_ID = ?");
     String query = queryBuilder.getQuery();
 
     jdbcTemplate.update(query, companyId);

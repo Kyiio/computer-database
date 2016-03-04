@@ -16,12 +16,12 @@ public class CompanyDaoImpl implements CompanyDao {
   private static final String LIST_ALL_QUERY    = "SELECT * FROM company";
   private static final String GET_BY_ID_QUERY   = "SELECT * FROM company WHERE ID = ?";
   private static final String GET_BY_NAME_QUERY = "SELECT * FROM company WHERE NAME = ?";
-
   private static final String DELETE_QUERY      = "DELETE FROM company WHERE ID=?";
 
   @Autowired
   private JdbcTemplate        jdbcTemplate;
-  private CompanyDaoMapper    companyDaoMapper  = new CompanyDaoMapper();
+  @Autowired
+  private CompanyDaoMapper    companyDaoMapper;
 
   @Override
   public Company getById(long id) {
@@ -61,7 +61,6 @@ public class CompanyDaoImpl implements CompanyDao {
 
   @Override
   public void deleteCompany(long id) {
-
     jdbcTemplate.update(DELETE_QUERY);
   }
 
