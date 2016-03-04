@@ -11,7 +11,7 @@ import java.time.LocalDate;
  */
 public class Computer {
 
-  private int       id;
+  private long      id;
   private Company   company;
 
   private String    name;
@@ -37,7 +37,7 @@ public class Computer {
    * @param introduced
    *          the introduced
    */
-  public Computer(int id, Company company, String name, LocalDate discontinued,
+  public Computer(long id, Company company, String name, LocalDate discontinued,
       LocalDate introduced) {
     this.id = id;
     this.company = company;
@@ -60,11 +60,11 @@ public class Computer {
     this.introduced = computer.introduced;
   }
 
-  public int getId() {
+  public long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(long id) {
     this.id = id;
   }
 
@@ -112,13 +112,14 @@ public class Computer {
     return strBuilder.toString();
   }
 
+
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((company == null) ? 0 : company.hashCode());
     result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
-    result = prime * result + id;
+    result = prime * result + (int) (id ^ (id >>> 32));
     result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     return result;

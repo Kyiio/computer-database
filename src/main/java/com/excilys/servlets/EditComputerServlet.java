@@ -2,8 +2,11 @@ package com.excilys.servlets;
 
 import com.excilys.dto.CompanyDto;
 import com.excilys.dto.ComputerDto;
-import com.excilys.service.impl.CompanyDtoServiceImpl;
-import com.excilys.service.impl.ComputerDtoServiceImpl;
+import com.excilys.service.CompanyDtoService;
+import com.excilys.service.ComputerDtoService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +24,11 @@ public class EditComputerServlet extends HttpServlet {
   /** The Constant serialVersionUID. */
   private static final long serialVersionUID = 1L;
 
+  @Autowired
+  private CompanyDtoService  companyDtoService;
+  @Autowired
+  private ComputerDtoService computerDtoService;
+
   /**
    * Instantiates a new edits the computer servlet.
    *
@@ -28,6 +36,12 @@ public class EditComputerServlet extends HttpServlet {
    */
   public EditComputerServlet() {
     super();
+  }
+
+  @Override
+  public void init() throws ServletException {
+    super.init();
+    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
   }
 
   /**
@@ -51,9 +65,8 @@ public class EditComputerServlet extends HttpServlet {
 
     if (computerId != null) {
 
-      ComputerDto computerDto =
-          ComputerDtoServiceImpl.getInstance().getById(Integer.parseInt(computerId));
-      ArrayList<CompanyDto> companyDtoList = CompanyDtoServiceImpl.getInstance().listCompanies();
+      ComputerDto computerDto = computerDtoService.getById(Long.parseLong(computerId));
+      ArrayList<CompanyDto> companyDtoList = companyDtoService.listCompanies();
 
       request.setAttribute("computer", computerDto);
       request.setAttribute("companyList", companyDtoList);
@@ -86,10 +99,10 @@ public class EditComputerServlet extends HttpServlet {
     String discontinued = request.getParameter("discontinued");
     String companyId = request.getParameter("companyId");
 
-    ComputerDto computerDto = new ComputerDto(Integer.parseInt(computerId), computerName,
-        introduced, discontinued, Integer.parseInt(companyId), "");
+    ComputerDto computerDto = new ComputerDto(Long.parseLong(computerId), computerName, introduced,
+        discontinued, Long.parseLong(companyId), "");
 
-    ComputerDtoServiceImpl.getInstance().updateComputer(computerDto);
+    computerDtoService.updateComputer(computerDto);
 
     response.sendRedirect("dashboard");
   }

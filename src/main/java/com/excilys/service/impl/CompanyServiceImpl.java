@@ -1,36 +1,28 @@
 package com.excilys.service.impl;
 
 import com.excilys.dao.CompanyDao;
-import com.excilys.dao.ConnectionManager;
-import com.excilys.dao.exception.DaoException;
-import com.excilys.dao.impl.CompanyDaoImpl;
-import com.excilys.dao.impl.ComputerDaoImpl;
+import com.excilys.dao.ComputerDao;
 import com.excilys.model.Company;
 import com.excilys.service.CompanyService;
-import com.excilys.service.exception.ServiceException;
 import com.excilys.validator.CompanyValidator;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
+@Service("companyService")
 public class CompanyServiceImpl implements CompanyService {
 
-  public static CompanyService INSTANCE;
-  private CompanyDao           companyDao;
+  @Autowired
+  private CompanyDao  companyDao;
 
-  static {
-    INSTANCE = new CompanyServiceImpl();
-  }
-
-  public static CompanyService getInstance() {
-    return INSTANCE;
-  }
-
-  private CompanyServiceImpl() {
-    companyDao = CompanyDaoImpl.getInstance();
-  }
+  @Autowired
+  private ComputerDao computerDao;
 
   @Override
-  public Company getById(int id) {
+  public Company getById(long id) {
     CompanyValidator.checkId(id);
     return companyDao.getById(id);
   }
@@ -48,34 +40,17 @@ public class CompanyServiceImpl implements CompanyService {
   }
 
   @Override
-  public void deleteCompany(int id) {
+  @Transactional(readOnly = false)
+  public void deleteCompany(long id) {
 
     CompanyValidator.checkId(id);
 
-    ConnectionManager connectionManager = ConnectionManager.getInstance();
+    // We first delete all the computers associated to the company that
+    // we will delete
+    computerDao.deleteComputersForCompanyId(id);
 
-    try {
-
-      connectionManager.startTransaction();
-
-      // We first delete all the computers associated to the company that
-      // we will delete
-      ComputerDaoImpl.getInstance().deleteComputersForCompanyId(id);
-
-      // And finally we delete the company itself
-      companyDao.deleteCompany(id);
-
-      connectionManager.endTransaction();
-
-    } catch (DaoException e) {
-
-      connectionManager.rollback();
-
-      throw new ServiceException(
-          "Error will trying delete the company and the associated computers ! Id : " + id, e);
-    } finally {
-      connectionManager.closeConnection();
-    }
+    // And finally we delete the company itself
+    companyDao.deleteCompany(id);
 
   }
 

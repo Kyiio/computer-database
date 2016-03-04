@@ -1,11 +1,14 @@
 package com.excilys.command;
 
-import com.excilys.dao.impl.ComputerDaoImpl;
 import com.excilys.exception.ValidationException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
-import com.excilys.service.impl.CompanyServiceImpl;
+import com.excilys.service.CompanyService;
+import com.excilys.service.ComputerService;
 import com.excilys.validator.InputValidator;
+
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -21,16 +24,28 @@ import java.util.Scanner;
  * 
  * @author B. Herbaut
  */
+@Component
 public abstract class AbstractCommand {
 
   protected Scanner scanner;
 
+  protected ComputerService computerService;
+  protected CompanyService  companyService;
+
+  /**
+   * Instantiates a new abstract command.
+   *
+   * @param scanner the scanner
+   */
   public AbstractCommand(Scanner scanner) {
     this.scanner = scanner;
-  }
 
-  public AbstractCommand() {
+    try (ClassPathXmlApplicationContext applicationContext =
+        new ClassPathXmlApplicationContext("applicationContext.xml")) {
 
+      computerService = applicationContext.getBean("computerService", ComputerService.class);
+      companyService = applicationContext.getBean("companyService", CompanyService.class);
+    }
   }
 
   /**
@@ -86,7 +101,7 @@ public abstract class AbstractCommand {
 
       String nameOfExistingComputer = scanner.nextLine();
 
-      matchingComputer = ComputerDaoImpl.getInstance().getByName(nameOfExistingComputer);
+      matchingComputer = computerService.getByName(nameOfExistingComputer);
 
       if (matchingComputer.size() <= 0) {
         System.out.println("The name you entered doesn't match any existing computer !");
@@ -127,7 +142,7 @@ public abstract class AbstractCommand {
 
       scanner.nextLine();
 
-      matchingComputer = ComputerDaoImpl.getInstance().getById(idOfExistingComputer);
+      matchingComputer = computerService.getById(idOfExistingComputer);
 
       if (matchingComputer == null) {
         System.out.println("The id you entered doesn't match any existing computer !");
@@ -182,7 +197,7 @@ public abstract class AbstractCommand {
 
     if (companyName.length() > 0) {
 
-      ArrayList<Company> matchingCompany = CompanyServiceImpl.getInstance().getByName(companyName);
+      ArrayList<Company> matchingCompany = companyService.getByName(companyName);
 
       if (matchingCompany.size() > 0) {
         resCompany = matchingCompany.get(0);

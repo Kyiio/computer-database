@@ -1,10 +1,13 @@
 package com.excilys.dto.mapper;
 
-import com.excilys.dao.impl.CompanyDaoImpl;
 import com.excilys.dto.ComputerDto;
 import com.excilys.exception.MappingException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+import com.excilys.service.CompanyDtoService;
+
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -19,13 +22,23 @@ import java.util.ArrayList;
  * @author B. Herbaut
  * @see Computer, ComputerDTO
  */
-public interface ComputerDtoMapper {
+@Component
+public class ComputerDtoMapper {
+
+  private static CompanyDtoService companyDtoService;
+
+  static {
+    try (ClassPathXmlApplicationContext applicationContext =
+        new ClassPathXmlApplicationContext("applicationContext.xml")) {
+
+      companyDtoService = applicationContext.getBean("companyDtoService", CompanyDtoService.class);
+    }
+  }
 
   /**
    * Method that maps an ArrayList of Computer into an ArrayList of ComputerDTO.
    * 
-   * @param computerList
-   *          The Computer ArrayList that will be mapped
+   * @param computerList The Computer ArrayList that will be mapped
    * @return The ComputerDTO ArrayList
    */
   public static ArrayList<ComputerDto> getComputerDtoList(ArrayList<Computer> computerList) {
@@ -42,8 +55,7 @@ public interface ComputerDtoMapper {
   /**
    * Method that maps a Computer into a ComputerDTO.
    * 
-   * @param computer
-   *          The computer that will be mapped.
+   * @param computer The computer that will be mapped.
    * @return The mapped ComputerDTO.
    */
   public static ComputerDto getComputerDto(Computer computer) {
@@ -51,7 +63,7 @@ public interface ComputerDtoMapper {
     String introducedString = "";
     String discontinuedString = "";
     String companyName = "";
-    int companyId = -1;
+    long companyId = -1;
 
     Company company = computer.getCompany();
 
@@ -78,8 +90,7 @@ public interface ComputerDtoMapper {
   /**
    * Method that maps a ComputerDTO into a Computer.
    * 
-   * @param computerDto
-   *          The ComputerDTO that will be mapped.
+   * @param computerDto The ComputerDTO that will be mapped.
    * @return The mapped Computer.
    */
   public static Computer getComputer(ComputerDto computerDto) {
@@ -91,20 +102,15 @@ public interface ComputerDtoMapper {
   /**
    * Method that maps the content of a ComputerDTO into a Computer.
    * 
-   * @param computerId
-   *          The id of the computer
-   * @param computerName
-   *          The name of the computer
-   * @param introduced
-   *          The introduced date
-   * @param discontinued
-   *          The discontinued date
-   * @param companyId
-   *          The company id
+   * @param computerId The id of the computer
+   * @param computerName The name of the computer
+   * @param introduced The introduced date
+   * @param discontinued The discontinued date
+   * @param companyId The company id
    * @return The mapped Computer.
    */
-  public static Computer getComputer(int computerId, String computerName, String introduced,
-      String discontinued, int companyId) {
+  public static Computer getComputer(long computerId, String computerName, String introduced,
+      String discontinued, long companyId) {
 
     String format = "yyyy-MM-dd";
     LocalDate introducedDate = null;
@@ -133,7 +139,7 @@ public interface ComputerDtoMapper {
     Company company = null;
 
     if (companyId > 0) {
-      company = CompanyDaoImpl.getInstance().getById(companyId);
+      company = CompanyDtoMapper.getCompany(companyDtoService.getById(companyId));
     }
 
     return new Computer(computerId, company, computerName, discontinuedDate, introducedDate);

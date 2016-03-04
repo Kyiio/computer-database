@@ -8,15 +8,15 @@ package com.excilys.dto;
  */
 public class CompanyDto {
 
-  private int    id;
+  private long   id;
   private String name;
 
-  public CompanyDto(int id, String name) {
+  public CompanyDto(long id, String name) {
     this.id = id;
     this.name = name;
   }
 
-  public int getId() {
+  public long getId() {
     return id;
   }
 

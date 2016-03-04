@@ -8,12 +8,12 @@ package com.excilys.dto;
  */
 public class ComputerDto {
 
-  private int    computerId;
+  private long   computerId;
   private String computerName;
   private String introducedDate;
   private String discontinuedDate;
 
-  private int    companyId;
+  private long   companyId;
   private String companyName;
 
   /**
@@ -32,8 +32,8 @@ public class ComputerDto {
    * @param companyName
    *          the company name
    */
-  public ComputerDto(int computerId, String computerName, String introducedDate,
-      String discontinuedDate, int companyId, String companyName) {
+  public ComputerDto(long computerId, String computerName, String introducedDate,
+      String discontinuedDate, long companyId, String companyName) {
     this.computerId = computerId;
     this.computerName = computerName;
     this.introducedDate = introducedDate;
@@ -42,7 +42,7 @@ public class ComputerDto {
     this.companyName = companyName;
   }
 
-  public int getComputerId() {
+  public long getComputerId() {
     return computerId;
   }
 
@@ -58,7 +58,7 @@ public class ComputerDto {
     return discontinuedDate;
   }
 
-  public int getCompanyId() {
+  public long getCompanyId() {
     return companyId;
   }
 

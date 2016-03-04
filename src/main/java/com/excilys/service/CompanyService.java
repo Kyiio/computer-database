@@ -17,7 +17,7 @@ public interface CompanyService {
    * @param id the id
    * @return The company that possess that id
    */
-  public Company getById(int id);
+  public Company getById(long id);
 
   /**
    * Method that calls the getByName method from the Company DAO.
@@ -39,6 +39,6 @@ public interface CompanyService {
    *
    * @param id the id
    */
-  public void deleteCompany(int id);
+  public void deleteCompany(long id);
 
 }

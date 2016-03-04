@@ -6,17 +6,18 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.excilys.dao.ComputerDao;
-import com.excilys.dao.ConnectionManager;
 import com.excilys.dao.exception.DaoException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -25,73 +26,46 @@ import java.util.ArrayList;
 /**
  * The Class ComputerDaoImplTest.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "classpath:./testApplicationContext.xml" })
+@Transactional(transactionManager = "txManager")
+@Rollback(true)
 public class ComputerDaoImplTest {
 
-  private static ComputerDao       computerDAO;
-  private static ConnectionManager connectionManager;
-
-  /**
-   * Inits the.
-   */
-  @BeforeClass
-  public static void init() {
-    computerDAO = ComputerDaoImpl.getInstance();
-    connectionManager = ConnectionManager.getInstance();
-  }
-
-  /**
-   * End.
-   */
-  @AfterClass
-  public static void end() {
-    computerDAO = null;
-    connectionManager = null;
-  }
-
-  @Before
-  public void before() {
-    connectionManager.startTransaction();
-  }
-
-  @After
-  public void after() {
-    connectionManager.rollback();
-    connectionManager.closeConnection();
-  }
+  @Autowired
+  private ComputerDao computerDao;
 
   /**
    * Test insert computer.
    *
-   * @throws Exception
-   *           the exception
+   * @throws Exception the exception
    */
   @Test
   public void testInsertComputer() throws Exception {
 
-    int newId = computerDAO.insertComputer(null, null, null, "Toto's computer");
+    long newId = computerDao.insertComputer(null, null, null, "Toto's computer");
 
-    Computer computer = computerDAO.getById(newId);
+    Computer computer = computerDao.getById(newId);
     assertNotNull(computer);
 
     assertEquals("Toto's computer", computer.getName());
     assertEquals(newId, computer.getId());
 
-    computerDAO.deleteComputer(computer.getId());
+    computerDao.deleteComputer(computer.getId());
   }
 
   /**
    * Test insert computer2.
    *
-   * @throws Exception
-   *           the exception
+   * @throws Exception the exception
    */
   @Test
   public void testInsertComputer2() throws Exception {
 
-    int newId = computerDAO.insertComputer(new Company(1, "Apple Inc."), LocalDate.of(2000, 10, 10),
-        LocalDate.of(2016, 10, 10), "Toto's computer");
+    long newId = computerDao.insertComputer(new Company(1, "Apple Inc."),
+        LocalDate.of(2000, 10, 10), LocalDate.of(2016, 10, 10), "Toto's computer");
 
-    Computer computer = computerDAO.getById(newId);
+    Computer computer = computerDao.getById(newId);
 
     assertNotNull(computer);
     assertEquals(computer.getName(), "Toto's computer");
@@ -100,7 +74,7 @@ public class ComputerDaoImplTest {
     assertEquals(computer.getCompany().getName(), "Apple Inc.");
     assertEquals(newId, computer.getId());
 
-    computerDAO.deleteComputer(computer.getId());
+    computerDao.deleteComputer(computer.getId());
   }
 
   /**
@@ -108,7 +82,7 @@ public class ComputerDaoImplTest {
    */
   @Test(expected = DaoException.class)
   public void testInsertComputerNull() {
-    computerDAO.insertComputer(null, null, null, null);
+    computerDao.insertComputer(null, null, null, null);
   }
 
   /**
@@ -116,69 +90,91 @@ public class ComputerDaoImplTest {
    */
   @Test(expected = DaoException.class)
   public void testInsertComputerNameEmpty() {
-    computerDAO.insertComputer(null, null, null, "");
+    computerDao.insertComputer(null, null, null, "");
   }
 
   /**
    * Test delete computer.
    *
-   * @throws SQLException
-   *           the SQL exception
-   * @throws Exception
-   *           the exception
+   * @throws SQLException the SQL exception
+   * @throws Exception the exception
    */
   @Test
   public void testDeleteComputer() throws SQLException, Exception {
 
     QueryParameters queryParameters = new QueryParameters();
-    int oldNumberOfLine = computerDAO.getCount(queryParameters);
+    long oldNumberOfLine = computerDao.getCount(queryParameters);
 
-    final Computer computer = computerDAO.getById(1);
-    computerDAO.deleteComputer(1);
+    final Computer computer = computerDao.getById(1);
+    computerDao.deleteComputer(1);
 
-    assertEquals(oldNumberOfLine - 1, computerDAO.getCount(queryParameters));
+    assertEquals(oldNumberOfLine - 1, computerDao.getCount(queryParameters));
 
-    Computer computer2 = computerDAO.getById(1);
+    Computer computer2 = computerDao.getById(1);
     assertNull(computer2);
 
-    computerDAO.insertComputer(computer.getCompany(), computer.getDiscontinued(),
+    computerDao.insertComputer(computer.getCompany(), computer.getDiscontinued(),
         computer.getIntroduced(), computer.getName());
   }
 
   /**
    * Test delete computer fake id.
    *
-   * @throws SQLException
-   *           the SQL exception
-   * @throws Exception
-   *           the exception
+   * @throws SQLException the SQL exception
+   * @throws Exception the exception
    */
   @Test
   public void testDeleteComputerFakeId() throws SQLException, Exception {
 
     QueryParameters queryParameters = new QueryParameters();
-    int oldNumberOfLine = computerDAO.getCount(queryParameters);
+    long oldNumberOfLine = computerDao.getCount(queryParameters);
 
-    computerDAO.deleteComputer(-200);
+    computerDao.deleteComputer(-200);
 
-    assertEquals(oldNumberOfLine, computerDAO.getCount(queryParameters));
+    assertEquals(oldNumberOfLine, computerDao.getCount(queryParameters));
+  }
+
+  /**
+   * Test update computer null.
+   */
+  @Test(expected = DaoException.class)
+  public void testUpdateComputerNull() {
+    computerDao.updateComputer(null);
+  }
+
+  /**
+   * Test update computer.
+   */
+
+  @Test
+  public void testUpdateComputer() {
+
+    Computer computer = computerDao.getById(1);
+
+    final Computer cp = new Computer(computer);
+
+    computer.setName("new computer name");
+    computerDao.updateComputer(computer);
+
+    computer = null;
+    computer = computerDao.getById(1);
+
+    assertNotEquals(computer, cp);
   }
 
   /**
    * Test list computer.
    *
-   * @throws DataSetException
-   *           the data set exception
-   * @throws Exception
-   *           the exception
+   * @throws DataSetException the data set exception
+   * @throws Exception the exception
    */
   @Test
   public void testListComputer() throws Exception {
 
-    ArrayList<Computer> listComputer = computerDAO.listComputers();
+    ArrayList<Computer> listComputer = computerDao.listComputers();
 
     QueryParameters queryParameters = new QueryParameters();
-    int nbComputerInDatabase = computerDAO.getCount(queryParameters);
+    long nbComputerInDatabase = computerDao.getCount(queryParameters);
 
     assertEquals(listComputer.size(), nbComputerInDatabase);
   }
@@ -189,7 +185,7 @@ public class ComputerDaoImplTest {
   @Test
   public void testGetComputerById() {
 
-    Computer computer = computerDAO.getById(1);
+    Computer computer = computerDao.getById(1);
     assertEquals(computer.getId(), 1);
   }
 
@@ -199,36 +195,7 @@ public class ComputerDaoImplTest {
   @Test
   public void testGetComputerByFakeId() {
 
-    Computer computer = computerDAO.getById(-1);
+    Computer computer = computerDao.getById(-1);
     assertNull(computer);
-  }
-
-  /**
-   * Test update computer null.
-   */
-  @Test(expected = DaoException.class)
-  public void testUpdateComputerNull() {
-    computerDAO.updateComputer(null);
-  }
-
-  /**
-   * Test update computer.
-   */
-
-  @Test
-
-  public void testUpdateComputer() {
-
-    Computer computer = computerDAO.getById(1);
-
-    final Computer cp = new Computer(computer);
-
-    computer.setName("new computer name");
-    computerDAO.updateComputer(computer);
-
-    computer = null;
-    computer = computerDAO.getById(1);
-
-    assertNotEquals(computer, cp);
   }
 }

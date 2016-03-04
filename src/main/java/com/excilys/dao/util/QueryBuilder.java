@@ -58,6 +58,11 @@ public class QueryBuilder {
     return this;
   }
 
+  public QueryBuilder append(long number) {
+    queryContent.append(number);
+    return this;
+  }
+
   public String getQuery() {
     return queryContent.toString();
   }

@@ -24,7 +24,7 @@ public class PageDto {
   private int                    pageNumber;
 
   /** The total number of computer. */
-  private int                    totalNumberOfComputer;
+  private long                   totalNumberOfComputer;
 
   /** The search name. */
   private String                 searchName;
@@ -38,24 +38,16 @@ public class PageDto {
   /**
    * Instantiates a new page dto.
    *
-   * @param pageSize
-   *          the page size
-   * @param pageNumber
-   *          the page number
-   * @param totalNumberOfComputer
-   *          the total number of computer
-   * @param maxPageNumber
-   *          the max page number
-   * @param content
-   *          the content
-   * @param searchName
-   *          the search name
-   * @param orderBy
-   *          the order by
-   * @param orderType
-   *          the order type
+   * @param pageSize the page size
+   * @param pageNumber the page number
+   * @param totalNumberOfComputer the total number of computer
+   * @param maxPageNumber the max page number
+   * @param content the content
+   * @param searchName the search name
+   * @param orderBy the order by
+   * @param orderType the order type
    */
-  public PageDto(int pageSize, int pageNumber, int totalNumberOfComputer, int maxPageNumber,
+  public PageDto(int pageSize, int pageNumber, long totalNumberOfComputer, int maxPageNumber,
       ArrayList<ComputerDto> content, String searchName, String orderBy, String orderType) {
     this.pageSize = pageSize;
     this.pageNumber = pageNumber;
@@ -108,7 +100,7 @@ public class PageDto {
    *
    * @return the total number of computer
    */
-  public int getTotalNumberOfComputer() {
+  public long getTotalNumberOfComputer() {
     return totalNumberOfComputer;
   }
 

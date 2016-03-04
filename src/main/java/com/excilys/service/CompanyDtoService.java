@@ -19,7 +19,7 @@ public interface CompanyDtoService {
    * @return The company dto matching the company that possess that id.
    * @see CompanyDTO, CompanyService
    */
-  public CompanyDto getById(int id);
+  public CompanyDto getById(long id);
 
   /**
    * Method that calls the getByName method from the Company DAO.

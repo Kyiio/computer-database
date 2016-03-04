@@ -1,7 +1,5 @@
 package com.excilys.command;
 
-import com.excilys.service.impl.ComputerServiceImpl;
-
 import java.util.Scanner;
 
 /**
@@ -20,7 +18,7 @@ public class ListComputerCommand extends AbstractCommand {
   public void execute() {
 
     System.out.println("Here is the list of all the company's computer :");
-    System.out.println(ComputerServiceImpl.getInstance().listComputers());
+    System.out.println(computerService.listComputers());
   }
 
 }

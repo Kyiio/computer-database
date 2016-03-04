@@ -3,7 +3,6 @@ package com.excilys.command;
 import com.excilys.command.exception.CommandException;
 import com.excilys.dao.exception.DaoException;
 import com.excilys.model.Computer;
-import com.excilys.service.impl.ComputerServiceImpl;
 
 import java.util.Scanner;
 
@@ -25,7 +24,7 @@ public class DeleteComputerCommand extends AbstractCommand {
     Computer oldComputer = askForMethodToFindComputer("delete");
 
     try {
-      ComputerServiceImpl.getInstance().deleteComputer(oldComputer.getId());
+      computerService.deleteComputer(oldComputer.getId());
       System.out.println("Delete complete !");
     } catch (DaoException e) {
       System.out.println("No matching found for the given id, delete aborted !");

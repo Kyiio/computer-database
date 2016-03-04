@@ -3,6 +3,8 @@ package com.excilys.dao.mapper;
 import com.excilys.exception.MappingException;
 import com.excilys.model.Company;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author B. Herbaut
  */
-public interface CompanyDaoMapper {
+public class CompanyDaoMapper implements RowMapper<Company> {
 
   /**
    * This function maps the resultSet into an ArrayList of Company.
@@ -27,7 +29,7 @@ public interface CompanyDaoMapper {
 
     try {
       while (resultSet.next()) {
-        convertedResults.add(new Company(resultSet.getInt("ID"), resultSet.getString("NAME")));
+        convertedResults.add(getCompany(resultSet));
       }
 
     } catch (SQLException e) {
@@ -35,6 +37,22 @@ public interface CompanyDaoMapper {
     }
 
     return convertedResults;
+  }
+
+  /**
+   * Gets the company.
+   *
+   * @param resultSet the result set
+   * @return the company
+   * @throws SQLException the SQL exception
+   */
+  public static Company getCompany(ResultSet resultSet) throws SQLException {
+    return new Company(resultSet.getLong("ID"), resultSet.getString("NAME"));
+  }
+
+  @Override
+  public Company mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+    return getCompany(resultSet);
   }
 
 }

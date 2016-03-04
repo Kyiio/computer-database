@@ -21,7 +21,7 @@ public interface ComputerValidator {
    * @param id
    *          The id that will be checked.
    */
-  public static void checkId(int id) {
+  public static void checkId(long id) {
     if (id <= 0) {
       throw new ValidationException("The computer id must be positive ! Given id is " + id);
     }

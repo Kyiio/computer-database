@@ -1,7 +1,6 @@
 package com.excilys.service.impl;
 
 import com.excilys.dao.ComputerDao;
-import com.excilys.dao.impl.ComputerDaoImpl;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
@@ -10,25 +9,17 @@ import com.excilys.validator.CompanyValidator;
 import com.excilys.validator.ComputerValidator;
 import com.excilys.validator.QueryParametersValidator;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+@Service("computerService")
 public class ComputerServiceImpl implements ComputerService {
 
-  public static ComputerService INSTANCE;
+  @Autowired
   public ComputerDao computerDao;
-
-  static {
-    INSTANCE = new ComputerServiceImpl();
-  }
-
-  public static ComputerService getInstance() {
-    return INSTANCE;
-  }
-
-  private ComputerServiceImpl() {
-    computerDao = ComputerDaoImpl.getInstance();
-  }
 
   @Override
   public void updateComputer(Computer computer) {
@@ -41,7 +32,7 @@ public class ComputerServiceImpl implements ComputerService {
   }
 
   @Override
-  public int insertComputer(Company company, LocalDate introduced, LocalDate discontinued,
+  public long insertComputer(Company company, LocalDate introduced, LocalDate discontinued,
       String name) {
 
     ComputerValidator.checkName(name);
@@ -51,14 +42,14 @@ public class ComputerServiceImpl implements ComputerService {
   }
 
   @Override
-  public void deleteComputer(int id) {
+  public void deleteComputer(long id) {
 
     ComputerValidator.checkId(id);
     computerDao.deleteComputer(id);
   }
 
   @Override
-  public void deleteComputerAssociatedToCompany(int companyId) {
+  public void deleteComputerAssociatedToCompany(long companyId) {
 
     CompanyValidator.checkId(companyId);
 
@@ -66,7 +57,7 @@ public class ComputerServiceImpl implements ComputerService {
   }
 
   @Override
-  public Computer getById(int id) {
+  public Computer getById(long id) {
 
     ComputerValidator.checkId(id);
     return computerDao.getById(id);
@@ -94,7 +85,7 @@ public class ComputerServiceImpl implements ComputerService {
   }
 
   @Override
-  public int getCount(QueryParameters queryParameters) {
+  public long getCount(QueryParameters queryParameters) {
     return computerDao.getCount(queryParameters);
   }
 

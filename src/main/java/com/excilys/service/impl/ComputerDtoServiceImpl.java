@@ -9,24 +9,16 @@ import com.excilys.service.ComputerService;
 import com.excilys.validator.ComputerValidator;
 import com.excilys.validator.QueryParametersValidator;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 
+@Service
 public class ComputerDtoServiceImpl implements ComputerDtoService {
 
-  public static ComputerDtoService INSTANCE;
-  public ComputerService           computerService;
-
-  static {
-    INSTANCE = new ComputerDtoServiceImpl();
-  }
-
-  public static ComputerDtoService getInstance() {
-    return INSTANCE;
-  }
-
-  private ComputerDtoServiceImpl() {
-    computerService = ComputerServiceImpl.getInstance();
-  }
+  @Autowired
+  public ComputerService computerService;
 
   @Override
   public void updateComputer(ComputerDto computerDto) {
@@ -42,7 +34,7 @@ public class ComputerDtoServiceImpl implements ComputerDtoService {
   }
 
   @Override
-  public int insertComputer(ComputerDto computerDto) {
+  public long insertComputer(ComputerDto computerDto) {
 
     ComputerValidator.checkName(computerDto.getComputerName());
     ComputerValidator.checkDate(computerDto.getIntroducedDate(), null);
@@ -55,14 +47,14 @@ public class ComputerDtoServiceImpl implements ComputerDtoService {
   }
 
   @Override
-  public void deleteComputer(int id) {
+  public void deleteComputer(long id) {
 
     ComputerValidator.checkId(id);
     computerService.deleteComputer(id);
   }
 
   @Override
-  public ComputerDto getById(int id) {
+  public ComputerDto getById(long id) {
 
     ComputerValidator.checkId(id);
     Computer computer = computerService.getById(id);
@@ -95,7 +87,7 @@ public class ComputerDtoServiceImpl implements ComputerDtoService {
   }
 
   @Override
-  public int getCount(QueryParameters queryParameters) {
+  public long getCount(QueryParameters queryParameters) {
 
     return computerService.getCount(queryParameters);
   }

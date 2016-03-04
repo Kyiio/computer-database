@@ -33,39 +33,35 @@ public interface ComputerService {
    * @param name the name
    * @return The id of the computer we just inserted
    */
-  public int insertComputer(Company company, LocalDate introduced, LocalDate discontinued,
+  public long insertComputer(Company company, LocalDate introduced, LocalDate discontinued,
       String name);
 
   /**
    * Method that calls the deleteComputer method from {@link ComputerDao}.
    *
-   * @param id
-   *          The id of the computer we want to delete
+   * @param id The id of the computer we want to delete
    */
-  public void deleteComputer(int id);
+  public void deleteComputer(long id);
 
   /**
    * Method that calls the deleteComputersForCompanyId method from {@link ComputerDao}.
    *
-   * @param companyId
-   *          The id of the company for witch we have to delete the computers
+   * @param companyId The id of the company for witch we have to delete the computers
    */
-  public void deleteComputerAssociatedToCompany(int companyId);
+  public void deleteComputerAssociatedToCompany(long companyId);
 
   /**
    * Method that calls the getById method from the {@link ComputerDao}.
    *
-   * @param id
-   *          The id of the computer we want to retrieve
+   * @param id The id of the computer we want to retrieve
    * @return The computer that matches the given id or null
    */
-  public Computer getById(int id);
+  public Computer getById(long id);
 
   /**
    * Method that calls the getByName method from the {@link ComputerDao}.
    *
-   * @param name
-   *          The name of the computer(s) we want to retrieve
+   * @param name The name of the computer(s) we want to retrieve
    * @return The list of computers that matches the given name (or an empty list)
    */
   public ArrayList<Computer> getByName(String name);
@@ -80,8 +76,7 @@ public interface ComputerService {
   /**
    * Method that calls the selectWithParameters from {@link ComputerDao}.
    *
-   * @param queryParameters
-   *          the query parameters
+   * @param queryParameters the query parameters
    * @return The list of company from the index pageNumber*offset to pageNumber*offset + offset
    */
   public ArrayList<Computer> selectWithParameters(QueryParameters queryParameters);
@@ -89,9 +84,8 @@ public interface ComputerService {
   /**
    * Method that calls the getNbComputer from the {@link ComputerDao}.
    *
-   * @param queryParameters
-   *          the query parameters
+   * @param queryParameters the query parameters
    * @return The number of computer in the database
    */
-  public int getCount(QueryParameters queryParameters);
+  public long getCount(QueryParameters queryParameters);
 }

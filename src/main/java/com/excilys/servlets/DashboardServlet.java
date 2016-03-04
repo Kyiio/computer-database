@@ -3,9 +3,12 @@ package com.excilys.servlets;
 import com.excilys.dto.ComputerDto;
 import com.excilys.dto.PageDto;
 import com.excilys.model.QueryParameters;
-import com.excilys.service.impl.ComputerDtoServiceImpl;
+import com.excilys.service.ComputerDtoService;
 import com.excilys.servlets.util.PageCreator;
 import com.excilys.servlets.util.QueryParametersBuilder;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,11 +29,20 @@ public class DashboardServlet extends HttpServlet {
   /** The Constant serialVersionUID. */
   private static final long serialVersionUID = 1L;
 
+  @Autowired
+  private ComputerDtoService computerDtoService;
+
   /**
    * Default constructor.
    */
   public DashboardServlet() {
 
+  }
+
+  @Override
+  public void init() throws ServletException {
+    super.init();
+    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
   }
 
   /**
@@ -55,10 +67,10 @@ public class DashboardServlet extends HttpServlet {
 
     // We retrieve the needed computers from the database
     ArrayList<ComputerDto> computerDtoList =
-        ComputerDtoServiceImpl.getInstance().selectWithParameters(queryParameters);
+        computerDtoService.selectWithParameters(queryParameters);
 
     // We retrieve the number of computer in the database
-    int computerCount = ComputerDtoServiceImpl.getInstance().getCount(queryParameters);
+    long computerCount = computerDtoService.getCount(queryParameters);
 
     PageDto page = PageCreator.buildPage(queryParameters, computerDtoList, computerCount);
 
@@ -89,7 +101,7 @@ public class DashboardServlet extends HttpServlet {
     String[] idStrTab = idsString.split(",");
 
     for (int i = 0; i < idStrTab.length; ++i) {
-      ComputerDtoServiceImpl.getInstance().deleteComputer(Integer.parseInt(idStrTab[i]));
+      computerDtoService.deleteComputer(Long.parseLong(idStrTab[i]));
     }
 
     // response.sendRedirect("dashboard");

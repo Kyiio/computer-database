@@ -31,7 +31,7 @@ public interface ComputerDao {
    *           the dao exception
    * @see Company
    */
-  public int insertComputer(Company company, LocalDate introduced, LocalDate discontinued,
+  public long insertComputer(Company company, LocalDate introduced, LocalDate discontinued,
       String name) throws DaoException;
 
   /**
@@ -49,7 +49,7 @@ public interface ComputerDao {
    * @param id
    *          The id of the computer we want to delete.
    */
-  public void deleteComputer(int id);
+  public void deleteComputer(long id);
 
   /**
    * This method access the database to retrieve the computer with the given id. If the id doesn't
@@ -60,7 +60,7 @@ public interface ComputerDao {
    * @return The matching computer or null.
    * @see Computer
    */
-  public Computer getById(int id);
+  public Computer getById(long id);
 
   /**
    * This method retrieve a list of all the computer that possess the name given. If none are found,
@@ -98,7 +98,7 @@ public interface ComputerDao {
    *          The query parameters.
    * @return The number of Computer that match the query parameters.
    */
-  public int getCount(QueryParameters queryParameter);
+  public long getCount(QueryParameters queryParameter);
 
   /**
    * Method that deletes all the computers associated to the given companyId.
@@ -106,5 +106,5 @@ public interface ComputerDao {
    * @param companyId
    *          The id of the company
    */
-  public void deleteComputersForCompanyId(int companyId);
+  public void deleteComputersForCompanyId(long companyId);
 }

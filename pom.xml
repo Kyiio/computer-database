@@ -10,26 +10,52 @@
 
 	<properties>
 		<!-- Version for all dependencies -->
+		
+		<!-- Test -->
+		
 		<junit-version>4.12</junit-version>
-		<dbunit-version>2.5.1</dbunit-version>
 		<org-mokito-all-version>1.10.19</org-mokito-all-version>
 		<powermock-module-junit4-version>1.6.4</powermock-module-junit4-version>
 		<powermock-api-mockito-version>1.6.4</powermock-api-mockito-version>
-		<h2-version>1.4.191</h2-version>
 		<selenium-java-version>2.52.0</selenium-java-version>
-		<mysql-connector-java-version>5.1.6</mysql-connector-java-version>
+		
+		<!-- Logger -->
 		<slf4j-api-version>1.7.14</slf4j-api-version>
 		<logback-classic-version>1.1.3</logback-classic-version>
+		
+		<mysql-connector-java-version>5.1.6</mysql-connector-java-version>
+		
+		<!-- Servlet Jsp Jstl -->
 		<javax.servlet-api-version>3.1.0</javax.servlet-api-version>
 		<jsp-api-version>2.1</jsp-api-version>
 		<jstl-version>1.2</jstl-version>
-		<bonecp-version>0.8.0.RELEASE</bonecp-version>
-		<!-- test suite that will be executed -->
+	
+		<!-- Spring  -->
+		<spring-version>4.2.5.RELEASE</spring-version>
+		<jcloverslf4j>1.7.0</jcloverslf4j>
+		
+		<!-- Test suite that will be executed -->
 		<junit-test-suite>com/excilys/TestSuite.java</junit-test-suite>
 		<selenium-test-suite>com/excilys/SeleniumIntegrationTestSuite.java</selenium-test-suite>
 	</properties>
 
+	<!-- Repository used to trick maven and ignore all commons-logging dependencies -->
+	<repositories>
+		<repository>
+			<id>version99</id>
+			<!-- highly available repository serving empty artifacts -->
+			<url>http://version99.qos.ch/</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
+
+		<!-- We trick maven so that we won't have any reference to commons-logging in our project -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>99-empty</version>
+		</dependency>
 
 		<!-- Test dependencies -->
 
@@ -43,18 +69,6 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>${org-mokito-all-version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-api-mockito</artifactId>
-			<version>${powermock-api-mockito-version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-module-junit4</artifactId>
-			<version>${powermock-module-junit4-version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -107,10 +121,55 @@
 			<artifactId>jstl</artifactId>
 			<version>${jstl-version}</version>
 		</dependency>
+
+		<!-- Spring -->
+
 		<dependency>
-			<groupId>com.jolbox</groupId>
-			<artifactId>bonecp</artifactId>
-			<version>${bonecp-version}</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<!-- Not needed yet
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring-version}</version>
+		</dependency>-->
+
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring-version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Spring logs -->
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${jcloverslf4j}</version>
 		</dependency>
 
 	</dependencies>
@@ -136,7 +195,7 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-			<!-- Plugin to run the junit tests -->
+			<!-- Plugin to run the unit tests -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>

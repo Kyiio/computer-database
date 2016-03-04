@@ -14,19 +14,17 @@ public interface CompanyDao {
   /**
    * This method return the Company that matches the given id. If none match returns null
    * 
-   * @param id
-   *          The id of the Company we want to retrieve.
+   * @param id The id of the Company we want to retrieve.
    * @return The Company matching the id.
    * @see Company
    */
-  public Company getById(int id);
+  public Company getById(long id);
 
   /**
    * Method that access the database to retrieve the list of company that possess the name given in
    * parameter. If none matches the name, an empty list is returned.
    * 
-   * @param name
-   *          The name of the companies we want to retrieve.
+   * @param name The name of the companies we want to retrieve.
    * @return The list of company that possess the given name.
    * @see Company
    */
@@ -43,9 +41,8 @@ public interface CompanyDao {
   /**
    * This method delete the company with the given id.
    * 
-   * @param id
-   *          The id of the company we want to delete
+   * @param id The id of the company we want to delete
    */
-  public void deleteCompany(int id);
+  public void deleteCompany(long id);
 
 }

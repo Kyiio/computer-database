@@ -4,6 +4,8 @@ import com.excilys.exception.MappingException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -15,18 +17,39 @@ import java.util.ArrayList;
  *
  * @author B. Herbaut
  */
-public interface ComputerDaoMapper {
+public class ComputerDaoMapper implements RowMapper<Computer> {
 
   /**
    * This method maps the resultSet into an ArrayList of Computer.
    *
-   * @param resultSet
-   *          The resultSet we want to map
+   * @param resultSet The resultSet we want to map
    * @return The mapped computer list
    */
   public static ArrayList<Computer> getComputerList(ResultSet resultSet) {
 
     ArrayList<Computer> convertedResults = new ArrayList<Computer>();
+
+    try {
+      while (resultSet.next()) {
+
+        convertedResults.add(getComputer(resultSet));
+      }
+    } catch (SQLException e) {
+      throw new MappingException("Error while trying to Map a resultSet into a computer", e);
+    }
+
+    return convertedResults;
+
+  }
+
+  /**
+   * Gets the computer.
+   *
+   * @param resultSet the result set
+   * @return the computer
+   * @throws SQLException the SQL exception
+   */
+  public static Computer getComputer(ResultSet resultSet) throws SQLException {
 
     Timestamp discontinuedTimestamp;
     Timestamp introducedTimestamp;
@@ -34,33 +57,30 @@ public interface ComputerDaoMapper {
     LocalDate discontinuedLocalDate;
     LocalDate introducedLocalDate;
 
-    try {
-      while (resultSet.next()) {
+    discontinuedTimestamp = resultSet.getTimestamp("DISCONTINUED");
+    introducedTimestamp = resultSet.getTimestamp("INTRODUCED");
 
-        discontinuedTimestamp = resultSet.getTimestamp("DISCONTINUED");
-        introducedTimestamp = resultSet.getTimestamp("INTRODUCED");
-
-        if (discontinuedTimestamp == null) {
-          discontinuedLocalDate = null;
-        } else {
-          discontinuedLocalDate = discontinuedTimestamp.toLocalDateTime().toLocalDate();
-        }
-
-        if (introducedTimestamp == null) {
-          introducedLocalDate = null;
-        } else {
-          introducedLocalDate = introducedTimestamp.toLocalDateTime().toLocalDate();
-        }
-
-        convertedResults.add(new Computer(resultSet.getInt("computer.ID"),
-            new Company(resultSet.getInt("company.ID"), resultSet.getString("company.NAME")),
-            resultSet.getString("computer.NAME"), discontinuedLocalDate, introducedLocalDate));
-      }
-
-    } catch (SQLException e) {
-      throw new MappingException("Error while trying to Map a resultSet into a ComputerList", e);
+    if (discontinuedTimestamp == null) {
+      discontinuedLocalDate = null;
+    } else {
+      discontinuedLocalDate = discontinuedTimestamp.toLocalDateTime().toLocalDate();
     }
 
-    return convertedResults;
+    if (introducedTimestamp == null) {
+      introducedLocalDate = null;
+    } else {
+      introducedLocalDate = introducedTimestamp.toLocalDateTime().toLocalDate();
+    }
+
+    return new Computer(resultSet.getLong("computer.ID"),
+        new Company(resultSet.getLong("company.ID"), resultSet.getString("company.NAME")),
+        resultSet.getString("computer.NAME"), discontinuedLocalDate, introducedLocalDate);
   }
+
+  @Override
+  public Computer mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+
+    return getComputer(resultSet);
+  }
+
 }

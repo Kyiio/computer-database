@@ -1,7 +1,6 @@
 package com.excilys.command;
 
 import com.excilys.model.Company;
-import com.excilys.service.impl.CompanyServiceImpl;
 
 import java.util.Scanner;
 
@@ -22,7 +21,7 @@ public class ListCompaniesCommand extends AbstractCommand {
 
     System.out.println("Here is the list of all the company :");
 
-    for (Company company : CompanyServiceImpl.getInstance().listCompanies()) {
+    for (Company company : companyService.listCompanies()) {
       System.out.println(company);
     }
   }

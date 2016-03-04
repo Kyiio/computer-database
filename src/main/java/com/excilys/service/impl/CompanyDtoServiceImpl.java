@@ -7,27 +7,19 @@ import com.excilys.service.CompanyDtoService;
 import com.excilys.service.CompanyService;
 import com.excilys.validator.CompanyValidator;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 
+@Service("companyDtoService")
 public class CompanyDtoServiceImpl implements CompanyDtoService {
 
-  public static CompanyDtoService INSTANCE;
-  public CompanyService           companyService;
-
-  static {
-    INSTANCE = new CompanyDtoServiceImpl();
-  }
-
-  public static CompanyDtoService getInstance() {
-    return INSTANCE;
-  }
-
-  private CompanyDtoServiceImpl() {
-    companyService = CompanyServiceImpl.getInstance();
-  }
+  @Autowired
+  public CompanyService companyService;
 
   @Override
-  public CompanyDto getById(int id) {
+  public CompanyDto getById(long id) {
     CompanyValidator.checkId(id);
     Company company = companyService.getById(id);
 

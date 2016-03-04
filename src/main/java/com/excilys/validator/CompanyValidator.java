@@ -16,7 +16,7 @@ public class CompanyValidator {
    * @param id
    *          The company id that will be checked.
    */
-  public static void checkId(int id) {
+  public static void checkId(long id) {
     if (id <= 0) {
       throw new ValidationException("The company id must be positive ! Given id is " + id);
     }

@@ -26,7 +26,7 @@ public interface PageCreator {
    * @return the page dto
    */
   public static PageDto buildPage(QueryParameters queryParameters,
-      ArrayList<ComputerDto> computerDtoList, int totalNumberOfComputer) {
+      ArrayList<ComputerDto> computerDtoList, long totalNumberOfComputer) {
 
     int pageSize = queryParameters.getPageSize();
     int maxPageNumber = (int) Math.ceil((double) totalNumberOfComputer / (double) pageSize);

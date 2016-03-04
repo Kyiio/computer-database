@@ -2,7 +2,6 @@ package com.excilys.command;
 
 import com.excilys.command.exception.CommandException;
 import com.excilys.model.Computer;
-import com.excilys.service.impl.ComputerServiceImpl;
 
 import java.util.Scanner;
 
@@ -43,7 +42,7 @@ public class UpdateComputerCommand extends AbstractCommand {
     oldComputer.setCompany(askForExistingCompanyByAskingName());
 
     try {
-      ComputerServiceImpl.getInstance().updateComputer(oldComputer);
+      computerService.updateComputer(oldComputer);
       System.out.println("Update succeeded!");
     } catch (CommandException se) {
       System.out.println(

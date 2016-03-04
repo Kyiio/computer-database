@@ -2,7 +2,6 @@ package com.excilys.command;
 
 import com.excilys.command.exception.CommandException;
 import com.excilys.model.Computer;
-import com.excilys.service.impl.ComputerServiceImpl;
 
 import java.util.Scanner;
 
@@ -37,8 +36,8 @@ public class InsertComputerCommand extends AbstractCommand {
     newComputer.setCompany(askForExistingCompanyByAskingName());
 
     try {
-      ComputerServiceImpl.getInstance().insertComputer(newComputer.getCompany(),
-          newComputer.getIntroduced(), newComputer.getDiscontinued(), newComputer.getName());
+      computerService.insertComputer(newComputer.getCompany(), newComputer.getIntroduced(),
+          newComputer.getDiscontinued(), newComputer.getName());
       System.out.println("Insert done !");
     } catch (CommandException se) {
       System.out.println(
