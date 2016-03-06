@@ -22,16 +22,16 @@ public class QueryParameters {
   }
 
   enum Order {
-    ASC,
-    DESC
+    ASC, DESC
   }
 
-  int     offset;
-  int     pageSize;
-  int     pageNumber;
+  /** The row number at which we will start to take the computer from the database. */
+  int offset;
+  int pageSize;
+  int pageNumber;
 
-  String  search;
-  Order   order;
+  String search;
+  Order order;
   OrderBy by;
 
   public QueryParameters() {
@@ -39,13 +39,10 @@ public class QueryParameters {
   }
 
   /**
-   * Create a queryParameter object with the given parameters. If you don't want to set some
-   * parameters just put -1 or null.
+   * Create a queryParameter object with the given parameters.
    *
-   * @param pageNumber
-   *          the page number
-   * @param pageSize
-   *          the page size
+   * @param pageNumber the page number
+   * @param pageSize the page size
    */
   public QueryParameters(int pageNumber, int pageSize) {
     this.pageSize = pageSize;
@@ -86,8 +83,7 @@ public class QueryParameters {
   /**
    * Sets the search.
    *
-   * @param search
-   *          the new search
+   * @param search the new search
    */
   public void setSearch(String search) {
     if (search != null && search.length() > 0) {
@@ -102,8 +98,7 @@ public class QueryParameters {
   /**
    * Sets the order.
    *
-   * @param order
-   *          the new order
+   * @param order the new order
    */
   public void setOrder(String order) {
     if (order != null && order.length() > 0) {
@@ -122,8 +117,7 @@ public class QueryParameters {
   /**
    * Sets the by.
    *
-   * @param by
-   *          the new by
+   * @param by the new by
    */
   public void setBy(String by) {
     if (by != null && by.length() > 0) {

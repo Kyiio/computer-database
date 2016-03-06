@@ -1,5 +1,6 @@
 package com.excilys.servlets.util;
 
+import com.excilys.dto.PageDto;
 import com.excilys.model.QueryParameters;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,16 +10,11 @@ public interface QueryParametersBuilder {
   /**
    * Creates the query parameters.
    *
-   * @param pageSize
-   *          the page size
-   * @param pageNumber
-   *          the page number
-   * @param search
-   *          the search
-   * @param order
-   *          the order
-   * @param by
-   *          the by
+   * @param pageSize the page size
+   * @param pageNumber the page number
+   * @param search the search
+   * @param order the order
+   * @param by the by
    * @return the query parameters
    */
   public static QueryParameters createQueryParameters(int pageSize, int pageNumber, String search,
@@ -35,17 +31,16 @@ public interface QueryParametersBuilder {
   /**
    * Creates the query parameters.
    *
-   * @param request
-   *          the request
+   * @param request the request
    * @return the query parameters
    */
   public static QueryParameters createQueryParameters(HttpServletRequest request) {
 
-    String pageNumberParameter = request.getParameter("page-number");
-    String computerPerPageParameter = request.getParameter("computer-per-page");
-    String search = request.getParameter("search-name");
-    String order = request.getParameter("order-type");
-    String by = request.getParameter("order-by");
+    String pageNumberParameter = request.getParameter("pageNumber");
+    String computerPerPageParameter = request.getParameter("pageSize");
+    String search = request.getParameter("searchName");
+    String order = request.getParameter("orderType");
+    String by = request.getParameter("orderBy");
 
     int parsedInt;
     int pageSize = 10;
@@ -62,6 +57,23 @@ public interface QueryParametersBuilder {
     }
 
     return createQueryParameters(pageSize, pageNumber, search, order, by);
+  }
+
+  public static QueryParameters createQueryParameters(PageDto pageDto) {
+
+    int pageSize = pageDto.getPageSize();
+    int pageNumber = pageDto.getPageNumber();
+
+    if (pageSize < 1) {
+      pageSize = 10;
+    }
+
+    if (pageNumber < 1) {
+      pageNumber = 1;
+    }
+
+    return createQueryParameters(pageSize, pageNumber, pageDto.getSearchName(),
+        pageDto.getOrderType(), pageDto.getOrderBy());
   }
 
 }

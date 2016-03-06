@@ -34,8 +34,8 @@ import javax.annotation.Resource;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:./testApplicationContext.xml" })
-@Transactional(transactionManager = "txManager")
-@Rollback(true)
+//@Transactional(transactionManager = "txManager")
+//@Rollback(true)
 public class AddComputerIntegrationTest {
 
   private WebDriver                driver;
@@ -55,7 +55,8 @@ public class AddComputerIntegrationTest {
   public void setUp() throws Exception {
     driver = new FirefoxDriver();
     baseUrl = "http://127.0.0.1:6060/";
-    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+    driver.manage().window().maximize();
   }
 
   /**
@@ -73,7 +74,8 @@ public class AddComputerIntegrationTest {
   /**
    * Integration test : Add computer feature.
    *
-   * @throws Exception the exception
+   * @throws Exception
+   *             the exception
    */
   @Test
   public void addComputer() throws Exception {
@@ -84,53 +86,42 @@ public class AddComputerIntegrationTest {
     driver.findElement(By.id("computerName")).sendKeys("Toto integration test");
     driver.findElement(By.id("computerName")).clear();
 
-    // We check that the error message regarding the computer's name shows up
+    // We check that the error message regarding the computer's name shows
+    // up
 
-    String errorText = driver.findElement(By.id("computerNameErr")).getText();
-    assertTrue(errorText.matches("^The computer name must be specified !$"));
+    checkText("computerNameErr", "^The computer name must be specified !$");
 
     driver.findElement(By.id("computerName")).sendKeys("Toto integration test");
 
-    // We check that we can't put a discontinued date if we don't have set the introduced date
+    // We check that we can't put a discontinued date if we don't have set
+    // the introduced date
 
     driver.findElement(By.id("discontinued")).clear();
     driver.findElement(By.id("discontinued")).sendKeys("2016-10-01");
 
-    errorText = driver.findElement(By.id("introducedErr")).getText();
-    assertTrue(errorText
-        .matches("^The introduced value must be specified if you put the discontinued one !$"));
+    checkText("introducedErr", "^The introduced value must be specified if you put the discontinued one !$");
+    checkText("discontinuedErr", "^You can't specify the discontinued date if you don't set the introduced one !$");
 
-    errorText = driver.findElement(By.id("discontinuedErr")).getText();
-    assertTrue(errorText.matches(
-        "^You can't specify the discontinued date if you don't set the introduced one !$"));
-
-    // We check that the discontinued date must be set after the introduced date
+    // We check that the discontinued date must be set after the introduced
+    // date
 
     driver.findElement(By.id("introduced")).clear();
     driver.findElement(By.id("introduced")).sendKeys("2017-12-02");
 
-    errorText = driver.findElement(By.id("introducedErr")).getText();
-    assertTrue(
-        errorText.matches("^The introduced value must be set before the discontinued one !$"));
-
-    errorText = driver.findElement(By.id("discontinuedErr")).getText();
-    assertTrue(
-        errorText.matches("^The discontinued value must be set after the introduced one !$"));
+    checkText("introducedErr", "^The introduced value must be set before the discontinued one !$");
+    checkText("discontinuedErr", "^The discontinued value must be set after the introduced one !$");
 
     // We check that all is fine with the current dates
 
     driver.findElement(By.id("introduced")).clear();
     driver.findElement(By.id("introduced")).sendKeys("2015-12-02");
 
-    errorText = driver.findElement(By.id("introducedErr")).getText();
-    assertTrue(errorText.matches("^$"));
-
-    errorText = driver.findElement(By.id("discontinuedErr")).getText();
-    assertTrue(errorText.matches("^$"));
+    checkText("introducedErr", "^$");
+    checkText("discontinuedErr", "^$");
 
     /*
-     * We set the company & submit the form, if all is fine no exception is thrown and we are
-     * redirected to the dashboard
+     * We set the company & submit the form, if all is fine no exception is
+     * thrown and we are redirected to the dashboard
      */
     new Select(driver.findElement(By.id("companyId"))).selectByVisibleText("Netronics");
     driver.findElement(By.id("submit")).click();
@@ -138,7 +129,6 @@ public class AddComputerIntegrationTest {
     // We then try to find the newly introduced computer in the database
 
     ArrayList<Computer> computerList = computerService.getByName("Toto integration test");
-
     assertNotEquals(0, computerList.size());
 
     // And we check the insertion went well for all fields
@@ -150,10 +140,22 @@ public class AddComputerIntegrationTest {
     assertEquals(LocalDate.of(2015, 12, 2), computer.getIntroduced());
     assertEquals(LocalDate.of(2016, 10, 1), computer.getDiscontinued());
     assertEquals("Netronics", computer.getCompany().getName());
-
-    // then we delete the computer so that the database remains unchanged
-
+    
+    //An dwe delete the computer so that the database remains clean
     computerService.deleteComputer(computer.getId());
+
+  }
+
+  /**
+   * Check text.
+   *
+   * @param id the id
+   * @param text the text
+   */
+  private void checkText(String id, String text) {
+
+    String errorText = driver.findElement(By.id(id)).getText();
+    assertTrue(errorText.matches(text));
   }
 
   /*

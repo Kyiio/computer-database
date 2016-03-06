@@ -11,29 +11,25 @@ import java.util.ArrayList;
  */
 public class PageDto {
 
-  /** The content. */
   private ArrayList<ComputerDto> content;
 
-  /** The page size. */
-  private int                    pageSize;
+  private int pageSize;
 
-  /** The max page number. */
-  private int                    maxPageNumber;
+  private int maxPageNumber;
 
-  /** The page number. */
-  private int                    pageNumber;
+  private int pageNumber;
 
-  /** The total number of computer. */
-  private long                   totalNumberOfComputer;
+  private long totalNumberOfComputer;
 
-  /** The search name. */
-  private String                 searchName;
+  private String searchName;
 
-  /** The oreder by. */
-  private String                 orederBy;
+  private String orederBy;
 
-  /** The order type. */
-  private String                 orderType;
+  private String orderType;
+
+  public PageDto() {
+    super();
+  }
 
   /**
    * Instantiates a new page dto.
@@ -59,75 +55,73 @@ public class PageDto {
     this.orderType = orderType;
   }
 
-  /**
-   * Gets the content.
-   *
-   * @return the content
-   */
   public ArrayList<ComputerDto> getContent() {
     return content;
   }
 
-  /**
-   * Gets the page size.
-   *
-   * @return the page size
-   */
+  public void setContent(ArrayList<ComputerDto> content) {
+    this.content = content;
+  }
+
   public int getPageSize() {
     return pageSize;
   }
 
-  /**
-   * Gets the max page number.
-   *
-   * @return the max page number
-   */
+  public void setPageSize(int pageSize) {
+    this.pageSize = pageSize;
+  }
+
   public int getMaxPageNumber() {
     return maxPageNumber;
   }
 
-  /**
-   * Gets the page number.
-   *
-   * @return the page number
-   */
+  public void setMaxPageNumber(int maxPageNumber) {
+    this.maxPageNumber = maxPageNumber;
+  }
+
   public int getPageNumber() {
     return pageNumber;
   }
 
-  /**
-   * Gets the total number of computer.
-   *
-   * @return the total number of computer
-   */
+  public void setPageNumber(int pageNumber) {
+    this.pageNumber = pageNumber;
+  }
+
   public long getTotalNumberOfComputer() {
     return totalNumberOfComputer;
   }
 
-  /**
-   * Gets the search name.
-   *
-   * @return the search name
-   */
+  public void setTotalNumberOfComputer(long totalNumberOfComputer) {
+    this.totalNumberOfComputer = totalNumberOfComputer;
+  }
+
   public String getSearchName() {
     return searchName;
   }
 
-  /**
-   * Gets the order by.
-   *
-   * @return the order by
-   */
+  public void setSearchName(String searchName) {
+    this.searchName = searchName;
+  }
+
   public String getOrderBy() {
     return orederBy;
   }
 
-  /**
-   * Gets the order type.
-   *
-   * @return the order type
-   */
+  public void setOrederBy(String orederBy) {
+    this.orederBy = orederBy;
+  }
+
   public String getOrderType() {
     return orderType;
   }
+
+  /**
+   * Sets the order type.
+   *
+   * @param orderType the new order type
+   */
+  public void setOrderType(String orderType) {
+    this.orderType = orderType;
+  }
+
 }

@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * The Class SeleniumIT.
  */
-public class SeleniumIntegrationTest {
+public class PageSizeAndPAgeNumberIntegrationTest {
 
   /** The driver. */
   private WebDriver driver;
@@ -31,22 +31,20 @@ public class SeleniumIntegrationTest {
   /**
    * Sets the up.
    *
-   * @throws Exception
-   *           the exception
+   * @throws Exception the exception
    */
   @Before
   public void setUp() throws Exception {
     driver = new FirefoxDriver();
     baseUrl = "http://127.0.0.1:6060";
-    driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+    driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
     driver.manage().window().maximize();
   }
 
   /**
    * Test next and previous.
    *
-   * @throws Exception
-   *           the exception
+   * @throws Exception the exception
    */
   @Test
   public void testNextAndPrevious() throws Exception {
@@ -105,8 +103,7 @@ public class SeleniumIntegrationTest {
   /**
    * Tear down.
    *
-   * @throws Exception
-   *           the exception
+   * @throws Exception the exception
    */
   @After
   public void tearDown() throws Exception {
