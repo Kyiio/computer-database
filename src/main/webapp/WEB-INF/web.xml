@@ -37,31 +37,33 @@
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.js</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.html</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.ttf</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.woff</url-pattern>
+	</servlet-mapping>
 
-
-	<!-- <welcome-file-list> <welcome-file>/dashboard</welcome-file> </welcome-file-list> 
-		<servlet> <servlet-name>DashboardServlet</servlet-name> <servlet-class>com.excilys.servlets.DashboardServlet</servlet-class> 
-		</servlet> <servlet> <servlet-name>AddComputerServlet</servlet-name> <servlet-class>com.excilys.servlets.AddComputerServlet</servlet-class> 
-		</servlet> <servlet> <servlet-name>EditComputerServlet</servlet-name> <servlet-class>com.excilys.servlets.EditComputerServlet</servlet-class> 
-		</servlet> <servlet-mapping> <servlet-name>DashboardServlet</servlet-name> 
-		<url-pattern>/dashboard</url-pattern> </servlet-mapping> <servlet-mapping> 
-		<servlet-name>AddComputerServlet</servlet-name> <url-pattern>/add-computer</url-pattern> 
-		</servlet-mapping> <servlet-mapping> <servlet-name>EditComputerServlet</servlet-name> 
-		<url-pattern>/edit-computer</url-pattern> </servlet-mapping> -->
 	<error-page>
 		<exception-type>java.lang.Exception</exception-type>
-		<location>/500.jsp</location>
+		<location>/views/500.html</location>
 	</error-page>
 	<error-page>
 		<error-code>403</error-code>
-		<location>/403.jsp</location>
+		<location>/views/403.html</location>
 	</error-page>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/404.jsp</location>
+		<location>/views/404.html</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
-		<location>/500.jsp</location>
+		<location>/views/500.html</location>
 	</error-page>
 </web-app>

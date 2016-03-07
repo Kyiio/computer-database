@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-@Service("computerDtoService")
+@Service
 public class ComputerDtoServiceImpl implements ComputerDtoService {
 
   @Autowired

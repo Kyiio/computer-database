@@ -27,7 +27,7 @@
 						${computer.computerId}</div>
 					<h1>Edit Computer</h1>
 
-					<form action="./edit-computer" method="POST" id="editComputerForm">
+					<form action="./edit-computer" method="POST" name="computerDto" id="editComputerForm">
 						<input id="computerId" name="computerId" type="hidden"
 							value="${computer.computerId}" />
 						<fieldset>
@@ -38,16 +38,16 @@
 								<div id="computerNameErr"></div>
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date (Format
+								<label for="introducedDate">Introduced date (Format
 									YYYY-MM-DD)</label> <input type="date" class="form-control"
-									id="introduced" name="introduced" value="${computer.introducedDate}"
+									id="introducedDate" name="introducedDate" value="${computer.introducedDate}"
 									placeholder="Introduced date">
 								<div id="introducedErr"></div>
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date (Format
+								<label for="discontinuedDate">Discontinued date (Format
 									YYYY-MM-DD)</label> <input type="date" class="form-control"
-									id="discontinued" name="discontinued" value="${computer.discontinuedDate}"
+									id="discontinuedDate" name="discontinuedDate" value="${computer.discontinuedDate}"
 									placeholder="Discontinued date">
 								<div id="discontinuedErr"></div>
 							</div>

@@ -1,4 +1,4 @@
-package com.excilys.servlets.util;
+package com.excilys.controller.util;
 
 import com.excilys.dto.ComputerDto;
 import com.excilys.dto.PageDto;

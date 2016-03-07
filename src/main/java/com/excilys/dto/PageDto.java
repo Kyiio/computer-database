@@ -13,19 +13,19 @@ public class PageDto {
 
   private ArrayList<ComputerDto> content;
 
-  private int pageSize;
+  private int                    pageSize;
 
-  private int maxPageNumber;
+  private int                    maxPageNumber;
 
-  private int pageNumber;
+  private int                    pageNumber;
 
-  private long totalNumberOfComputer;
+  private long                   totalNumberOfComputer;
 
-  private String searchName;
+  private String                 searchName;
 
-  private String orederBy;
+  private String                 orderBy;
 
-  private String orderType;
+  private String                 orderType;
 
   public PageDto() {
     super();
@@ -51,7 +51,7 @@ public class PageDto {
     this.maxPageNumber = maxPageNumber;
     this.content = content;
     this.searchName = searchName;
-    this.orederBy = orderBy;
+    this.orderBy = orderBy;
     this.orderType = orderType;
   }
 
@@ -104,24 +104,27 @@ public class PageDto {
   }
 
   public String getOrderBy() {
-    return orederBy;
+    return orderBy;
   }
 
-  public void setOrederBy(String orederBy) {
-    this.orederBy = orederBy;
+  public void setOrderBy(String orederBy) {
+    this.orderBy = orederBy;
   }
 
   public String getOrderType() {
     return orderType;
   }
 
-  /**
-   * Sets the order type.
-   *
-   * @param orderType the new order type
-   */
   public void setOrderType(String orderType) {
     this.orderType = orderType;
+  }
+
+  @Override
+  public String toString() {
+    return "PageDto [content=" + content + ", pageSize=" + pageSize + ", maxPageNumber="
+        + maxPageNumber + ", pageNumber=" + pageNumber + ", totalNumberOfComputer="
+        + totalNumberOfComputer + ", searchName=" + searchName + ", orederBy=" + orderBy
+        + ", orderType=" + orderType + "]";
   }
 
 }

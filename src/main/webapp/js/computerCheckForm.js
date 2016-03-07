@@ -21,34 +21,34 @@ $("#computerName").bind( "change input propertychange", function() {
 	}
 });
 
-$("#introduced").bind( "change input propertychange", function() {
-	var dateOk = checkDate($.trim($('#introduced').val()));
+$("#introducedDate").bind( "change input propertychange", function() {
+	var dateOk = checkDate($.trim($('#introducedDate').val()));
 	
 	if(dateOk == true){
 		
 	    removeErrorText($("#introducedErr"))
-	    setSuccess($("#introduced"));
+	    setSuccess($("#introducedDate"));
 		
 		updateSubmit();
 	}else{
 		
-		setError($("#introduced"));
+		setError($("#introducedDate"));
 		setErrorText($("#introducedErr"), "Wrong format entered");
 		
 		$("#submit").attr('disabled',true);
 	}
 });
 
-$("#discontinued").bind( "change input propertychange", function() {
-	var dateOk = checkDate($.trim($('#discontinued').val()));
+$("#discontinuedDate").bind( "change input propertychange", function() {
+	var dateOk = checkDate($.trim($('#discontinuedDate').val()));
 	
 	if(dateOk == true){
 		removeErrorText($('#discontinuedErr'))
-	    setSuccess($('#discontinued'))
+	    setSuccess($('#discontinuedDate'))
 
 	    updateSubmit();
 	}else{
-		setError($('#discontinued'));
+		setError($('#discontinuedDate'));
 		setErrorText($("#discontinuedErr"), "Wrong format entered");
 		
 		$("#submit").attr('disabled',true);
@@ -93,27 +93,27 @@ function checkDate(dateStr, inputDate, errorDiv){
 
 function checkDateConsistency(){
 	
-	var introducedStr = $.trim($('#introduced').val());
-	var discontinuedStr = $.trim($('#discontinued').val());
+	var introducedStr = $.trim($('#introducedDate').val());
+	var discontinuedStr = $.trim($('#discontinuedDate').val());
 	
 	if(discontinuedStr === '' && introducedStr === ''){
 		removeErrorText($('#introducedErr'));
 		removeErrorText($('#discontinuedErr'));
-		setSuccess($('#introduced'));
-		setSuccess($('#discontinued'));
+		setSuccess($('#introducedDate'));
+		setSuccess($('#discontinuedDate'));
 		return true;
 	}else if(introducedStr !== '' && discontinuedStr === ''){
 		removeErrorText($('#introducedErr'));
 		removeErrorText($('#discontinuedErr'));
-		setSuccess($('#introduced'));
-		setSuccess($('#discontinued'));
+		setSuccess($('#introducedDate'));
+		setSuccess($('#discontinuedDate'));
 		return true;
 	}
 	else if(discontinuedStr !== '' && introducedStr === ''){
 		setErrorText($('#introducedErr'),"The introduced value must be specified if you put the discontinued one !");
 		setErrorText($('#discontinuedErr'),"You can't specify the discontinued date if you don't set the introduced one !");
-		setError($('#introduced'));
-		setError($('#discontinued'));
+		setError($('#introducedDate'));
+		setError($('#discontinuedDate'));
 		return false;
 	}
 	
@@ -131,8 +131,8 @@ function checkDateConsistency(){
 	
 	removeErrorText($('#introducedErr'));
 	removeErrorText($('#discontinuedErr'));
-	setSuccess($('#introduced'));
-	setSuccess($('#discontinued'));
+	setSuccess($('#introducedDate'));
+	setSuccess($('#discontinuedDate'));
 	return true;
 	
 }
@@ -151,8 +151,8 @@ function checkName(){
 function updateSubmit(){
 	
 	var nameOk = checkName();
-	var introducedOk = checkDate($.trim($('#introduced').val()));
-	var discontinuedOk = checkDate($.trim($('#discontinued').val()));
+	var introducedOk = checkDate($.trim($('#introducedDate').val()));
+	var discontinuedOk = checkDate($.trim($('#discontinuedDate').val()));
 	
 	var dateConsistence = false;
 	

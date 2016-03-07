@@ -28,8 +28,8 @@
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="./dashboard" method="GET" class="form-inline">
-						<input type="hidden" name="computer-per-page"  value="${page.pageSize}" />
-						<input type="search" id="search-name" name="search-name"
+						<input type="hidden" name="pageSize" name="pageSize" value="${page.pageSize}" />
+						<input type="search" id="searchName" name="searchName"
 							class="form-control" placeholder="Search name" value="${((page.searchName != '%')? page.searchName:'')}"/> <input
 							type="submit" id="searchsubmit" value="Filter by name"
 							class="btn btn-primary" />
@@ -45,8 +45,8 @@
 
 		<form id="deleteForm" action="./dashboard" method="POST">
 			<input type="hidden" name="selection" value="">
-			<input type="hidden" name="computer-per-page"  value="${page.pageSize}" />
-			<input type="hidden" name="search-name"  value="${page.searchName}" />
+			<input type="hidden" name="pageSize"  value="${page.pageSize}" />
+			<input type="hidden" name="searchName"  value="${page.searchName}" />
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
@@ -78,7 +78,7 @@
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.computerId}"></td>
 							<td><a
-								href="edit-computer?computer-id=${computer.computerId}"
+								href="edit-computer?computerId=${computer.computerId}"
 								onclick=""><c:out value="${computer.computerName}" /></a></td>
 							<td>${computer.introducedDate}</td>
 							<td>${computer.discontinuedDate}</td>

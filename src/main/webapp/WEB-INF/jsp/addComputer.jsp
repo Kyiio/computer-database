@@ -26,7 +26,7 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
-					<form action="./add-computer" method="POST" id="addComputerForm">
+					<form action="./add-computer" method="POST" name="computerDto" id="addComputerForm">
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name *</label> <input
@@ -37,13 +37,13 @@
 							<div class="form-group">
 								<label for="introduced">Introduced date (Format
 									YYYY-MM-DD)</label> <input type="date" class="form-control"
-									id="introduced" name="introduced" placeholder="Introduced date">
+									id="introducedDate" name="introducedDate" placeholder="Introduced date">
 								<div id="introducedErr"></div>
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date (Format
 									YYYY-MM-DD)</label> <input type="date" class="form-control"
-									id="discontinued" name="discontinued"
+									id="discontinuedDate" name="discontinuedDate"
 									placeholder="Discontinued date">
 								<div id="discontinuedErr"></div>
 							</div>

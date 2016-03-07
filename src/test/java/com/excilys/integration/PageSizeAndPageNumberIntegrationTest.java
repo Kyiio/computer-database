@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * The Class SeleniumIT.
  */
-public class PageSizeAndPAgeNumberIntegrationTest {
+public class PageSizeAndPageNumberIntegrationTest {
 
   /** The driver. */
   private WebDriver driver;

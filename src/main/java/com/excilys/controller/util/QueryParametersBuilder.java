@@ -1,4 +1,4 @@
-package com.excilys.servlets.util;
+package com.excilys.controller.util;
 
 import com.excilys.dto.PageDto;
 import com.excilys.model.QueryParameters;
@@ -59,6 +59,12 @@ public interface QueryParametersBuilder {
     return createQueryParameters(pageSize, pageNumber, search, order, by);
   }
 
+  /**
+   * Creates the query parameters.
+   *
+   * @param pageDto the page dto
+   * @return the query parameters
+   */
   public static QueryParameters createQueryParameters(PageDto pageDto) {
 
     int pageSize = pageDto.getPageSize();
