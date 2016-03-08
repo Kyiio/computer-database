@@ -7,34 +7,42 @@ import com.excilys.service.ComputerDtoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/add-computer")
 public class AddComputerController {
 
   @Autowired
-  private CompanyDtoService  companyDtoService;
+  private CompanyDtoService     companyDtoService;
   @Autowired
-  private ComputerDtoService computerDtoService;
+  private ComputerDtoService    computerDtoService;
+
+  private ArrayList<CompanyDto> companyDtoList;
+  private String                lang;
 
   /**
    * Show form.
    *
-   * @param modelMap the model map
+   * @param model the model map
    * @return the string
    */
   @RequestMapping(method = RequestMethod.GET)
-  public String showForm(ModelMap modelMap) {
+  public String showForm(Model model, String lang) {
 
-    ArrayList<CompanyDto> companyDtoList = companyDtoService.listCompanies();
+    companyDtoList = companyDtoService.listCompanies();
 
-    modelMap.addAttribute("companyList", companyDtoList);
+    model.addAttribute("computerDto", new ComputerDto());
+    model.addAttribute("companyList", companyDtoList);
+    this.lang = lang;
+    model.addAttribute("lang", lang);
 
     return "addComputer";
   }
@@ -46,11 +54,22 @@ public class AddComputerController {
    * @return the string
    */
   @RequestMapping(method = RequestMethod.POST)
-  public ModelAndView performAdd(ComputerDto computerDto) {
+  public String performAdd(@Valid ComputerDto computerDto, BindingResult bindingResult,
+      Model model) {
+
+    model.addAttribute("lang", lang);
+
+    if (bindingResult.hasErrors()) {
+      model.addAttribute("org.springframework.validation.BindingResult.computerDto", bindingResult);
+      model.addAttribute("computerDto", computerDto);
+      model.addAttribute("companyList", companyDtoList);
+
+      return "addComputer";
+    }
 
     computerDtoService.insertComputer(computerDto);
 
-    return new ModelAndView("redirect:/dashboard");
+    return "redirect:/dashboard";
   }
 
 }

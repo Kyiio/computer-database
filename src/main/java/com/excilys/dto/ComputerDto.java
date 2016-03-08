@@ -1,16 +1,31 @@
 package com.excilys.dto;
 
+import com.excilys.dto.validation.Date;
+import com.excilys.dto.validation.DateConsistency;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * DTO representation of the model class Computer
  * 
  * @author B. Herbaut
  * @see com.excilys.model.Computer
  */
+@DateConsistency
 public class ComputerDto {
 
+  @Min(0)
   private long   computerId;
+
+  @NotNull
+  @Size(min = 1, max = 30)
   private String computerName;
+
+  @Date
   private String introducedDate;
+  @Date
   private String discontinuedDate;
 
   private long   companyId;

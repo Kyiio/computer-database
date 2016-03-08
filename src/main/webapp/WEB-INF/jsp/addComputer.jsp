@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="pagination" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <!DOCTYPE html>
 <html>
@@ -21,34 +23,77 @@
 		</div>
 	</header>
 
+	<spring:message code="title.addcomputer" var="Title" />
+
+	<spring:message code="label.computername" var="ComputerNameLabel" />
+	<spring:message code="label.introduced" var="IntroducedLabel" />
+	<spring:message code="label.discontinued" var="DiscontinuedLabel" />
+	<spring:message code="label.company" var="CompanyLabel" />
+
+	<spring:message code="placeholder.computername"
+		var="ComputerNamePlaceholder" />
+	<spring:message code="placeholder.introduced"
+		var="IntroducedPlaceholder" />
+	<spring:message code="placeholder.discontinued"
+		var="DiscontinuedPlaceholder" />
+
+	<spring:message code="button.cancel" var="CancelButton" />
+	<spring:message code="button.submitadd" var="AddButton" />
+
+	<!-- We put all the needed strings in an array so that the js can access them -->
+
+	<script type="text/javascript">
+		var strings = new Array();
+		strings['error.name'] = "<spring:message code='error.name' javaScriptEscape='true' />";
+		strings['error.date.format'] = "<spring:message code='error.date.format' javaScriptEscape='true' />";
+		strings['error.date.introducedNullDiscontinuedNotNull'] = "<spring:message code='error.date.introducedNullDiscontinuedNotNull' javaScriptEscape='true' />";
+		strings['error.date.discontinuedNotNullIntroducedNull'] = "<spring:message code='error.date.discontinuedNotNullIntroducedNull' javaScriptEscape='true' />";
+		strings['error.date.introducedAfterDiscontinued'] = "<spring:message code='error.date.introducedAfterDiscontinued' javaScriptEscape='true' />";
+		strings['error.date.discontinuedBeforeIntroduced'] = "<spring:message code='error.date.discontinuedBeforeIntroduced' javaScriptEscape='true' />";
+	</script>
+
 	<section id="main">
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<h1>Add Computer</h1>
-					<form action="./add-computer" method="POST" name="computerDto" id="addComputerForm">
+					<h1>${Title}</h1>
+
+					<form:form action="./add-computer" method="POST" name="computerDto"
+						commandName="computerDto" id="addComputerForm">
+
+						<form:errors path="" element="div" class="alert alert-danger" />
+
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name *</label> <input
-									type="text" class="form-control" id="computerName"
-									name="computerName" placeholder="Computer name">
+								<label for="computerName">${ComputerNameLabel}</label>
+								<form:input type="text" path="computerName" class="form-control"
+									id="computerName" name="computerName"
+									placeholder="${ComputerNamePlaceholder}" />
+								<form:errors path="computerName" element="div"
+									class="alert alert-danger" />
 								<div id="computerNameErr"></div>
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date (Format
-									YYYY-MM-DD)</label> <input type="date" class="form-control"
-									id="introducedDate" name="introducedDate" placeholder="Introduced date">
+								<label for="introduced">${IntroducedLabel}</label>
+								<form:input type="text" path="introducedDate"
+									class="form-control" id="introducedDate" name="introducedDate"
+									placeholder="${IntroducedPlaceholder}" />
+								<form:errors path="introducedDate" element="div"
+									class="alert alert-danger" />
 								<div id="introducedErr"></div>
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date (Format
-									YYYY-MM-DD)</label> <input type="date" class="form-control"
-									id="discontinuedDate" name="discontinuedDate"
-									placeholder="Discontinued date">
+								<label for="discontinued">${DiscontinuedLabel}</label>
+								<form:input path="discontinuedDate" type="text"
+									class="form-control" id="discontinuedDate"
+									name="discontinuedDate"
+									placeholder="${DiscontinuedPlaceholder}" />
+								<form:errors path="discontinuedDate" element="div"
+									class="alert alert-danger" />
 								<div id="discontinuedErr"></div>
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label> <select
+								<label for="companyId">${CompanyLabel}</label> <select
 									class="form-control" id="companyId" name="companyId">
 									<option value="0">--</option>
 									<c:forEach items="${companyList}" var="company">
@@ -58,12 +103,12 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Add" class="btn btn-primary"
+							<input type="submit" value="${AddButton}" class="btn btn-primary"
 								id="submit"> or
 							<pagination:link pageNumber="1" pageSize="10" target="dashboard"
-								text="Cancel" cssClass="btn btn-default"></pagination:link>
+								text="${CancelButton}" cssClass="btn btn-default"></pagination:link>
 						</div>
-					</form>
+					</form:form>
 				</div>
 			</div>
 		</div>

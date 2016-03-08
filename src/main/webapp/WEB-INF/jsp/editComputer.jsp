@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="pagination" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +18,7 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<pagination:link pageNumber="1" pageSize="10" target="dashboard"
-				text="Application - Computer Database" cssClass="navbar-brand"></pagination:link>
+				text="Application - Computer Database" cssClass="navbar-brand" ></pagination:link>
 		</div>
 	</header>
 	<section id="main">
@@ -24,31 +26,47 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<div class="label label-default pull-right">id:
-						${computer.computerId}</div>
+						${computerDto.computerId}</div>
 					<h1>Edit Computer</h1>
 
-					<form action="./edit-computer" method="POST" name="computerDto" id="editComputerForm">
-						<input id="computerId" name="computerId" type="hidden"
-							value="${computer.computerId}" />
+					<form:form action="./edit-computer" method="POST"
+						name="computerDto" commandName="computerDto" id="editComputerForm">
+						
+						<form:input path="computerId" id="computerId" name="computerId"
+							type="hidden" value="${computerDto.computerId}" />
+						
+						<form:errors path="" element="div" class="alert alert-danger" />	
+							
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName"
-									name="computerName" value="${computer.computerName}" placeholder="Computer name">
+								<label for="computerName">Computer name</label>
+								<form:input path="computerName" type="text" class="form-control"
+									id="computerName" name="computerName"
+									value="${computerDto.computerName}" placeholder="Computer name" />
+								<form:errors path="computerName" element="div"
+									class="alert alert-danger" />
 								<div id="computerNameErr"></div>
 							</div>
 							<div class="form-group">
 								<label for="introducedDate">Introduced date (Format
-									YYYY-MM-DD)</label> <input type="date" class="form-control"
-									id="introducedDate" name="introducedDate" value="${computer.introducedDate}"
-									placeholder="Introduced date">
+									YYYY-MM-DD)</label>
+								<form:input type="text" path="introducedDate"
+									class="form-control" id="introducedDate" name="introducedDate"
+									value="${computerDto.introducedDate}"
+									placeholder="Introduced date" />
+								<form:errors path="introducedDate" element="div"
+									class="alert alert-danger" />
 								<div id="introducedErr"></div>
 							</div>
 							<div class="form-group">
 								<label for="discontinuedDate">Discontinued date (Format
-									YYYY-MM-DD)</label> <input type="date" class="form-control"
-									id="discontinuedDate" name="discontinuedDate" value="${computer.discontinuedDate}"
-									placeholder="Discontinued date">
+									YYYY-MM-DD)</label>
+								<form:input type="text" path="discontinuedDate"
+									class="form-control" id="discontinuedDate"
+									name="discontinuedDate" value="${computerDto.discontinuedDate}"
+									placeholder="Discontinued date" />
+								<form:errors path="discontinuedDate" element="div"
+									class="alert alert-danger" />
 								<div id="discontinuedErr"></div>
 							</div>
 							<div class="form-group">
@@ -57,7 +75,7 @@
 									<option value="0">--</option>
 									<c:forEach items="${companyList}" var="company">
 										<c:choose>
-											<c:when test="${company.id == computer.companyId}">
+											<c:when test="${company.id == computerDto.companyId}">
 												<option selected="selected" value="${company.id}">${company.name}</option>
 											</c:when>
 											<c:otherwise>
@@ -73,9 +91,9 @@
 							<input id="submit" type="submit" value="Edit"
 								class="btn btn-primary"> or
 							<pagination:link pageNumber="1" pageSize="10" target="dashboard"
-								text="Cancel" cssClass="btn btn-default"></pagination:link>
+								text="Cancel" cssClass="btn btn-default" ></pagination:link>
 						</div>
-					</form>
+					</form:form>
 				</div>
 			</div>
 		</div>

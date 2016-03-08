@@ -15,7 +15,7 @@ $("#computerName").bind( "change input propertychange", function() {
 	}else{
     	
 		setError($("#computerName"));
-		setErrorText($("#computerNameErr"), "The computer name must be specified !");
+		setErrorText($("#computerNameErr"), strings['error.name']);
     	
     	$("#submit").attr('disabled',true);
 	}
@@ -33,7 +33,7 @@ $("#introducedDate").bind( "change input propertychange", function() {
 	}else{
 		
 		setError($("#introducedDate"));
-		setErrorText($("#introducedErr"), "Wrong format entered");
+		setErrorText($("#introducedErr"), strings['error.date.format']);
 		
 		$("#submit").attr('disabled',true);
 	}
@@ -49,7 +49,7 @@ $("#discontinuedDate").bind( "change input propertychange", function() {
 	    updateSubmit();
 	}else{
 		setError($('#discontinuedDate'));
-		setErrorText($("#discontinuedErr"), "Wrong format entered");
+		setErrorText($("#discontinuedErr"), strings['error.date.format']);
 		
 		$("#submit").attr('disabled',true);
 	}
@@ -110,8 +110,8 @@ function checkDateConsistency(){
 		return true;
 	}
 	else if(discontinuedStr !== '' && introducedStr === ''){
-		setErrorText($('#introducedErr'),"The introduced value must be specified if you put the discontinued one !");
-		setErrorText($('#discontinuedErr'),"You can't specify the discontinued date if you don't set the introduced one !");
+		setErrorText($('#introducedErr'),strings['error.date.introducedNullDiscontinuedNotNull']);
+		setErrorText($('#discontinuedErr'),strings['error.date.discontinuedNotNullIntroducedNull']);
 		setError($('#introducedDate'));
 		setError($('#discontinuedDate'));
 		return false;
@@ -124,8 +124,8 @@ function checkDateConsistency(){
 	var discontinuedDate = new Date(parseInt(discontinuedData[0]), parseInt(discontinuedData[1])-1, parseInt(discontinuedData[2]));
 	
 	if(introducedDate.getTime() >= discontinuedDate.getTime()){
-		setErrorText($('#introducedErr'),"The introduced value must be set before the discontinued one !");
-		setErrorText($('#discontinuedErr'),"The discontinued value must be set after the introduced one !");
+		setErrorText($('#introducedErr'),strings['error.date.introducedAfterDiscontinued']);
+		setErrorText($('#discontinuedErr'),strings['error.date.discontinuedBeforeIntroduced']);
 		return false;
 	}
 	
@@ -140,8 +140,9 @@ function checkDateConsistency(){
 function checkName(){
 
 	var name = $.trim($('#computerName').val());
+	
 
-    if (name === '') {
+    if (name === '' || name.length > 30) {
     	return false;
     }
         

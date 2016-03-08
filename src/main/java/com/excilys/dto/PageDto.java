@@ -126,5 +126,4 @@ public class PageDto {
         + totalNumberOfComputer + ", searchName=" + searchName + ", orederBy=" + orderBy
         + ", orderType=" + orderType + "]";
   }
-
 }

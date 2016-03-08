@@ -1,3 +1,4 @@
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="links" tagdir="/WEB-INF/tags" %>
 <%@ attribute name="pageNumber" required="true" type="java.lang.Integer" description="The page number" %>
@@ -7,6 +8,9 @@
 <%@ attribute name="orderBy" required="false" type="java.lang.String" description="The attribute we will to sort by " %>
 <%@ attribute name="orderType" required="false" type="java.lang.String" description="The sort type we will use" %>
 
+<spring:message code="button.next" var="NextButton" />
+<spring:message code="button.previous" var="PreviousButton" />
+
 <c:set var="radius" value="4"/>
 <c:set var="begin" value="${(pageNumber - radius > 1 ? pageNumber - radius : 1)}"/>
 <c:set var="end" value="${(pageNumber + radius < maxPageNumber ? pageNumber + radius : maxPageNumber)}"/>
@@ -15,12 +19,12 @@
 <c:choose>
 	<c:when test="${pageNumber > 1}">
 		<li>
-			<links:link pageNumber="${pageNumber-1}" pageSize="${pageSize}" target="dashboard" text="Previous" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
+			<links:link pageNumber="${pageNumber-1}" pageSize="${pageSize}" target="dashboard" text="${PreviousButton}" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
 		</li>	
 	</c:when>
 	<c:otherwise>
 		<li class="disabled">
-			<links:link pageNumber="${pageNumber}" pageSize="${pageSize}" target="#" text="Previous" ></links:link>
+			<links:link pageNumber="${pageNumber}" pageSize="${pageSize}" target="#" text="${PreviousButton}" ></links:link>
 		</li>	
 	</c:otherwise>
 </c:choose>
@@ -67,12 +71,12 @@
 <c:choose>
 	<c:when test="${pageNumber < maxPageNumber}">
 		<li>
-			<links:link pageNumber="${pageNumber+1}" pageSize="${pageSize}" target="dashboard" text="Next" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
+			<links:link pageNumber="${pageNumber+1}" pageSize="${pageSize}" target="dashboard" text="${NextButton}" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
 		</li>	
 	</c:when>
 	<c:otherwise>
 		<li class="disabled">
-			<links:link pageNumber="${pageNumber}" pageSize="${pageSize}" target="#" text="Next"></links:link>
+			<links:link pageNumber="${pageNumber}" pageSize="${pageSize}" target="#" text="${NextButton}"></links:link>
 		</li>	
 	</c:otherwise>
 </c:choose>

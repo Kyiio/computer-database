@@ -62,6 +62,7 @@ public class DashboardController {
     }
 
     pageDto = getPageDtoFromPreviousOne(pageDto);
+
     modelMap.addAttribute("page", pageDto);
 
     return "dashboard";

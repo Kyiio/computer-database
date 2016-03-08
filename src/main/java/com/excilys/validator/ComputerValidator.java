@@ -78,6 +78,12 @@ public interface ComputerValidator {
     }
 
     if (date != null && date.length() > 0) {
+
+      if (!date.matches("^\\d\\d\\d\\d-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$")) {
+        throw new ValidationException(
+            "The given date " + date + " isn't matching the format : " + format);
+      }
+
       try {
         new Timestamp(new SimpleDateFormat(format).parse(date).getTime()).toLocalDateTime();
       } catch (ParseException e) {

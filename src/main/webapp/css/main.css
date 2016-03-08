@@ -13,6 +13,14 @@ footer {
     height:60px;
 }
 
+.flags {
+	float: right;
+	width: 25px;
+	height: auto;
+	margin: 3px;
+	margin-top: 13px;
+}
+
 footer .pagination {
     margin:10px 0px;
 }

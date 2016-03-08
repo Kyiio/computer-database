@@ -84,7 +84,8 @@ public class AddComputerIntegrationTest {
     // We check that the error message regarding the computer's name shows
     // up
 
-    checkText("computerNameErr", "^The computer name must be specified !$");
+    checkText("computerNameErr",
+        "^The computer name is empty or is to long (more than 30 caracters)!$");
 
     driver.findElement(By.id("computerName")).sendKeys("Toto integration test");
 

@@ -37,6 +37,11 @@
 		<spring-version>4.2.5.RELEASE</spring-version>
 		<jcloverslf4j>1.7.0</jcloverslf4j>
 
+		<!-- Validation -->
+
+		<validation-api>1.1.0.Final</validation-api>
+		<hibernate-validator>5.0.1.Final</hibernate-validator>
+
 		<!-- Test suite that will be executed -->
 		<junit-test-suite>com/excilys/TestSuite.java</junit-test-suite>
 		<selenium-test-suite>com/excilys/SeleniumIntegrationTestSuite.java</selenium-test-suite>
@@ -158,16 +163,26 @@
 			<artifactId>spring-jdbc</artifactId>
 			<version>${spring-version}</version>
 		</dependency>
-		<!-- Not needed yet <dependency> <groupId>org.springframework</groupId> 
-			<artifactId>spring-webmvc</artifactId> <version>${spring-version}</version> 
-			</dependency> -->
-
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring-version}</version>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- dependencies used for validation -->
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate-validator}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>${validation-api}</version>
 		</dependency>
 
 		<!-- Spring logs -->
