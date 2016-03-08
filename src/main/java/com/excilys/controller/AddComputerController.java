@@ -21,12 +21,11 @@ import javax.validation.Valid;
 public class AddComputerController {
 
   @Autowired
-  private CompanyDtoService     companyDtoService;
+  private CompanyDtoService companyDtoService;
   @Autowired
-  private ComputerDtoService    computerDtoService;
+  private ComputerDtoService computerDtoService;
 
   private ArrayList<CompanyDto> companyDtoList;
-  private String                lang;
 
   /**
    * Show form.
@@ -41,8 +40,6 @@ public class AddComputerController {
 
     model.addAttribute("computerDto", new ComputerDto());
     model.addAttribute("companyList", companyDtoList);
-    this.lang = lang;
-    model.addAttribute("lang", lang);
 
     return "addComputer";
   }
@@ -56,8 +53,6 @@ public class AddComputerController {
   @RequestMapping(method = RequestMethod.POST)
   public String performAdd(@Valid ComputerDto computerDto, BindingResult bindingResult,
       Model model) {
-
-    model.addAttribute("lang", lang);
 
     if (bindingResult.hasErrors()) {
       model.addAttribute("org.springframework.validation.BindingResult.computerDto", bindingResult);
