@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="pagination" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <!DOCTYPE html>
 <html>
@@ -18,80 +19,96 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<pagination:link pageNumber="1" pageSize="10" target="dashboard"
-				text="Application - Computer Database" cssClass="navbar-brand" ></pagination:link>
+				text="Application - Computer Database" cssClass="navbar-brand"></pagination:link>
 		</div>
 	</header>
+
+	<spring:message code="title.editcomputer" var="Title" />
+
+	<spring:message code="label.computername" var="ComputerNameLabel" />
+	<spring:message code="label.introduced" var="IntroducedLabel" />
+	<spring:message code="label.discontinued" var="DiscontinuedLabel" />
+	<spring:message code="label.company" var="CompanyLabel" />
+
+	<spring:message code="placeholder.computername"
+		var="ComputerNamePlaceholder" />
+	<spring:message code="placeholder.introduced"
+		var="IntroducedPlaceholder" />
+	<spring:message code="placeholder.discontinued"
+		var="DiscontinuedPlaceholder" />
+
+	<spring:message code="button.cancel" var="CancelButton" />
+	<spring:message code="button.submitedit" var="EditButton" />
+
+	<!-- We put all the needed strings in an array so that the js can access them -->
+
+	<script type="text/javascript">
+		var strings = new Array();
+		strings['error.name'] = "<spring:message code='error.name' javaScriptEscape='true' />";
+		strings['error.date.format'] = "<spring:message code='error.date.format' javaScriptEscape='true' />";
+		strings['error.date.introducedNullDiscontinuedNotNull'] = "<spring:message code='error.date.introducedNullDiscontinuedNotNull' javaScriptEscape='true' />";
+		strings['error.date.discontinuedNotNullIntroducedNull'] = "<spring:message code='error.date.discontinuedNotNullIntroducedNull' javaScriptEscape='true' />";
+		strings['error.date.introducedAfterDiscontinued'] = "<spring:message code='error.date.introducedAfterDiscontinued' javaScriptEscape='true' />";
+		strings['error.date.discontinuedBeforeIntroduced'] = "<spring:message code='error.date.discontinuedBeforeIntroduced' javaScriptEscape='true' />";
+	</script>
+
 	<section id="main">
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<div class="label label-default pull-right">id:
 						${computerDto.computerId}</div>
-					<h1>Edit Computer</h1>
+					<h1>${Title}</h1>
 
 					<form:form action="./edit-computer" method="POST"
 						name="computerDto" commandName="computerDto" id="editComputerForm">
-						
-						<form:input path="computerId" id="computerId" name="computerId"
-							type="hidden" value="${computerDto.computerId}" />
-						
-						<form:errors path="" element="div" class="alert alert-danger" />	
-							
+
+						<form:errors path="" element="div" class="alert alert-danger" />
+
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label>
-								<form:input path="computerName" type="text" class="form-control"
+								<label for="computerName">${ComputerNameLabel}</label>
+								<form:input type="text" path="computerName" class="form-control"
 									id="computerName" name="computerName"
-									value="${computerDto.computerName}" placeholder="Computer name" />
+									placeholder="${ComputerNamePlaceholder}" />
 								<form:errors path="computerName" element="div"
 									class="alert alert-danger" />
 								<div id="computerNameErr"></div>
 							</div>
 							<div class="form-group">
-								<label for="introducedDate">Introduced date (Format
-									YYYY-MM-DD)</label>
+								<label for="introduced">${IntroducedLabel}</label>
 								<form:input type="text" path="introducedDate"
 									class="form-control" id="introducedDate" name="introducedDate"
-									value="${computerDto.introducedDate}"
-									placeholder="Introduced date" />
+									placeholder="${IntroducedPlaceholder}" />
 								<form:errors path="introducedDate" element="div"
 									class="alert alert-danger" />
 								<div id="introducedErr"></div>
 							</div>
 							<div class="form-group">
-								<label for="discontinuedDate">Discontinued date (Format
-									YYYY-MM-DD)</label>
-								<form:input type="text" path="discontinuedDate"
+								<label for="discontinued">${DiscontinuedLabel}</label>
+								<form:input path="discontinuedDate" type="text"
 									class="form-control" id="discontinuedDate"
-									name="discontinuedDate" value="${computerDto.discontinuedDate}"
-									placeholder="Discontinued date" />
+									name="discontinuedDate"
+									placeholder="${DiscontinuedPlaceholder}" />
 								<form:errors path="discontinuedDate" element="div"
 									class="alert alert-danger" />
 								<div id="discontinuedErr"></div>
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label> <select
+								<label for="companyId">${CompanyLabel}</label> <select
 									class="form-control" id="companyId" name="companyId">
 									<option value="0">--</option>
 									<c:forEach items="${companyList}" var="company">
-										<c:choose>
-											<c:when test="${company.id == computerDto.companyId}">
-												<option selected="selected" value="${company.id}">${company.name}</option>
-											</c:when>
-											<c:otherwise>
-												<option value="${company.id}">${company.name}</option>
-											</c:otherwise>
-										</c:choose>
+										<option value="${company.id}">${company.name}</option>
 									</c:forEach>
-
 								</select>
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input id="submit" type="submit" value="Edit"
-								class="btn btn-primary"> or
+							<input type="submit" value="${EditButton}" class="btn btn-primary"
+								id="submit"> or
 							<pagination:link pageNumber="1" pageSize="10" target="dashboard"
-								text="Cancel" cssClass="btn btn-default" ></pagination:link>
+								text="${CancelButton}" cssClass="btn btn-default"></pagination:link>
 						</div>
 					</form:form>
 				</div>

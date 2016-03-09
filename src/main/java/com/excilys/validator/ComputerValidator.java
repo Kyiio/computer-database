@@ -73,9 +73,24 @@ public interface ComputerValidator {
    */
   public static void checkDate(String date, String format) {
 
+    LocalDate currentDate = checkDateFormat(date, format);
+    checkDateIsntToOld(currentDate);
+  }
+
+  /**
+   * Check date format.
+   *
+   * @param date the date
+   * @param format the format
+   * @return the local date
+   */
+  public static LocalDate checkDateFormat(String date, String format) {
+
     if (format == null || format.length() <= 0) {
       format = "yyyy-MM-dd";
     }
+
+    LocalDate localDate = null;
 
     if (date != null && date.length() > 0) {
 
@@ -85,10 +100,31 @@ public interface ComputerValidator {
       }
 
       try {
-        new Timestamp(new SimpleDateFormat(format).parse(date).getTime()).toLocalDateTime();
+        localDate = new Timestamp(new SimpleDateFormat(format).parse(date).getTime())
+            .toLocalDateTime().toLocalDate();
       } catch (ParseException e) {
         throw new ValidationException(
             "The given date " + date + " isn't matching the format : " + format);
+      }
+    }
+
+    return localDate;
+  }
+
+  /**
+   * Check date isnt to old.
+   *
+   * @param date the date
+   */
+  public static void checkDateIsntToOld(LocalDate date) {
+
+    if (date != null) {
+
+      LocalDate minDate = LocalDate.of(1970, 1, 2);
+
+      if (date.isBefore(minDate)) {
+        throw new ValidationException(
+            "The given date is to old : " + date + "(before " + minDate + ")");
       }
     }
   }
@@ -111,5 +147,20 @@ public interface ComputerValidator {
           "The discontinued date is before the introduced one ! introduced: " + introducedDate
               + " discontinued: " + discontinuedDate);
     }
+  }
+
+  /**
+   * Check date consitency.
+   *
+   * @param introducedStr the introduced str
+   * @param discontinuedStr the discontinued str
+   */
+  public static void checkDateConsitency(String introducedStr, String discontinuedStr) {
+
+    LocalDate discontinuedDate = checkDateFormat(discontinuedStr, null);
+    LocalDate introducedDate = checkDateFormat(introducedStr, null);
+
+    checkDateConsitency(introducedDate, discontinuedDate);
+
   }
 }

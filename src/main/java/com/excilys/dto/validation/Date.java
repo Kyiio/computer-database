@@ -11,7 +11,7 @@ import javax.validation.Payload;
 /**
  * The Interface Date.
  */
-@Constraint(validatedBy = DateConstraintValidator.class)
+@Constraint(validatedBy = DateFormatValidator.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Date {

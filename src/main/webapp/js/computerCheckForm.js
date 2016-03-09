@@ -87,6 +87,16 @@ function checkDate(dateStr, inputDate, errorDiv){
 	if(res == false){
 		return false;
 	}
+	
+	var date = new Date(dateStr);
+	var minDate = new Date("1970-01-02");
+	
+	console.log(date);
+	console.log(minDate);
+	
+	if(date < minDate){
+		return false;
+	}
 
     return true;	
 }

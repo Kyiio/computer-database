@@ -13,6 +13,8 @@
 
 	<context:component-scan base-package="com.excilys.controller" />
 
+	<!-- Bean used for multilingual features -->
+
 	<bean id="localeResolver"
 		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
 		<property name="defaultLocale" value="en" />
@@ -25,6 +27,14 @@
 		</bean>
 	</mvc:interceptors>
 
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="classpath:./messages/messages" />
+		<property name="defaultEncoding" value="UTF-8"></property>
+	</bean>
+
+	<!-- View resolver -->
+
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
@@ -35,10 +45,6 @@
 		</property>
 	</bean>
 
-	<bean id="messageSource"
-		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-		<property name="basename" value="classpath:./messages/messages" />
-		<property name="defaultEncoding" value="UTF-8"></property>
-	</bean>
+
 
 </beans>

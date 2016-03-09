@@ -13,7 +13,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -73,19 +72,17 @@ public class AddComputerIntegrationTest {
    * @throws Exception the exception
    */
   @Test
-  public void addComputer() throws Exception {
-    driver.get(baseUrl + "/computerdatabase/dashboard?computer-per-page=10&page-number=1&order-by="
-        + "&order-type=&search-name=");
+  public void addComputerEnglish() throws Exception {
+    driver.get(baseUrl + "/computerdatabase/dashboard?computer-per-page=10&page-number=1&lang=en");
     driver.findElement(By.id("addComputer")).click();
     driver.findElement(By.id("computerName")).clear();
     driver.findElement(By.id("computerName")).sendKeys("Toto integration test");
     driver.findElement(By.id("computerName")).clear();
 
-    // We check that the error message regarding the computer's name shows
-    // up
+    // We check that the error message regarding the computer's name shows up
 
     checkText("computerNameErr",
-        "^The computer name is empty or is to long (more than 30 caracters)!$");
+        "The computer name is empty or is to long (more than 30 characters)!");
 
     driver.findElement(By.id("computerName")).sendKeys("Toto integration test");
 
@@ -96,9 +93,9 @@ public class AddComputerIntegrationTest {
     driver.findElement(By.id("discontinuedDate")).sendKeys("2016-10-01");
 
     checkText("introducedErr",
-        "^The introduced value must be specified if you put the discontinued one !$");
+        "The introduced value must be specified if you put the discontinued one !");
     checkText("discontinuedErr",
-        "^You can't specify the discontinued date if you don't set the introduced one !$");
+        "You can't specify the discontinued date if you don't set the introduced one !");
 
     // We check that the discontinued date must be set after the introduced
     // date
@@ -106,16 +103,104 @@ public class AddComputerIntegrationTest {
     driver.findElement(By.id("introducedDate")).clear();
     driver.findElement(By.id("introducedDate")).sendKeys("2017-12-02");
 
-    checkText("introducedErr", "^The introduced value must be set before the discontinued one !$");
-    checkText("discontinuedErr", "^The discontinued value must be set after the introduced one !$");
+    checkText("introducedErr", "The introduced value must be set before the discontinued one !");
+    checkText("discontinuedErr", "The discontinued value must be set after the introduced one !");
+
+    // We check that if a wrong format is entered there is an error
+
+    driver.findElement(By.id("introducedDate")).clear();
+    driver.findElement(By.id("introducedDate")).sendKeys("2015-12");
+
+    checkText("introducedErr", "Wrong format entered (or the date is before January 01 1970)");
 
     // We check that all is fine with the current dates
 
     driver.findElement(By.id("introducedDate")).clear();
     driver.findElement(By.id("introducedDate")).sendKeys("2015-12-02");
 
-    checkText("introducedErr", "^$");
-    checkText("discontinuedErr", "^$");
+    checkText("introducedErr", "");
+    checkText("discontinuedErr", "");
+
+    /*
+     * We set the company & submit the form, if all is fine no exception is thrown and we are
+     * redirected to the dashboard
+     */
+    new Select(driver.findElement(By.id("companyId"))).selectByVisibleText("Netronics");
+    driver.findElement(By.id("submit")).click();
+
+    // We then try to find the newly introduced computer in the database
+
+    ArrayList<Computer> computerList = computerService.getByName("Toto integration test");
+    assertNotEquals(0, computerList.size());
+
+    // And we check the insertion went well for all fields
+
+    Computer computer = computerList.get(0);
+
+    assertNotNull(computer);
+    assertEquals("Toto integration test", computer.getName());
+    assertEquals(LocalDate.of(2015, 12, 2), computer.getIntroduced());
+    assertEquals(LocalDate.of(2016, 10, 1), computer.getDiscontinued());
+    assertEquals("Netronics", computer.getCompany().getName());
+
+    // An dwe delete the computer so that the database remains clean
+    computerService.deleteComputer(computer.getId());
+
+  }
+
+  @Test
+  public void addComputerFrench() throws Exception {
+    driver.get(baseUrl + "/computerdatabase/add-computer?lang=fr");
+    driver.findElement(By.id("computerName")).clear();
+    driver.findElement(By.id("computerName")).sendKeys("Toto integration test");
+    driver.findElement(By.id("computerName")).clear();
+
+    // We check that the error message regarding the computer's name shows up
+
+    checkText("computerNameErr",
+        "Le nom de l'ordinateur ne contient pas entre 1 et 30 caractéres !");
+
+    driver.findElement(By.id("computerName")).sendKeys("Toto integration test");
+
+    // We check that we can't put a discontinued date if we don't have set
+    // the introduced date
+
+    driver.findElement(By.id("discontinuedDate")).clear();
+    driver.findElement(By.id("discontinuedDate")).sendKeys("2016-10-01");
+
+    checkText("introducedErr",
+        "La date de mise en service doit être renseignée si la date de mise hors service est "
+            + "spécifiée !");
+    checkText("discontinuedErr",
+        "Impossible de renseigner la date de mise hors service sans mettre la date de "
+            + "mise en service également !");
+
+    // We check that the discontinued date must be set after the introduced
+    // date
+
+    driver.findElement(By.id("introducedDate")).clear();
+    driver.findElement(By.id("introducedDate")).sendKeys("2017-12-02");
+
+    checkText("introducedErr",
+        "La date de mise en service doit être antérieure à la date de mise hors service !");
+    checkText("discontinuedErr",
+        "La mise hors service doit avoir lieu après la mise en service de l'ordinateur !");
+
+    // We check that if a wrong format is entered there is an error
+
+    driver.findElement(By.id("introducedDate")).clear();
+    driver.findElement(By.id("introducedDate")).sendKeys("2015-12");
+
+    checkText("introducedErr",
+        "La date n'est pas au bon format (ou est inférieure au 2 Janvier 1970)!");
+
+    // We check that all is fine with the current dates
+
+    driver.findElement(By.id("introducedDate")).clear();
+    driver.findElement(By.id("introducedDate")).sendKeys("2015-12-02");
+
+    checkText("introducedErr", "");
+    checkText("discontinuedErr", "");
 
     /*
      * We set the company & submit the form, if all is fine no exception is thrown and we are
@@ -153,7 +238,7 @@ public class AddComputerIntegrationTest {
   private void checkText(String id, String text) {
 
     String errorText = driver.findElement(By.id(id)).getText();
-    assertTrue(errorText.matches(text));
+    assertTrue(errorText.equals(text));
   }
 
   /*
@@ -164,27 +249,8 @@ public class AddComputerIntegrationTest {
    * driver.findElement(By.xpath("(//input[@name='cb'])[2]")).click();
    * driver.findElement(By.xpath("//a[@id='deleteSelected']/i")).click();
    * assertTrue(closeAlertAndGetItsText() .matches(
-   * "^Are you sure you want to delete the selected computers[\\s\\S]$"));
+   * "Are you sure you want to delete the selected computers[\\s\\S]"));
    *
    */
 
-  /**
-   * Close alert and get its text.
-   *
-   * @return the string
-   */
-  private String closeAlertAndGetItsText() {
-    try {
-      Alert alert = driver.switchTo().alert();
-      String alertText = alert.getText();
-      if (acceptNextAlert) {
-        alert.accept();
-      } else {
-        alert.dismiss();
-      }
-      return alertText;
-    } finally {
-      acceptNextAlert = true;
-    }
-  }
 }
