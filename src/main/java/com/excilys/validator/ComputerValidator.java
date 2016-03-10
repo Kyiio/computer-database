@@ -10,13 +10,24 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Locale;
 
 /**
  * Interface that provides methods to check if the data in a computer are consistent.
  * 
  * @author B. Herbaut
  */
-public interface ComputerValidator {
+public class ComputerValidator {
+
+  public static MessageSource messageSource;
+
+  static {
+    try (ClassPathXmlApplicationContext applicationContext =
+        new ClassPathXmlApplicationContext("applicationContext.xml")) {
+
+      messageSource = applicationContext.getBean("messageSource", MessageSource.class);
+    }
+  }
 
   /**
    * Method that check that the given id is positive. It throws a ValidationException if it is not
@@ -83,16 +94,9 @@ public interface ComputerValidator {
    */
   public static LocalDate checkDateFormat(String date) {
 
-    MessageSource messageSource;
-    try (ClassPathXmlApplicationContext applicationContext =
-        new ClassPathXmlApplicationContext("applicationContext.xml")) {
-
-      messageSource = applicationContext.getBean("messageSource", MessageSource.class);
-    }
-
-    String format = messageSource.getMessage("date.format", null, LocaleContextHolder.getLocale());
-    String regex =
-        messageSource.getMessage("date.java.regex", null, LocaleContextHolder.getLocale());
+    Locale locale = LocaleContextHolder.getLocale();
+    String format = messageSource.getMessage("date.format", null, locale);
+    String regex = messageSource.getMessage("date.java.regex", null, locale);
 
     LocalDate localDate = null;
 

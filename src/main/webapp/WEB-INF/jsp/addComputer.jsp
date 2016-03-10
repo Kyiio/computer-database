@@ -11,14 +11,14 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="css/main.css" rel="stylesheet" media="screen">
+<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="../css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="../css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<pagination:link pageNumber="1" pageSize="10" target="dashboard"
+			<pagination:link pageNumber="1" pageSize="10" target="../computers"
 				text="Application - Computer Database" cssClass="navbar-brand"></pagination:link>
 		</div>
 	</header>
@@ -62,7 +62,7 @@
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>${Title}</h1>
 
-					<form:form action="./add-computer" method="POST" name="computerDto"
+					<form:form action="/computerdatabase/computers/add" method="POST" name="computerDto"
 						commandName="computerDto" id="addComputerForm">
 
 						<form:errors path="" element="div" class="alert alert-danger" />
@@ -109,7 +109,7 @@
 						<div class="actions pull-right">
 							<input type="submit" value="${AddButton}" class="btn btn-primary"
 								id="submit"> ${Or}
-							<pagination:link pageNumber="1" pageSize="10" target="dashboard"
+							<pagination:link pageNumber="1" pageSize="10" target="../computers"
 								text="${CancelButton}" cssClass="btn btn-default"></pagination:link>
 						</div>
 					</form:form>
@@ -118,7 +118,7 @@
 		</div>
 	</section>
 
-	<script src="js/jquery.min.js"></script>
-	<script src="js/computerCheckForm.js"></script>
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/computerCheckForm.js"></script>
 </body>
 </html>

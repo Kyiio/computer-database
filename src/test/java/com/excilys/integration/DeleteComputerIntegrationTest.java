@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Resource;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:./testApplicationContext.xml" })
+@ContextConfiguration(locations = { "classpath:./applicationContext.xml" })
 public class DeleteComputerIntegrationTest {
 
   private WebDriver       driver;
@@ -64,7 +64,7 @@ public class DeleteComputerIntegrationTest {
 
     Long id = computerService.insertComputer(null, null, null, "Toto integration test");
 
-    driver.get(baseUrl + "/computerdatabase/dashboard?computer-per-page=10&page-number=1&lang=en");
+    driver.get(baseUrl + "/computerdatabase/computers?lang=en");
 
     driver.findElement(By.id("searchName")).clear();
     driver.findElement(By.id("searchName")).sendKeys("Toto integration test");

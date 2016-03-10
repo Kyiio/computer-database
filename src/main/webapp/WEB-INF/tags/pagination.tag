@@ -19,7 +19,7 @@
 <c:choose>
 	<c:when test="${pageNumber > 1}">
 		<li>
-			<links:link pageNumber="${pageNumber-1}" pageSize="${pageSize}" target="dashboard" text="${PreviousButton}" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
+			<links:link pageNumber="${pageNumber-1}" pageSize="${pageSize}" target="computers" text="${PreviousButton}" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
 		</li>	
 	</c:when>
 	<c:otherwise>
@@ -33,7 +33,7 @@
 
 <c:if test="${begin > 1}">
 	<li>
-		<links:link pageNumber="1" pageSize="${pageSize}" target="dashboard" text="1" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
+		<links:link pageNumber="1" pageSize="${pageSize}" target="computers" text="1" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
 	</li>
 	<c:if test="${begin > 2}">
 		<li>
@@ -48,7 +48,7 @@
 <c:forEach var="i" begin="${begin}" end="${end}">
 
 	<li class="${((pageNumber == i)?'active':'')}">
-		<links:link pageNumber="${i}" pageSize="${pageSize}" target="dashboard" text="${i}" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
+		<links:link pageNumber="${i}" pageSize="${pageSize}" target="computers" text="${i}" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
 	</li>
 </c:forEach>
 
@@ -62,7 +62,7 @@
 		</li>
 	</c:if>
 	<li>
-		<links:link pageNumber="${maxPageNumber}" pageSize="${pageSize}" target="dashboard" text="${maxPageNumber}" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
+		<links:link pageNumber="${maxPageNumber}" pageSize="${pageSize}" target="computers" text="${maxPageNumber}" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
 	</li>
 </c:if>
 
@@ -71,7 +71,7 @@
 <c:choose>
 	<c:when test="${pageNumber < maxPageNumber}">
 		<li>
-			<links:link pageNumber="${pageNumber+1}" pageSize="${pageSize}" target="dashboard" text="${NextButton}" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
+			<links:link pageNumber="${pageNumber+1}" pageSize="${pageSize}" target="computers" text="${NextButton}" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
 		</li>	
 	</c:when>
 	<c:otherwise>

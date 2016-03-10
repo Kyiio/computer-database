@@ -127,7 +127,7 @@ public class ComputerDtoMapper {
       String discontinued, long companyId) {
 
     String format = messageSource.getMessage("date.format", null, LocaleContextHolder.getLocale());
-    
+
     LocalDate introducedDate = null;
     LocalDate discontinuedDate = null;
 

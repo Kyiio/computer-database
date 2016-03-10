@@ -11,14 +11,14 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="css/main.css" rel="stylesheet" media="screen">
+<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="../css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="../css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<pagination:link pageNumber="1" pageSize="10" target="dashboard"
+			<pagination:link pageNumber="1" pageSize="10" target="../computers"
 				text="Application - Computer Database" cssClass="navbar-brand"></pagination:link>
 		</div>
 	</header>
@@ -64,8 +64,10 @@
 						${computerDto.computerId}</div>
 					<h1>${Title}</h1>
 
-					<form:form action="./edit-computer" method="POST"
+					<form:form action="/computerdatabase/computers/edit" method="POST"
 						name="computerDto" commandName="computerDto" id="editComputerForm">
+
+						<form:input path="computerId" type="hidden" value="${computerDto.computerId}"/>
 
 						<form:errors path="" element="div" class="alert alert-danger" />
 
@@ -73,7 +75,7 @@
 							<div class="form-group">
 								<label for="computerName">${ComputerNameLabel}</label>
 								<form:input type="text" path="computerName" class="form-control"
-									id="computerName" name="computerName"
+									id="computerName" name="computerName" value="${computerDto.computerName}"
 									placeholder="${ComputerNamePlaceholder}" />
 								<form:errors path="computerName" element="div"
 									class="alert alert-danger" />
@@ -82,7 +84,7 @@
 							<div class="form-group">
 								<label for="introduced">${IntroducedLabel}</label>
 								<form:input type="text" path="introducedDate"
-									class="form-control" id="introducedDate" name="introducedDate"
+									class="form-control" id="introducedDate" name="introducedDate" value="${computerDto.introducedDate}"
 									placeholder="${IntroducedPlaceholder}" />
 								<form:errors path="introducedDate" element="div"
 									class="alert alert-danger" />
@@ -92,7 +94,7 @@
 								<label for="discontinued">${DiscontinuedLabel}</label>
 								<form:input path="discontinuedDate" type="text"
 									class="form-control" id="discontinuedDate"
-									name="discontinuedDate"
+									name="discontinuedDate" value="${computerDto.discontinuedDate}"
 									placeholder="${DiscontinuedPlaceholder}" />
 								<form:errors path="discontinuedDate" element="div"
 									class="alert alert-danger" />
@@ -103,7 +105,14 @@
 									class="form-control" id="companyId" name="companyId">
 									<option value="0">--</option>
 									<c:forEach items="${companyList}" var="company">
-										<option value="${company.id}">${company.name}</option>
+										<c:choose>
+											<c:when test="${company.id == computerDto.companyId}">
+												<option selected="selected" value="${company.id}">${company.name}</option>
+											</c:when>
+											<c:otherwise>
+												<option value="${company.id}">${company.name}</option>
+											</c:otherwise>
+										</c:choose>
 									</c:forEach>
 								</select>
 							</div>
@@ -111,7 +120,7 @@
 						<div class="actions pull-right">
 							<input type="submit" value="${EditButton}" class="btn btn-primary"
 								id="submit"> ${Or}
-							<pagination:link pageNumber="1" pageSize="10" target="dashboard"
+							<pagination:link pageNumber="1" pageSize="10" target="../computers"
 								text="${CancelButton}" cssClass="btn btn-default"></pagination:link>
 						</div>
 					</form:form>
@@ -120,7 +129,7 @@
 		</div>
 	</section>
 
-	<script src="js/jquery.min.js"></script>
-	<script src="js/computerCheckForm.js"></script>
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/computerCheckForm.js"></script>
 </body>
 </html>

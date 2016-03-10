@@ -75,6 +75,21 @@ function removeErrorText(errField){
 	errField.text("");
 }
 
+function getDateFromStr(dateStr){
+	
+	var array = dateStr.split("-"); 
+	
+	if(local === 'en'){
+		date = new Date(array[2], array[0], array[1]);
+	}
+	else if(local === 'fr'){
+		date = new Date(array[2], array[1], array[0]);
+	}
+	
+	return date;
+	
+}
+
 function checkDate(dateStr, inputDate, errorDiv){
 	
 	if(dateStr === ''){
@@ -90,16 +105,8 @@ function checkDate(dateStr, inputDate, errorDiv){
 		return false;
 	}
 		
-	var date;
-	var array = dateStr.split("-"); 
+	var date = getDateFromStr(dateStr);
 	
-	if(local === 'en'){
-		date = new Date(array[2], array[0], array[1]);
-	}
-	else if(local === 'fr'){
-		date = new Date(array[2], array[1], array[0]);
-	}
-
 	var minDate = new Date("1970-01-02");
 	
 	if(date < minDate){
@@ -113,6 +120,9 @@ function checkDateConsistency(){
 	
 	var introducedStr = $.trim($('#introducedDate').val());
 	var discontinuedStr = $.trim($('#discontinuedDate').val());
+
+	console.log("introduced",introducedStr);
+	console.log("discontinued",discontinuedStr);
 	
 	if(discontinuedStr === '' && introducedStr === ''){
 		removeErrorText($('#introducedErr'));
@@ -135,11 +145,10 @@ function checkDateConsistency(){
 		return false;
 	}
 	
-	var introducedData = introducedStr.split('-');
-	var discontinuedData = discontinuedStr.split('-');
 	
-	var introducedDate = new Date(parseInt(introducedData[0]), parseInt(introducedData[1])-1, parseInt(introducedData[2]));
-	var discontinuedDate = new Date(parseInt(discontinuedData[0]), parseInt(discontinuedData[1])-1, parseInt(discontinuedData[2]));
+	
+	var introducedDate = getDateFromStr(introducedStr.replace(new RegExp('/','g'), "-"));
+	var discontinuedDate = getDateFromStr(discontinuedStr.replace(new RegExp('/','g'), "-"));
 	
 	if(introducedDate.getTime() >= discontinuedDate.getTime()){
 		setErrorText($('#introducedErr'),strings['error.date.introducedAfterDiscontinued']);

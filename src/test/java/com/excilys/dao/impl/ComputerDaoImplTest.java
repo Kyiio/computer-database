@@ -32,7 +32,7 @@ import javax.annotation.Resource;
  * The Class ComputerDaoImplTest.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:./testApplicationContext.xml" })
+@ContextConfiguration(locations = { "classpath:./applicationContext.xml" })
 @Transactional(transactionManager = "txManager")
 @Rollback(true)
 public class ComputerDaoImplTest {

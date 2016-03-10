@@ -18,7 +18,8 @@
     <context:component-scan base-package="com.excilys.command" />
     <context:component-scan base-package="com.excilys.dto.mapper" />
     <context:component-scan base-package="com.excilys.dao" />
-    
+    <context:component-scan base-package="com.excilys.controller" />
+
     <context:component-scan base-package="com.excilys.integration" />
 
     <bean id="dataSource"
@@ -39,5 +40,17 @@
     </bean>
 
     <tx:annotation-driven transaction-manager="txManager" />
+
+    <!-- Needed for multilang -->
+    <bean id="messageSource"
+        class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:./messages/messages" />
+        <property name="defaultEncoding" value="UTF-8"></property>
+    </bean>
+
+    <bean id="localeResolver"
+        class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <property name="defaultLocale" value="en" />
+    </bean>
 
 </beans>

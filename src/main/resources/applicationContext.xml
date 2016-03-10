@@ -17,6 +17,7 @@
     <context:component-scan base-package="com.excilys.service.impl" />
     <context:component-scan base-package="com.excilys.dto.mapper" />
     <context:component-scan base-package="com.excilys.command" />
+    <context:component-scan base-package="com.excilys.controller" />
 
     <bean id="dataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -42,6 +43,11 @@
         class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <property name="basename" value="classpath:./messages/messages" />
         <property name="defaultEncoding" value="UTF-8"></property>
+    </bean>
+
+    <bean id="localeResolver"
+        class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <property name="defaultLocale" value="en" />
     </bean>
 
 

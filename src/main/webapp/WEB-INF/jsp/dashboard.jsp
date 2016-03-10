@@ -18,14 +18,14 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<pagination:link pageNumber="1" pageSize="${page.pageSize}"
-				target="dashboard" text="Application - Computer Database"
+				target="computers" text="Application - Computer Database"
 				cssClass="navbar-brand"></pagination:link>
 			<div>
 				<a
-					href="dashboard?pageSize=${page.pageSize}&pageNumber=${page.pageNumber}&orderBy=${page.orderBy}&orderType=${page.orderType}&searchName=${page.searchName}&lang=en">
+					href="computers?pageSize=${page.pageSize}&pageNumber=${page.pageNumber}&orderBy=${page.orderBy}&orderType=${page.orderType}&searchName=${page.searchName}&lang=en">
 					<img class="flags" src="fonts/england.png" alt="uk flag">
 				</a> <a
-					href="dashboard?pageSize=${page.pageSize}&pageNumber=${page.pageNumber}&orderBy=${page.orderBy}&orderType=${page.orderType}&searchName=${page.searchName}&lang=fr">
+					href="computers?pageSize=${page.pageSize}&pageNumber=${page.pageNumber}&orderBy=${page.orderBy}&orderType=${page.orderType}&searchName=${page.searchName}&lang=fr">
 					<img class="flags" src="fonts/french.png" alt="fr flag">
 				</a>
 			</div>
@@ -59,7 +59,7 @@
 				${ComputerFound}</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="./dashboard" method="GET"
+					<form id="searchForm" action="./computers" method="GET"
 						class="form-inline">
 						<input type="hidden" name="pageSize" value="${page.pageSize}" />
 						<input type="search" id="searchName" name="searchName"
@@ -70,14 +70,14 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="add-computer">${AddComputer}</a>
+					<a class="btn btn-success" id="addComputer" href="computers/add">${AddComputer}</a>
 					<a class="btn btn-default" id="editComputersButton" href="#"
 						onclick="$.fn.toggleEditMode();">${Edit}</a>
 				</div>
 			</div>
 		</div>
 
-		<form id="deleteForm" action="./dashboard" method="POST">
+		<form id="deleteForm" action="./computers" method="POST">
 			<input type="hidden" name="selection" value=""> <input
 				type="hidden" name="pageSize" value="${page.pageSize}" /><input
 				type="hidden" name="searchName" value="${page.searchName}" />
@@ -98,24 +98,24 @@
 							</a>
 						</span></th>
 						<th><pagination:link pageNumber="1"
-								pageSize="${page.pageSize}" target="dashboard"
+								pageSize="${page.pageSize}" target="computers"
 								text="${ComputerNameField}" searchName="${page.searchName}"
 								orderBy="COMPUTER_NAME"
 								orderType="${((page.orderBy == 'COMPUTER_NAME' && page.orderType == 'ASC' ) ? 'DESC' : 'ASC')}"></pagination:link></th>
 						<th><pagination:link pageNumber="1"
-								pageSize="${page.pageSize}" target="dashboard"
+								pageSize="${page.pageSize}" target="computers"
 								text="${IntroducedField}" searchName="${page.searchName}"
 								orderBy="INTRODUCED"
 								orderType="${((page.orderBy == 'INTRODUCED' && page.orderType == 'ASC' ) ? 'DESC' : 'ASC')}"></pagination:link></th>
 						<!-- Table header for Discontinued Date -->
 						<th><pagination:link pageNumber="1"
-								pageSize="${page.pageSize}" target="dashboard"
+								pageSize="${page.pageSize}" target="computers"
 								text="${DiscontinuedField}" searchName="${page.searchName}"
 								orderBy="DISCONTINUED"
 								orderType="${((page.orderBy == 'DISCONTINUED' && page.orderType == 'ASC' ) ? 'DESC' : 'ASC')}"></pagination:link></th>
 						<!-- Table header for Company -->
 						<th><pagination:link pageNumber="1"
-								pageSize="${page.pageSize}" target="dashboard"
+								pageSize="${page.pageSize}" target="computers"
 								text="${CompanyNameField}" searchName="${page.searchName}"
 								orderBy="COMPANY_NAME"
 								orderType="${((page.orderBy == 'COMPANY_NAME' && page.orderType == 'ASC' ) ? 'DESC' : 'ASC')}"></pagination:link></th>
@@ -128,7 +128,7 @@
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.computerId}"></td>
 							<td><a
-								href="edit-computer?computerId=${computer.computerId}"
+								href="computers/edit?computerId=${computer.computerId}"
 								onclick=""><c:out value="${computer.computerName}" /></a></td>
 							<td>${computer.introducedDate}</td>
 							<td>${computer.discontinuedDate}</td>

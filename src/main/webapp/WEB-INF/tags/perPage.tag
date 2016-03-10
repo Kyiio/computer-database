@@ -12,7 +12,7 @@
 			<links:link pageNumber="1" pageSize="${pageSize}" target="#" text="${computerPerPageValue}" cssClass="btn btn-default disabled"></links:link>
 		</c:when>
 		<c:otherwise>
-			<links:link pageNumber="1" pageSize="${computerPerPageValue}" target="dashboard" text="${computerPerPageValue}" cssClass="btn btn-default" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
+			<links:link pageNumber="1" pageSize="${computerPerPageValue}" target="computers" text="${computerPerPageValue}" cssClass="btn btn-default" searchName="${searchName}" orderType="${orderType}" orderBy="${orderBy}"></links:link>
 		</c:otherwise>
 	</c:choose>
 </c:forEach>

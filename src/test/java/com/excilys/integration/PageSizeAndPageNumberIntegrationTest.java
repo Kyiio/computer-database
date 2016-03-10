@@ -7,16 +7,21 @@ import static org.junit.Assert.fail;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.concurrent.TimeUnit;
 
 /**
  * The Class SeleniumIT.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "classpath:./applicationContext.xml" })
 public class PageSizeAndPageNumberIntegrationTest {
 
   /** The driver. */
@@ -49,7 +54,7 @@ public class PageSizeAndPageNumberIntegrationTest {
   @Test
   public void testNextAndPrevious() throws Exception {
 
-    driver.get(baseUrl + "/computerdatabase/dashboard?page-number=1");
+    driver.get(baseUrl + "/computerdatabase/computers?page-number=1&lang=en");
 
     driver.findElement(By.xpath("//li[contains(@class, 'active')]/a[text()='1']"));
 
@@ -79,7 +84,7 @@ public class PageSizeAndPageNumberIntegrationTest {
   @Test
   public void testNbComputerPerPage() {
 
-    driver.get(baseUrl + "/computerdatabase/dashboard");
+    driver.get(baseUrl + "/computerdatabase/computers?lang=en");
 
     int rowCounts = driver.findElements(By.xpath("//tbody[@id='results']/tr")).size();
     assertEquals(10, rowCounts);
