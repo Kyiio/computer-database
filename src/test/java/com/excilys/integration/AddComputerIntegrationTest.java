@@ -35,8 +35,9 @@ public class AddComputerIntegrationTest {
 
   private WebDriver       driver;
   private String          baseUrl;
-  private boolean         acceptNextAlert    = true;
   private StringBuffer    verificationErrors = new StringBuffer();
+
+  final String            computerName       = "Toto integration test";
 
   @Resource(name = "computerService")
   private ComputerService computerService;
@@ -73,10 +74,11 @@ public class AddComputerIntegrationTest {
    */
   @Test
   public void addComputerEnglish() throws Exception {
+
     driver.get(baseUrl + "/computerdatabase/dashboard?computer-per-page=10&page-number=1&lang=en");
     driver.findElement(By.id("addComputer")).click();
     driver.findElement(By.id("computerName")).clear();
-    driver.findElement(By.id("computerName")).sendKeys("Toto integration test");
+    driver.findElement(By.id("computerName")).sendKeys(computerName);
     driver.findElement(By.id("computerName")).clear();
 
     // We check that the error message regarding the computer's name shows up
@@ -84,7 +86,7 @@ public class AddComputerIntegrationTest {
     checkText("computerNameErr",
         "The computer name is empty or is to long (more than 30 characters)!");
 
-    driver.findElement(By.id("computerName")).sendKeys("Toto integration test");
+    driver.findElement(By.id("computerName")).sendKeys(computerName);
 
     // We check that we can't put a discontinued date if we don't have set
     // the introduced date
@@ -111,7 +113,7 @@ public class AddComputerIntegrationTest {
     driver.findElement(By.id("introducedDate")).clear();
     driver.findElement(By.id("introducedDate")).sendKeys("2015-12");
 
-    checkText("introducedErr", "Wrong format entered (or the date is before January 01 1970)");
+    checkText("introducedErr", "Wrong format entered (or the date is before January 02 1970)");
 
     // We check that all is fine with the current dates
 
@@ -130,7 +132,7 @@ public class AddComputerIntegrationTest {
 
     // We then try to find the newly introduced computer in the database
 
-    ArrayList<Computer> computerList = computerService.getByName("Toto integration test");
+    ArrayList<Computer> computerList = computerService.getByName(computerName);
     assertNotEquals(0, computerList.size());
 
     // And we check the insertion went well for all fields
@@ -138,7 +140,7 @@ public class AddComputerIntegrationTest {
     Computer computer = computerList.get(0);
 
     assertNotNull(computer);
-    assertEquals("Toto integration test", computer.getName());
+    assertEquals(computerName, computer.getName());
     assertEquals(LocalDate.of(2015, 12, 2), computer.getIntroduced());
     assertEquals(LocalDate.of(2016, 10, 1), computer.getDiscontinued());
     assertEquals("Netronics", computer.getCompany().getName());
@@ -150,9 +152,10 @@ public class AddComputerIntegrationTest {
 
   @Test
   public void addComputerFrench() throws Exception {
+
     driver.get(baseUrl + "/computerdatabase/add-computer?lang=fr");
     driver.findElement(By.id("computerName")).clear();
-    driver.findElement(By.id("computerName")).sendKeys("Toto integration test");
+    driver.findElement(By.id("computerName")).sendKeys(computerName);
     driver.findElement(By.id("computerName")).clear();
 
     // We check that the error message regarding the computer's name shows up
@@ -160,7 +163,7 @@ public class AddComputerIntegrationTest {
     checkText("computerNameErr",
         "Le nom de l'ordinateur ne contient pas entre 1 et 30 caractéres !");
 
-    driver.findElement(By.id("computerName")).sendKeys("Toto integration test");
+    driver.findElement(By.id("computerName")).sendKeys(computerName);
 
     // We check that we can't put a discontinued date if we don't have set
     // the introduced date
@@ -211,7 +214,7 @@ public class AddComputerIntegrationTest {
 
     // We then try to find the newly introduced computer in the database
 
-    ArrayList<Computer> computerList = computerService.getByName("Toto integration test");
+    ArrayList<Computer> computerList = computerService.getByName(computerName);
     assertNotEquals(0, computerList.size());
 
     // And we check the insertion went well for all fields
@@ -219,7 +222,7 @@ public class AddComputerIntegrationTest {
     Computer computer = computerList.get(0);
 
     assertNotNull(computer);
-    assertEquals("Toto integration test", computer.getName());
+    assertEquals(computerName, computer.getName());
     assertEquals(LocalDate.of(2015, 12, 2), computer.getIntroduced());
     assertEquals(LocalDate.of(2016, 10, 1), computer.getDiscontinued());
     assertEquals("Netronics", computer.getCompany().getName());
@@ -240,17 +243,4 @@ public class AddComputerIntegrationTest {
     String errorText = driver.findElement(By.id(id)).getText();
     assertTrue(errorText.equals(text));
   }
-
-  /*
-   * driver.findElement(By.id("search-name")).clear();
-   * driver.findElement(By.id("search-name")).sendKeys("Toto integration test");
-   * driver.findElement(By.id("searchsubmit")).click();
-   * driver.findElement(By.id("editComputer")).click();
-   * driver.findElement(By.xpath("(//input[@name='cb'])[2]")).click();
-   * driver.findElement(By.xpath("//a[@id='deleteSelected']/i")).click();
-   * assertTrue(closeAlertAndGetItsText() .matches(
-   * "Are you sure you want to delete the selected computers[\\s\\S]"));
-   *
-   */
-
 }

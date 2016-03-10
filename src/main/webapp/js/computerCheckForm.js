@@ -81,18 +81,26 @@ function checkDate(dateStr, inputDate, errorDiv){
 		return true;
 	}
 	
-	var regex = /^\d\d\d\d-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+	dateStr = dateStr.replace(new RegExp('/','g'), "-");
+	
+	var regex = new RegExp(strings['date.jquery.regex']);
 	var res = regex.test(dateStr);
 	
 	if(res == false){
 		return false;
 	}
+		
+	var date;
+	var array = dateStr.split("-"); 
 	
-	var date = new Date(dateStr);
+	if(local === 'en'){
+		date = new Date(array[2], array[0], array[1]);
+	}
+	else if(local === 'fr'){
+		date = new Date(array[2], array[1], array[0]);
+	}
+
 	var minDate = new Date("1970-01-02");
-	
-	console.log(date);
-	console.log(minDate);
 	
 	if(date < minDate){
 		return false;

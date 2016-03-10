@@ -76,7 +76,7 @@ public class ComputerDto {
   }
 
   public void setIntroducedDate(String introducedDate) {
-    this.introducedDate = introducedDate;
+    this.introducedDate = introducedDate.replace('/', '-');
   }
 
   public String getDiscontinuedDate() {
@@ -84,7 +84,7 @@ public class ComputerDto {
   }
 
   public void setDiscontinuedDate(String discontinuedDate) {
-    this.discontinuedDate = discontinuedDate;
+    this.discontinuedDate = discontinuedDate.replace('/', '-');
   }
 
   public long getCompanyId() {

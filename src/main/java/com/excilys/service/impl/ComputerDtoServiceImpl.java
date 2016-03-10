@@ -25,8 +25,8 @@ public class ComputerDtoServiceImpl implements ComputerDtoService {
 
     ComputerValidator.checkId(computerDto.getComputerId());
     ComputerValidator.checkName(computerDto.getComputerName());
-    ComputerValidator.checkDate(computerDto.getIntroducedDate(), null);
-    ComputerValidator.checkDate(computerDto.getDiscontinuedDate(), null);
+    ComputerValidator.checkDate(computerDto.getIntroducedDate());
+    ComputerValidator.checkDate(computerDto.getDiscontinuedDate());
 
     Computer computer = ComputerDtoMapper.getComputer(computerDto);
 
@@ -37,8 +37,8 @@ public class ComputerDtoServiceImpl implements ComputerDtoService {
   public long insertComputer(ComputerDto computerDto) {
 
     ComputerValidator.checkName(computerDto.getComputerName());
-    ComputerValidator.checkDate(computerDto.getIntroducedDate(), null);
-    ComputerValidator.checkDate(computerDto.getDiscontinuedDate(), null);
+    ComputerValidator.checkDate(computerDto.getIntroducedDate());
+    ComputerValidator.checkDate(computerDto.getDiscontinuedDate());
 
     Computer computer = ComputerDtoMapper.getComputer(computerDto);
 

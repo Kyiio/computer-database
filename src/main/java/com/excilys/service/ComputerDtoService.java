@@ -77,8 +77,8 @@ public interface ComputerDtoService {
 
   /**
    * Method that calls the getNbComputer from the ComputerService.
-   * 
-   * @param queryParameters
+   *
+   * @param queryParameters the query parameters
    * @return The number of computer in the database.
    * @see ComputerService
    */

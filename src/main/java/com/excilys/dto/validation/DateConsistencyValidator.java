@@ -16,13 +16,13 @@ public class DateConsistencyValidator implements ConstraintValidator<DateConsist
 
   @Override
   public void initialize(DateConsistency constraintAnnotation) {
-    // TODO Auto-generated method stub
+
   }
 
   @Override
   public boolean isValid(ComputerDto computerDto, ConstraintValidatorContext context) {
 
-    LOGGER.info("Starting date consistency validation");
+    LOGGER.info("Starting date consistency validation for the following computer :" + computerDto);
 
     try {
       ComputerValidator.checkDateConsitency(computerDto.getIntroducedDate(),

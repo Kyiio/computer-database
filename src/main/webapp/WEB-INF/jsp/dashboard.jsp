@@ -65,13 +65,13 @@
 						<input type="search" id="searchName" name="searchName"
 							class="form-control" placeholder="${SearchPlaceholder}"
 							value="${((page.searchName != '%')? page.searchName:'')}" /> <input
-							type="submit" id="searchsubmit" value="${SearchButtonName}"
+							type="submit" id="searchSubmit" value="${SearchButtonName}"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer" href="add-computer">${AddComputer}</a>
-					<a class="btn btn-default" id="editComputer" href="#"
+					<a class="btn btn-default" id="editComputersButton" href="#"
 						onclick="$.fn.toggleEditMode();">${Edit}</a>
 				</div>
 			</div>

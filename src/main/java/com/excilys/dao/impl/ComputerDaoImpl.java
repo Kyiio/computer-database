@@ -50,7 +50,7 @@ public class ComputerDaoImpl implements ComputerDao {
       String name) {
 
     if (name == null || name.length() <= 0) {
-      throw new DaoException("Then name of the computer must be set !");
+      throw new DaoException("The name of the computer must be set !");
     }
 
     KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -185,6 +185,10 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public ArrayList<Computer> selectWithParameters(QueryParameters queryParameters) {
 
+    if (queryParameters == null) {
+      throw new DaoException("The queryParameters object shouldn't be null");
+    }
+
     String query = QueryParameterMapper.createPageQuery(queryParameters);
 
     String search = "%" + queryParameters.getSearch() + "%";
@@ -200,7 +204,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
     String search = "%" + queryParameters.getSearch() + "%";
 
-    String query = QueryParameterMapper.createCountQuery(queryParameters);
+    String query = QueryParameterMapper.createCountQuery();
 
     long rowCount = jdbcTemplate.queryForObject(query, new Object[] { search, search }, Long.class);
 

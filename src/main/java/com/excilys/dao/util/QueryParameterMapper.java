@@ -32,10 +32,9 @@ public interface QueryParameterMapper {
   /**
    * Creates the count query.
    *
-   * @param queryParameters the query parameters
    * @return the prepared statement
    */
-  public static String createCountQuery(QueryParameters queryParameters) {
+  public static String createCountQuery() {
 
     QueryBuilder queryBuilder = new QueryBuilder();
 

@@ -26,13 +26,7 @@
 			<property name="paramName" value="lang" />
 		</bean>
 	</mvc:interceptors>
-
-	<bean id="messageSource"
-		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-		<property name="basename" value="classpath:./messages/messages" />
-		<property name="defaultEncoding" value="UTF-8"></property>
-	</bean>
-
+	
 	<!-- View resolver -->
 
 	<bean

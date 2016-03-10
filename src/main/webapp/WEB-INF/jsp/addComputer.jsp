@@ -24,6 +24,7 @@
 	</header>
 
 	<spring:message code="title.addcomputer" var="Title" />
+	<spring:message code="or" var="Or" />
 
 	<spring:message code="label.computername" var="ComputerNameLabel" />
 	<spring:message code="label.introduced" var="IntroducedLabel" />
@@ -43,6 +44,7 @@
 	<!-- We put all the needed strings in an array so that the js can access them -->
 
 	<script type="text/javascript">
+		var local = "${pageContext.response.locale}";
 		var strings = new Array();
 		strings['error.name'] = "<spring:message code='error.name' javaScriptEscape='true' />";
 		strings['error.date.format'] = "<spring:message code='error.date.format' javaScriptEscape='true' />";
@@ -50,6 +52,8 @@
 		strings['error.date.discontinuedNotNullIntroducedNull'] = "<spring:message code='error.date.discontinuedNotNullIntroducedNull' javaScriptEscape='true' />";
 		strings['error.date.introducedAfterDiscontinued'] = "<spring:message code='error.date.introducedAfterDiscontinued' javaScriptEscape='true' />";
 		strings['error.date.discontinuedBeforeIntroduced'] = "<spring:message code='error.date.discontinuedBeforeIntroduced' javaScriptEscape='true' />";
+		strings['date.format'] = "<spring:message code='date.format' javaScriptEscape='true' />";
+		strings['date.jquery.regex'] = "<spring:message code='date.jquery.regex' javaScriptEscape='true' />";
 	</script>
 
 	<section id="main">
@@ -104,7 +108,7 @@
 						</fieldset>
 						<div class="actions pull-right">
 							<input type="submit" value="${AddButton}" class="btn btn-primary"
-								id="submit"> or
+								id="submit"> ${Or}
 							<pagination:link pageNumber="1" pageSize="10" target="dashboard"
 								text="${CancelButton}" cssClass="btn btn-default"></pagination:link>
 						</div>

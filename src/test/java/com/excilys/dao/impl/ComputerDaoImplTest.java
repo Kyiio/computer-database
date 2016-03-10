@@ -12,8 +12,11 @@ import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
 
 import org.dbunit.dataset.DataSetException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -36,6 +39,22 @@ public class ComputerDaoImplTest {
 
   @Resource(name = "computerDao")
   private ComputerDao computerDao;
+
+  private QueryParameters queryParameter;
+
+  /**
+   * Inits the mocks.
+   */
+  @Before
+  public void initMocks() {
+    MockitoAnnotations.initMocks(this);
+    queryParameter = Mockito.mock(QueryParameters.class);
+    Mockito.when(queryParameter.getSearch()).thenReturn("%");
+    Mockito.when(queryParameter.getPageSize()).thenReturn(10);
+    Mockito.when(queryParameter.getOffset()).thenReturn(0);
+    Mockito.when(queryParameter.getByContent()).thenReturn("computer.id");
+    Mockito.when(queryParameter.getOrder()).thenReturn("ASC");
+  }
 
   /**
    * Test insert computer.
@@ -83,7 +102,7 @@ public class ComputerDaoImplTest {
    * Test insert computer null.
    */
   @Test(expected = DaoException.class)
-  public void testInsertComputerNull() {
+  public void testInsertComputerNameNull() {
     computerDao.insertComputer(null, null, null, null);
   }
 
@@ -104,13 +123,8 @@ public class ComputerDaoImplTest {
   @Test
   public void testDeleteComputer() throws SQLException, Exception {
 
-    QueryParameters queryParameters = new QueryParameters();
-    long oldNumberOfLine = computerDao.getCount(queryParameters);
-
     final Computer computer = computerDao.getById(1);
     computerDao.deleteComputer(1);
-
-    assertEquals(oldNumberOfLine - 1, computerDao.getCount(queryParameters));
 
     Computer computer2 = computerDao.getById(1);
     assertNull(computer2);
@@ -128,12 +142,11 @@ public class ComputerDaoImplTest {
   @Test
   public void testDeleteComputerFakeId() throws SQLException, Exception {
 
-    QueryParameters queryParameters = new QueryParameters();
-    long oldNumberOfLine = computerDao.getCount(queryParameters);
+    long oldNumberOfLine = computerDao.getCount(queryParameter);
 
     computerDao.deleteComputer(-200);
 
-    assertEquals(oldNumberOfLine, computerDao.getCount(queryParameters));
+    assertEquals(oldNumberOfLine, computerDao.getCount(queryParameter));
   }
 
   /**
@@ -165,6 +178,29 @@ public class ComputerDaoImplTest {
   }
 
   /**
+   * Test update computer null.
+   */
+  @Test
+  public void testUpdateComputerWithNulls() {
+
+    Computer computer = computerDao.getById(1);
+
+    final Computer cp = new Computer(computer);
+
+    computer.setName("new computer name");
+    computer.setCompany(null);
+    computer.setIntroduced(LocalDate.of(2000, 12, 12));
+    computer.setDiscontinued(LocalDate.of(2010, 12, 12));
+
+    computerDao.updateComputer(computer);
+
+    computer = null;
+    computer = computerDao.getById(1);
+
+    assertNotEquals(computer, cp);
+  }
+
+  /**
    * Test list computer.
    *
    * @throws DataSetException the data set exception
@@ -175,8 +211,7 @@ public class ComputerDaoImplTest {
 
     ArrayList<Computer> listComputer = computerDao.listComputers();
 
-    QueryParameters queryParameters = new QueryParameters();
-    long nbComputerInDatabase = computerDao.getCount(queryParameters);
+    long nbComputerInDatabase = computerDao.getCount(queryParameter);
 
     assertEquals(listComputer.size(), nbComputerInDatabase);
   }
@@ -199,5 +234,32 @@ public class ComputerDaoImplTest {
 
     Computer computer = computerDao.getById(-1);
     assertNull(computer);
+  }
+
+  @Test
+  public void testGetByName() {
+
+    String computerName = "Toto's computer Unit Test";
+
+    computerDao.insertComputer(new Company(1, "Apple Inc."), null, null, computerName);
+    final Computer computer = computerDao.getByName(computerName).get(0);
+
+    assertEquals(computer.getName(), computerName);
+  }
+
+  /**
+   * Test select with paramaters.
+   */
+  @Test(expected = DaoException.class)
+  public void testSelectWithParamatersNull() {
+    computerDao.selectWithParameters(null);
+  }
+
+  @Test
+  public void testSelectWithParamaters() {
+
+    ArrayList<Computer> computerList = computerDao.selectWithParameters(queryParameter);
+
+    assertEquals(computerList.size(), 10);
   }
 }

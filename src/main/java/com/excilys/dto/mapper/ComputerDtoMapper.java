@@ -6,6 +6,8 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.CompanyDtoService;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,9 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
@@ -25,13 +30,16 @@ import java.util.ArrayList;
 @Component
 public class ComputerDtoMapper {
 
+
   private static CompanyDtoService companyDtoService;
+  private static MessageSource     messageSource;
 
   static {
     try (ClassPathXmlApplicationContext applicationContext =
         new ClassPathXmlApplicationContext("applicationContext.xml")) {
 
       companyDtoService = applicationContext.getBean("companyDtoService", CompanyDtoService.class);
+      messageSource = applicationContext.getBean("messageSource", MessageSource.class);
     }
   }
 
@@ -69,13 +77,19 @@ public class ComputerDtoMapper {
 
     LocalDate introducedDate = computer.getIntroduced();
     LocalDate discontinuedDate = computer.getDiscontinued();
+    
+    
+    String format = messageSource.getMessage("date.format", null, LocaleContextHolder.getLocale());
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
 
     if (introducedDate != null) {
-      introducedString = introducedDate.toString();
+      LocalDateTime ldt = LocalDateTime.of(introducedDate, LocalTime.of(0, 0));
+      introducedString = ldt.format(formatter);
     }
 
     if (discontinuedDate != null) {
-      discontinuedString = discontinuedDate.toString();
+      LocalDateTime ldt2 = LocalDateTime.of(discontinuedDate, LocalTime.of(0, 0));
+      discontinuedString = ldt2.format(formatter);
     }
 
     if (company != null) {
@@ -112,7 +126,8 @@ public class ComputerDtoMapper {
   public static Computer getComputer(long computerId, String computerName, String introduced,
       String discontinued, long companyId) {
 
-    String format = "yyyy-MM-dd";
+    String format = messageSource.getMessage("date.format", null, LocaleContextHolder.getLocale());
+    
     LocalDate introducedDate = null;
     LocalDate discontinuedDate = null;
 
