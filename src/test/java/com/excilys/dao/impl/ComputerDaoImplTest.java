@@ -11,7 +11,6 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
 
-import org.dbunit.dataset.DataSetException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

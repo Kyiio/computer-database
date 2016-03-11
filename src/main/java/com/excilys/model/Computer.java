@@ -1,6 +1,15 @@
 package com.excilys.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * This class represents a computer from the database. A computer is identified by its id and must
@@ -9,14 +18,29 @@ import java.time.LocalDate;
  * 
  * @author B. Herbaut
  */
-public class Computer {
 
+@Entity
+@Table(name = "computer")
+public class Computer implements Serializable {
+
+  private static final long serialVersionUID = 1L;
+
+  @Id
+  @GeneratedValue
+  @Column(name = "id")
   private long      id;
+
+  @ManyToOne
+  @JoinColumn(name = "company_id")
   private Company   company;
 
+  @Column(name = "name")
   private String    name;
 
+  @Column(name = "discontinued")
   private LocalDate discontinued;
+
+  @Column(name = "introduced")
   private LocalDate introduced;
 
   public Computer() {
@@ -26,16 +50,11 @@ public class Computer {
   /**
    * Instantiates a new computer.
    *
-   * @param id
-   *          the id
-   * @param company
-   *          the company
-   * @param name
-   *          the name
-   * @param discontinued
-   *          the discontinued
-   * @param introduced
-   *          the introduced
+   * @param id the id
+   * @param company the company
+   * @param name the name
+   * @param discontinued the discontinued
+   * @param introduced the introduced
    */
   public Computer(long id, Company company, String name, LocalDate discontinued,
       LocalDate introduced) {
@@ -49,8 +68,7 @@ public class Computer {
   /**
    * Instantiates a new computer.
    *
-   * @param computer
-   *          the computer
+   * @param computer the computer
    */
   public Computer(Computer computer) {
     this.id = computer.id;
@@ -111,7 +129,6 @@ public class Computer {
 
     return strBuilder.toString();
   }
-
 
   @Override
   public int hashCode() {

@@ -1,14 +1,30 @@
 package com.excilys.model;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * This class represents a company from the database, a company is identified by its id and possess
  * a name
  * 
  * @author B. Herbaut
  */
-public class Company {
+@Entity
+@Table(name = "company")
+public class Company implements Serializable {
 
+  private static final long serialVersionUID = 1L;
+
+  @Id
+  @GeneratedValue
+  @Column(name = "id")
   private long   id;
+  @Column(name = "name")
   private String name;
 
   public Company() {

@@ -9,6 +9,9 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -40,8 +43,17 @@ public class ComputerDaoImpl implements ComputerDao {
   private static final String GET_BY_NAME_QUERY =
       "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID WHERE computer.NAME = ?";
 
+  private static final String GET_PAGE_QUERY    =
+      "SELECT computer FROM Computer AS computer LEFT JOIN computer.company AS company "
+          + "WHERE computer.name LIKE :searchpattern OR company.name LIKE :searchpattern ";
+  // + "ORDER BY :toto :ordertype";
+
   @Autowired
   private JdbcTemplate        jdbcTemplate;
+
+  @Autowired
+  private SessionFactory      sessionFactory;
+
   @Autowired
   private ComputerDaoMapper   computerDaoMapper;
 
@@ -189,12 +201,20 @@ public class ComputerDaoImpl implements ComputerDao {
       throw new DaoException("The queryParameters object shouldn't be null");
     }
 
-    String query = QueryParameterMapper.createPageQuery(queryParameters);
+    Session session = sessionFactory.getCurrentSession();
+    session.beginTransaction();
 
-    String search = "%" + queryParameters.getSearch() + "%";
-    ArrayList<Computer> computerResult =
-        (ArrayList<Computer>) jdbcTemplate.query(query, computerDaoMapper, search, search,
-            queryParameters.getPageSize(), queryParameters.getOffset());
+    Query query = session.createQuery(GET_PAGE_QUERY + "ORDER BY " + queryParameters.getByContent()
+        + " " + queryParameters.getOrder());
+
+    query.setParameter("searchpattern", "%" + queryParameters.getSearch() + "%");
+    query.setFirstResult(queryParameters.getOffset());
+    query.setMaxResults(queryParameters.getPageSize());
+
+    @SuppressWarnings("unchecked")
+    ArrayList<Computer> computerResult = (ArrayList<Computer>) query.list();
+
+    session.disconnect();
 
     return computerResult;
   }

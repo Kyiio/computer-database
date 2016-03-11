@@ -26,7 +26,7 @@ public class ExceptionController {
     model.addAttribute("errorMessage", exception.getMessage());
     model.addAttribute("stackTrace", exception.getStackTrace());
 
-    return "500";
+    return "err/500";
   }
 
   /**
@@ -40,14 +40,14 @@ public class ExceptionController {
   @RequestMapping("404")
   public String defaultPageNotFound(HttpServletRequest request, Model model) {
 
-    return "404";
+    return "err/404";
   }
 
-  @ResponseStatus(value = HttpStatus.NOT_FOUND)
+  @ResponseStatus(value = HttpStatus.FORBIDDEN)
   @RequestMapping("403")
   public String defaultAccessDenied(HttpServletRequest request, Model model) {
 
-    return "403";
+    return "err/403";
   }
 
   
