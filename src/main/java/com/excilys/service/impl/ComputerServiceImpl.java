@@ -9,95 +9,82 @@ import com.excilys.validator.CompanyValidator;
 import com.excilys.validator.ComputerValidator;
 import com.excilys.validator.QueryParametersValidator;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 @Service("computerService")
+@Transactional(readOnly = true)
 public class ComputerServiceImpl implements ComputerService {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ComputerServiceImpl.class);
+
   @Autowired
-  public ComputerDao     computerDao;
-  @Autowired
-  private SessionFactory sessionFactory;
+  public ComputerDao          computerDao;
 
   @Override
+  @Transactional(readOnly = false)
   public void updateComputer(Computer computer) {
 
-    ComputerValidator.checkId(computer.getId());
-    ComputerValidator.checkName(computer.getName());
-    ComputerValidator.checkDateConsitency(computer.getIntroduced(), computer.getDiscontinued());
+    LOGGER.info("Update computer : " + computer);
 
-    Session session = sessionFactory.openSession();
-    session.beginTransaction();
+    ComputerValidator.checkComputer(computer);
 
     computerDao.updateComputer(computer);
-
-    session.close();
   }
 
   @Override
+  @Transactional(readOnly = false)
   public long insertComputer(Company company, LocalDate introduced, LocalDate discontinued,
       String name) {
+
+    LOGGER.info(new StringBuffer("Insert computer with following information : Company : ")
+        .append("computer name ").append(name).append(company).append(" introduced date :")
+        .append(introduced).append(" discontinued date :").append(discontinued).toString());
 
     ComputerValidator.checkName(name);
     ComputerValidator.checkDateConsitency(introduced, discontinued);
 
-    Session session = sessionFactory.openSession();
-    Transaction transaction = session.beginTransaction();
-
     long id = computerDao.insertComputer(company, introduced, discontinued, name);
-
-    transaction.commit();
-    session.close();
 
     return id;
   }
 
   @Override
+  @Transactional(readOnly = false)
   public void deleteComputer(long id) {
+
+    LOGGER.info("Delete computer with id : " + id);
 
     ComputerValidator.checkId(id);
 
-    Session session = sessionFactory.openSession();
-    Transaction transaction = session.beginTransaction();
-
     computerDao.deleteComputer(id);
-
-    transaction.commit();
-    session.close();
   }
 
   @Override
+  @Transactional(readOnly = false)
   public void deleteComputerAssociatedToCompany(long companyId) {
+
+    LOGGER.info("Delete computers with company id : " + companyId);
 
     CompanyValidator.checkId(companyId);
 
-    Session session = sessionFactory.openSession();
-    Transaction transaction = session.beginTransaction();
-
     computerDao.deleteComputersForCompanyId(companyId);
-
-    transaction.commit();
-    session.close();
   }
 
   @Override
   public Computer getById(long id) {
 
+    LOGGER.info("Get computer by id : " + id);
+
     ComputerValidator.checkId(id);
 
-    Session session = sessionFactory.openSession();
-    session.beginTransaction();
-
     Computer computer = computerDao.getById(id);
-
-    session.close();
 
     return computer;
   }
@@ -105,14 +92,11 @@ public class ComputerServiceImpl implements ComputerService {
   @Override
   public ArrayList<Computer> getByName(String name) {
 
+    LOGGER.info("Get computers by name : " + name);
+
     ComputerValidator.checkName(name);
 
-    Session session = sessionFactory.openSession();
-    session.beginTransaction();
-
     ArrayList<Computer> computerList = computerDao.getByName(name);
-
-    session.close();
 
     return computerList;
   }
@@ -120,12 +104,9 @@ public class ComputerServiceImpl implements ComputerService {
   @Override
   public ArrayList<Computer> listComputers() {
 
-    Session session = sessionFactory.openSession();
-    session.beginTransaction();
+    LOGGER.info("List computers");
 
     ArrayList<Computer> computerList = computerDao.listComputers();
-
-    session.close();
 
     return computerList;
   }
@@ -133,13 +114,13 @@ public class ComputerServiceImpl implements ComputerService {
   @Override
   public ArrayList<Computer> selectWithParameters(QueryParameters queryParameters) {
 
-    Session session = sessionFactory.openSession();
-    session.beginTransaction();
+    LOGGER.info("Select with parameters : " + queryParameters);
 
     QueryParametersValidator.validateQueryParameters(queryParameters);
-    ArrayList<Computer> computerList = computerDao.selectWithParameters(queryParameters);
 
-    session.close();
+    ArrayList<Computer> computerList = null;
+
+    computerList = computerDao.selectWithParameters(queryParameters);
 
     return computerList;
   }
@@ -147,12 +128,9 @@ public class ComputerServiceImpl implements ComputerService {
   @Override
   public long getCount(QueryParameters queryParameters) {
 
-    Session session = sessionFactory.openSession();
-    session.beginTransaction();
+    LOGGER.info("Get count with parameters : " + queryParameters);
 
     long count = computerDao.getCount(queryParameters);
-
-    session.close();
 
     return count;
   }

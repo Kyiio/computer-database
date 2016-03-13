@@ -1,6 +1,7 @@
 package com.excilys.validator;
 
 import com.excilys.exception.ValidationException;
+import com.excilys.model.Computer;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -174,5 +175,16 @@ public class ComputerValidator {
     }
 
     checkDateConsitency(introducedDate, discontinuedDate);
+  }
+
+  public static void checkComputer(Computer computer) {
+
+    if (computer == null) {
+      throw new ValidationException("Computer is null");
+    }
+
+    ComputerValidator.checkId(computer.getId());
+    ComputerValidator.checkName(computer.getName());
+    ComputerValidator.checkDateConsitency(computer.getIntroduced(), computer.getDiscontinued());
   }
 }

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 
 @Service("companyService")
+@Transactional(readOnly = true)
 public class CompanyServiceImpl implements CompanyService {
 
   @Autowired
@@ -23,6 +24,7 @@ public class CompanyServiceImpl implements CompanyService {
 
   @Override
   public Company getById(long id) {
+
     CompanyValidator.checkId(id);
     return companyDao.getById(id);
   }

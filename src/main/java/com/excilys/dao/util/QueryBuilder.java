@@ -49,17 +49,17 @@ public class QueryBuilder {
   }
 
   public QueryBuilder append(String str) {
-    queryContent.append(str);
+    queryContent.append(str).append(" ");
     return this;
   }
 
   public QueryBuilder append(int number) {
-    queryContent.append(number);
+    queryContent.append(number).append(" ");
     return this;
   }
 
   public QueryBuilder append(long number) {
-    queryContent.append(number);
+    queryContent.append(number).append(" ");
     return this;
   }
 

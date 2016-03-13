@@ -14,8 +14,7 @@ public interface QueryParametersValidator {
    * Method that check if the given offset isn't inferior to 1. If not it throws a
    * ValidationException
    *
-   * @param pageSize
-   *          the page size
+   * @param pageSize the page size
    */
   public static void checkPageSize(int pageSize) {
     if (pageSize < 1) {
@@ -26,8 +25,7 @@ public interface QueryParametersValidator {
   /**
    * Method that check if the pageNumber isn't inferior to 1 If not it throws a ValidationException.
    *
-   * @param pageNumber
-   *          the page number
+   * @param pageNumber the page number
    */
   public static void checkPageNumber(int pageNumber) {
     if (pageNumber < 1) {
@@ -38,10 +36,14 @@ public interface QueryParametersValidator {
   /**
    * Method that validate the content of a QueryParameters object.
    *
-   * @param queryParameters
-   *          the query parameters
+   * @param queryParameters the query parameters
    */
   public static void validateQueryParameters(QueryParameters queryParameters) {
+
+    if (queryParameters == null) {
+      throw new ValidationException("Query parameters can't be null");
+    }
+
     checkPageSize(queryParameters.getPageSize());
     checkPageNumber(queryParameters.getPageNumber());
   }

@@ -24,6 +24,7 @@ public class ExceptionController {
   public String defaultErrorHandler(Model model, Exception exception) {
 
     model.addAttribute("errorMessage", exception.getMessage());
+    model.addAttribute("errorCause", exception.getCause());
     model.addAttribute("stackTrace", exception.getStackTrace());
 
     return "err/500";
@@ -50,5 +51,4 @@ public class ExceptionController {
     return "err/403";
   }
 
-  
 }

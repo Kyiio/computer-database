@@ -10,9 +10,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="css/main.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -23,10 +23,10 @@
 			<div>
 				<a
 					href="computers?pageSize=${page.pageSize}&pageNumber=${page.pageNumber}&orderBy=${page.orderBy}&orderType=${page.orderType}&searchName=${page.searchName}&lang=en">
-					<img class="flags" src="fonts/england.png" alt="uk flag">
+					<img class="flags" src="${pageContext.request.contextPath}/fonts/england.png" alt="uk flag">
 				</a> <a
 					href="computers?pageSize=${page.pageSize}&pageNumber=${page.pageNumber}&orderBy=${page.orderBy}&orderType=${page.orderType}&searchName=${page.searchName}&lang=fr">
-					<img class="flags" src="fonts/french.png" alt="fr flag">
+					<img class="flags" src="${pageContext.request.contextPath}/fonts/french.png" alt="fr flag">
 				</a>
 			</div>
 		</div>
@@ -78,7 +78,7 @@
 		</div>
 
 		<form id="deleteForm" action="./computers" method="POST">
-			<input type="hidden" name="selection" value=""> <input
+			<input type="hidden" name="selection" value="" /> <input
 				type="hidden" name="pageSize" value="${page.pageSize}" /><input
 				type="hidden" name="searchName" value="${page.searchName}" />
 		</form>
@@ -160,9 +160,9 @@
 
 		</div>
 	</footer>
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/dashboard.js"></script>
+	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
 
 </body>
 </html>

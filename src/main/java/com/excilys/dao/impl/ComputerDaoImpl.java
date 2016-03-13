@@ -2,219 +2,234 @@ package com.excilys.dao.impl;
 
 import com.excilys.dao.ComputerDao;
 import com.excilys.dao.exception.DaoException;
-import com.excilys.dao.mapper.ComputerDaoMapper;
 import com.excilys.dao.util.QueryBuilder;
-import com.excilys.dao.util.QueryParameterMapper;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 @Repository("computerDao")
 public class ComputerDaoImpl implements ComputerDao {
 
-  private static final String INSERT_QUERY      =
-      "INSERT INTO computer(COMPANY_ID, DISCONTINUED, INTRODUCED, NAME) VALUES (?, ?, ?, ?);";
-  private static final String UPDATE_QUERY      =
-      "UPDATE computer SET COMPANY_ID=?, DISCONTINUED=?, INTRODUCED=?, NAME=? WHERE ID=?";
-  private static final String DELETE_QUERY      = "DELETE FROM computer WHERE ID=?";
+  private static final Logger LOGGER                  =
+      LoggerFactory.getLogger(ComputerDaoImpl.class);
 
-  private static final String LIST_ALL_QUERY    =
-      "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID";
-  private static final String GET_BY_ID_QUERY   =
-      "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID WHERE computer.ID = ?";
-  private static final String GET_BY_NAME_QUERY =
-      "SELECT * FROM computer LEFT JOIN company ON COMPANY_ID = company.ID WHERE computer.NAME = ?";
+  private static final String DELETE_QUERY            =
+      "DELETE Computer AS computer WHERE computer.id = :id";
 
-  private static final String GET_PAGE_QUERY    =
+  private static final String LIST_ALL_QUERY          =
+      "SELECT computer FROM Computer AS computer LEFT JOIN computer.company AS company";
+
+  private static final String GET_BY_ID_QUERY         =
+      "SELECT computer FROM Computer AS computer LEFT JOIN computer.company AS company WHERE computer.id = :id";
+
+  private static final String GET_BY_NAME_QUERY       =
+      "SELECT computer FROM Computer AS computer LEFT JOIN computer.company AS company WHERE computer.name = :name";
+
+  private static final String GET_PAGE_QUERY          =
       "SELECT computer FROM Computer AS computer LEFT JOIN computer.company AS company "
-          + "WHERE computer.name LIKE :searchpattern OR company.name LIKE :searchpattern ";
-  // + "ORDER BY :toto :ordertype";
+          + "WHERE computer.name LIKE :searchName OR company.name LIKE :searchName";
 
-  @Autowired
-  private JdbcTemplate        jdbcTemplate;
+  private static final String GET_COUNT_QUERY         =
+      "SELECT COUNT(*) from Computer AS computer LEFT JOIN computer.company AS company "
+          + "WHERE computer.name LIKE :searchName OR company.name LIKE :searchName";
+
+  private static final String DELETE_WHERE_COMPANY_ID =
+      "DELETE Computer AS computer WHERE computer.company_id = :companyId";
 
   @Autowired
   private SessionFactory      sessionFactory;
-
-  @Autowired
-  private ComputerDaoMapper   computerDaoMapper;
 
   @Override
   public long insertComputer(Company company, LocalDate introduced, LocalDate discontinued,
       String name) {
 
+    LOGGER.info(new StringBuffer("Insert computer with following information : Company : ")
+        .append("computer name ").append(name).append(company).append(" introduced date :")
+        .append(introduced).append(" discontinued date :").append(discontinued).toString());
+
     if (name == null || name.length() <= 0) {
       throw new DaoException("The name of the computer must be set !");
     }
 
-    KeyHolder keyHolder = new GeneratedKeyHolder();
+    Computer computer = new Computer();
+    computer.setName(name);
+    computer.setCompany(company);
+    computer.setIntroduced(introduced);
+    computer.setDiscontinued(discontinued);
 
-    jdbcTemplate.update(new PreparedStatementCreator() {
-      @Override
-      public PreparedStatement createPreparedStatement(Connection connection) {
-        PreparedStatement preparedStatement;
-        try {
-          preparedStatement =
-              connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
+    long id = 0;
+    Session session = null;
 
-          if (company == null) {
-            preparedStatement.setNull(1, java.sql.Types.BIGINT);
-          } else {
-            preparedStatement.setLong(1, company.getId());
-          }
+    try {
+      session = sessionFactory.getCurrentSession();
+      id = (long) session.save(computer);
 
-          if (discontinued == null) {
-            preparedStatement.setNull(2, java.sql.Types.TIMESTAMP);
-          } else {
-            preparedStatement.setTimestamp(2, Timestamp.valueOf(discontinued.atStartOfDay()));
-          }
+    } catch (HibernateException e) {
+      throw new DaoException("Problem while inserting a computer ", e);
+    }
 
-          if (introduced == null) {
-            preparedStatement.setNull(3, java.sql.Types.TIMESTAMP);
-          } else {
-            preparedStatement.setTimestamp(3, Timestamp.valueOf(introduced.atStartOfDay()));
-          }
-
-          preparedStatement.setString(4, name);
-
-        } catch (SQLException e) {
-
-          throw new DaoException("Error while trying to create the insert computer statement", e);
-        }
-
-        return preparedStatement;
-      }
-    }, keyHolder);
-
-    return keyHolder.getKey().longValue();
+    return id;
   }
 
   @Override
   public void updateComputer(Computer computer) {
 
+    LOGGER.info("Update computer " + computer);
+
     if (computer == null) {
       throw new DaoException("The given computer is null !");
     }
 
-    jdbcTemplate.update(new PreparedStatementCreator() {
-      @Override
-      public PreparedStatement createPreparedStatement(Connection connection) {
+    Session session = null;
 
-        PreparedStatement preparedStatement;
-        try {
-          preparedStatement = connection.prepareStatement(UPDATE_QUERY);
+    try {
+      session = sessionFactory.getCurrentSession();
 
-          if (computer.getCompany() == null) {
-            preparedStatement.setNull(1, java.sql.Types.BIGINT);
-          } else {
-            preparedStatement.setLong(1, computer.getCompany().getId());
-          }
+      session.update(computer);
 
-          if (computer.getDiscontinued() == null) {
-            preparedStatement.setNull(2, java.sql.Types.TIMESTAMP);
-          } else {
-            preparedStatement.setTimestamp(2,
-                Timestamp.valueOf(computer.getDiscontinued().atStartOfDay()));
-          }
-
-          if (computer.getIntroduced() == null) {
-            preparedStatement.setNull(3, java.sql.Types.TIMESTAMP);
-          } else {
-            preparedStatement.setTimestamp(3,
-                Timestamp.valueOf(computer.getIntroduced().atStartOfDay()));
-          }
-
-          preparedStatement.setString(4, computer.getName());
-          preparedStatement.setLong(5, computer.getId());
-
-        } catch (SQLException e) {
-
-          throw new DaoException("Error while trying to create the update computer statement", e);
-        }
-
-        return preparedStatement;
-      }
-    });
+    } catch (HibernateException e) {
+      throw new DaoException("Problem while updating a computer ", e);
+    }
   }
 
   @Override
   public void deleteComputer(long id) throws DaoException {
 
-    jdbcTemplate.update(DELETE_QUERY, id);
+    LOGGER.info("Delete by id " + id);
+
+    Session session = null;
+
+    try {
+      session = sessionFactory.getCurrentSession();
+
+      Query query = session.createQuery(DELETE_QUERY);
+      query.setLong("id", id);
+      query.executeUpdate();
+
+    } catch (HibernateException e) {
+      throw new DaoException("Problem while trying to delete computer with id : " + id, e);
+    }
   }
 
   @Override
   public Computer getById(long id) throws DaoException {
 
+    LOGGER.info("Get by id : " + id);
+
     Computer computerResult = null;
+    Session session = null;
 
-    ArrayList<Computer> computerList =
-        (ArrayList<Computer>) jdbcTemplate.query(GET_BY_ID_QUERY, computerDaoMapper, id);
+    try {
+      session = sessionFactory.getCurrentSession();
 
-    if (computerList.size() > 0) {
-      computerResult = computerList.get(0);
+      Query query = session.createQuery(GET_BY_ID_QUERY);
+      query.setLong("id", id);
+
+      computerResult = (Computer) query.uniqueResult();
+
+    } catch (HibernateException e) {
+      throw new DaoException("Problem while retrieving the computer with id " + id, e);
     }
 
     return computerResult;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public ArrayList<Computer> getByName(String name) {
 
-    ArrayList<Computer> computerResult =
-        (ArrayList<Computer>) jdbcTemplate.query(GET_BY_NAME_QUERY, computerDaoMapper, name);
+    LOGGER.info("Get by name : " + name);
+
+    Session session = null;
+    ArrayList<Computer> computerResult = null;
+
+    try {
+      session = sessionFactory.getCurrentSession();
+
+      Query query = session.createQuery(GET_BY_NAME_QUERY);
+      query.setString("name", name);
+      computerResult = (ArrayList<Computer>) query.list();
+
+    } catch (HibernateException e) {
+      throw new DaoException("Problem while retrieving the list of computers with name : " + name,
+          e);
+    }
 
     return computerResult;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
-  public ArrayList<Computer> listComputers() throws DaoException {
+  public ArrayList<Computer> listComputers() {
 
-    ArrayList<Computer> computerResult =
-        (ArrayList<Computer>) jdbcTemplate.query(LIST_ALL_QUERY, computerDaoMapper);
+    LOGGER.info("List computers query");
 
+    Session session = null;
+    ArrayList<Computer> computerResult = null;
+
+    try {
+      LOGGER.error("before get session");
+      session = sessionFactory.openSession();
+      LOGGER.error("after get session :" + session.toString());
+
+      Query query = session.createQuery(LIST_ALL_QUERY);
+
+      LOGGER.error("After create query " + query.toString());
+
+      computerResult = (ArrayList<Computer>) query.list();
+
+      LOGGER.error("After list : " + computerResult);
+
+    } catch (HibernateException e) {
+      LOGGER.error("Throw exception : " + e);
+      throw new DaoException("Problem while retrieving the list of computers in the database!", e);
+    }
+    LOGGER.error("return the results");
     return computerResult;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public ArrayList<Computer> selectWithParameters(QueryParameters queryParameters) {
+
+    LOGGER.info("Select with parameters : " + queryParameters);
 
     if (queryParameters == null) {
       throw new DaoException("The queryParameters object shouldn't be null");
     }
 
-    Session session = sessionFactory.getCurrentSession();
-    session.beginTransaction();
+    Session session = null;
+    ArrayList<Computer> computerResult = null;
 
-    Query query = session.createQuery(GET_PAGE_QUERY + "ORDER BY " + queryParameters.getByContent()
-        + " " + queryParameters.getOrder());
+    try {
+      session = sessionFactory.getCurrentSession();
 
-    query.setParameter("searchpattern", "%" + queryParameters.getSearch() + "%");
-    query.setFirstResult(queryParameters.getOffset());
-    query.setMaxResults(queryParameters.getPageSize());
+      String q = new QueryBuilder().append(GET_PAGE_QUERY)
+          .orderBy(queryParameters.getByContent(), queryParameters.getOrder()).getQuery();
 
-    @SuppressWarnings("unchecked")
-    ArrayList<Computer> computerResult = (ArrayList<Computer>) query.list();
+      Query query = session.createQuery(q);
 
-    session.disconnect();
+      query.setString("searchName", "%" + queryParameters.getSearch() + "%");
+      query.setFirstResult(queryParameters.getOffset());
+      query.setMaxResults(queryParameters.getPageSize());
+
+      computerResult = (ArrayList<Computer>) query.list();
+
+    } catch (HibernateException e) {
+      throw new DaoException("Problem while executing the get page query !", e);
+    }
 
     return computerResult;
   }
@@ -222,11 +237,22 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public long getCount(QueryParameters queryParameters) {
 
-    String search = "%" + queryParameters.getSearch() + "%";
+    LOGGER.info("Count query with parameters : " + queryParameters);
 
-    String query = QueryParameterMapper.createCountQuery();
+    long rowCount = 0;
+    Session session = null;
 
-    long rowCount = jdbcTemplate.queryForObject(query, new Object[] { search, search }, Long.class);
+    try {
+      session = sessionFactory.getCurrentSession();
+
+      Query query = session.createQuery(GET_COUNT_QUERY);
+      query.setString("searchName", "%" + queryParameters.getSearch() + "%");
+
+      rowCount = ((Long) (query.uniqueResult())).longValue();
+
+    } catch (HibernateException e) {
+      throw new DaoException("Problem while executing the get count query!", e);
+    }
 
     return rowCount;
   }
@@ -234,11 +260,20 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public void deleteComputersForCompanyId(long companyId) {
 
-    QueryBuilder queryBuilder = new QueryBuilder();
-    queryBuilder.deleteFrom("computer").where("COMPANY_ID = ?");
-    String query = queryBuilder.getQuery();
+    LOGGER.info("Delete computers with company id: " + companyId);
 
-    jdbcTemplate.update(query, companyId);
+    Session session = null;
 
+    try {
+      session = sessionFactory.getCurrentSession();
+
+      Query query = session.createQuery(DELETE_WHERE_COMPANY_ID);
+      query.setLong("companyId", companyId);
+      query.executeUpdate();
+
+    } catch (HibernateException e) {
+      throw new DaoException("Problem while deleting the computers with company id : " + companyId,
+          e);
+    }
   }
 }

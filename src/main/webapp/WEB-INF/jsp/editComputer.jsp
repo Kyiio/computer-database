@@ -11,14 +11,14 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="../css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="../css/main.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<pagination:link pageNumber="1" pageSize="10" target="../computers"
+			<pagination:link pageNumber="1" pageSize="10" target="${pageContext.request.contextPath}/computers"
 				text="Application - Computer Database" cssClass="navbar-brand"></pagination:link>
 		</div>
 	</header>
@@ -120,7 +120,7 @@
 						<div class="actions pull-right">
 							<input type="submit" value="${EditButton}" class="btn btn-primary"
 								id="submit"> ${Or}
-							<pagination:link pageNumber="1" pageSize="10" target="../computers"
+							<pagination:link pageNumber="1" pageSize="10" target="${pageContext.request.contextPath}/computers"
 								text="${CancelButton}" cssClass="btn btn-default"></pagination:link>
 						</div>
 					</form:form>
@@ -129,7 +129,7 @@
 		</div>
 	</section>
 
-	<script src="../js/jquery.min.js"></script>
-	<script src="../js/computerCheckForm.js"></script>
+	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/computerCheckForm.js"></script>
 </body>
 </html>

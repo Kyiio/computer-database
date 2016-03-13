@@ -1,11 +1,16 @@
 package com.excilys.dao.impl;
 
 import com.excilys.dao.CompanyDao;
-import com.excilys.dao.mapper.CompanyDaoMapper;
+import com.excilys.dao.exception.DaoException;
 import com.excilys.model.Company;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -13,55 +18,107 @@ import java.util.ArrayList;
 @Repository("companyDao")
 public class CompanyDaoImpl implements CompanyDao {
 
-  private static final String LIST_ALL_QUERY    = "SELECT * FROM company";
-  private static final String GET_BY_ID_QUERY   = "SELECT * FROM company WHERE ID = ?";
-  private static final String GET_BY_NAME_QUERY = "SELECT * FROM company WHERE NAME = ?";
-  private static final String DELETE_QUERY      = "DELETE FROM company WHERE ID=?";
+  private static final Logger LOGGER            = LoggerFactory.getLogger(CompanyDaoImpl.class);
+
+  private static final String LIST_ALL_QUERY    = "SELECT company FROM Company AS company";
+  private static final String GET_BY_ID_QUERY   =
+      "SELECT company FROM Company AS company WHERE company.id = :id";
+
+  private static final String GET_BY_NAME_QUERY =
+      "SELECT company FROM Company AS company WHERE company.name = :name";
+
+  private static final String DELETE_QUERY      =
+      "DELETE Company AS company WHERE company.id = :id";
 
   @Autowired
-  private JdbcTemplate        jdbcTemplate;
-  @Autowired
-  private CompanyDaoMapper    companyDaoMapper;
+  private SessionFactory      sessionFactory;
 
   @Override
   public Company getById(long id) {
 
+    LOGGER.info("Get by id : " + id);
+
     Company companyResult = null;
+    Session session = null;
 
-    ArrayList<Company> companyList =
-        (ArrayList<Company>) jdbcTemplate.query(GET_BY_ID_QUERY, companyDaoMapper, id);
+    try {
+      session = sessionFactory.getCurrentSession();
 
-    if (companyList.size() > 0) {
-      companyResult = companyList.get(0);
+      Query query = session.createQuery(GET_BY_ID_QUERY);
+      query.setLong("id", id);
+
+      companyResult = (Company) query.uniqueResult();
+
+    } catch (HibernateException e) {
+      throw new DaoException("Problem while retrieving the company with id " + id, e);
     }
 
     return companyResult;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public ArrayList<Company> getByName(String name) {
 
-    ArrayList<Company> companyResults = null;
+    LOGGER.info("Get by name : " + name);
 
-    companyResults =
-        (ArrayList<Company>) jdbcTemplate.query(GET_BY_NAME_QUERY, companyDaoMapper, name);
+    ArrayList<Company> companyResults = null;
+    Session session = null;
+
+    try {
+      session = sessionFactory.getCurrentSession();
+
+      Query query = session.createQuery(GET_BY_NAME_QUERY);
+      query.setString("name", name);
+
+      companyResults = (ArrayList<Company>) query.list();
+
+    } catch (HibernateException e) {
+      throw new DaoException("Problem while retrieving the companies with name " + name, e);
+    }
 
     return companyResults;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public ArrayList<Company> listCompanies() {
 
-    ArrayList<Company> companyResults = null;
+    LOGGER.info("List all companies");
 
-    companyResults = (ArrayList<Company>) jdbcTemplate.query(LIST_ALL_QUERY, companyDaoMapper);
+    ArrayList<Company> companyResults = null;
+    Session session = null;
+
+    try {
+      session = sessionFactory.getCurrentSession();
+
+      Query query = session.createQuery(LIST_ALL_QUERY);
+
+      companyResults = (ArrayList<Company>) query.list();
+
+    } catch (HibernateException e) {
+      throw new DaoException("Problem while retrieving the list of all the companies", e);
+    }
 
     return companyResults;
   }
 
   @Override
   public void deleteCompany(long id) {
-    jdbcTemplate.update(DELETE_QUERY);
-  }
 
+    LOGGER.info("Delete company");
+
+    Session session = null;
+
+    try {
+      session = sessionFactory.getCurrentSession();
+
+      Query query = session.createQuery(DELETE_QUERY);
+      query.setLong("id", id);
+      query.executeUpdate();
+
+    } catch (HibernateException e) {
+      throw new DaoException("Problem while trying to delete the company with id : " + id, e);
+    }
+  }
 }
