@@ -19,13 +19,13 @@
 			<property name="paramName" value="lang" />
 		</bean>
 	</mvc:interceptors>
-	
+
 	<!-- View resolver -->
 
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
-				<value>/WEB-INF/jsp/</value>
+			<value>/WEB-INF/jsp/</value>
 		</property>
 		<property name="suffix">
 			<value>.jsp</value>

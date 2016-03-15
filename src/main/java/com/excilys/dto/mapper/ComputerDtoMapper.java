@@ -6,9 +6,9 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.CompanyDtoService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -30,18 +30,10 @@ import java.util.ArrayList;
 @Component
 public class ComputerDtoMapper {
 
-
-  private static CompanyDtoService companyDtoService;
-  private static MessageSource     messageSource;
-
-  static {
-    try (ClassPathXmlApplicationContext applicationContext =
-        new ClassPathXmlApplicationContext("applicationContext.xml")) {
-
-      companyDtoService = applicationContext.getBean("companyDtoService", CompanyDtoService.class);
-      messageSource = applicationContext.getBean("messageSource", MessageSource.class);
-    }
-  }
+  @Autowired
+  private CompanyDtoService companyDtoService;
+  @Autowired
+  private MessageSource     messageSource;
 
   /**
    * Method that maps an ArrayList of Computer into an ArrayList of ComputerDTO.
@@ -49,7 +41,7 @@ public class ComputerDtoMapper {
    * @param computerList The Computer ArrayList that will be mapped
    * @return The ComputerDTO ArrayList
    */
-  public static ArrayList<ComputerDto> getComputerDtoList(ArrayList<Computer> computerList) {
+  public ArrayList<ComputerDto> getComputerDtoList(ArrayList<Computer> computerList) {
 
     ArrayList<ComputerDto> computerDtoList = new ArrayList<>();
 
@@ -66,7 +58,7 @@ public class ComputerDtoMapper {
    * @param computer The computer that will be mapped.
    * @return The mapped ComputerDTO.
    */
-  public static ComputerDto getComputerDto(Computer computer) {
+  public ComputerDto getComputerDto(Computer computer) {
 
     String introducedString = "";
     String discontinuedString = "";
@@ -77,8 +69,7 @@ public class ComputerDtoMapper {
 
     LocalDate introducedDate = computer.getIntroduced();
     LocalDate discontinuedDate = computer.getDiscontinued();
-    
-    
+
     String format = messageSource.getMessage("date.format", null, LocaleContextHolder.getLocale());
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
 
@@ -107,7 +98,7 @@ public class ComputerDtoMapper {
    * @param computerDto The ComputerDTO that will be mapped.
    * @return The mapped Computer.
    */
-  public static Computer getComputer(ComputerDto computerDto) {
+  public Computer getComputer(ComputerDto computerDto) {
     return getComputer(computerDto.getComputerId(), computerDto.getComputerName(),
         computerDto.getIntroducedDate(), computerDto.getDiscontinuedDate(),
         computerDto.getCompanyId());
@@ -123,7 +114,7 @@ public class ComputerDtoMapper {
    * @param companyId The company id
    * @return The mapped Computer.
    */
-  public static Computer getComputer(long computerId, String computerName, String introduced,
+  public Computer getComputer(long computerId, String computerName, String introduced,
       String discontinued, long companyId) {
 
     String format = messageSource.getMessage("date.format", null, LocaleContextHolder.getLocale());

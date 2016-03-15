@@ -3,9 +3,10 @@ package com.excilys.validator;
 import com.excilys.exception.ValidationException;
 import com.excilys.model.Computer;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -18,17 +19,11 @@ import java.util.Locale;
  * 
  * @author B. Herbaut
  */
+@Component("computerValidator")
 public class ComputerValidator {
 
-  public static MessageSource messageSource;
-
-  static {
-    try (ClassPathXmlApplicationContext applicationContext =
-        new ClassPathXmlApplicationContext("applicationContext.xml")) {
-
-      messageSource = applicationContext.getBean("messageSource", MessageSource.class);
-    }
-  }
+  @Autowired
+  public MessageSource messageSource;
 
   /**
    * Method that check that the given id is positive. It throws a ValidationException if it is not
@@ -36,7 +31,7 @@ public class ComputerValidator {
    * 
    * @param id The id that will be checked.
    */
-  public static void checkId(long id) {
+  public void checkId(long id) {
     if (id <= 0) {
       throw new ValidationException("The computer id must be positive ! Given id is " + id);
     }
@@ -48,7 +43,7 @@ public class ComputerValidator {
    * 
    * @param idString The string that will be checked.
    */
-  public static void checkId(String idString) {
+  public void checkId(String idString) {
     if (idString == null || idString.length() == 0) {
       throw new ValidationException("The computer id must be an int ! Given id is " + idString);
     }
@@ -69,7 +64,7 @@ public class ComputerValidator {
    * 
    * @param name The computer name that will be checked.
    */
-  public static void checkName(String name) {
+  public void checkName(String name) {
     if (name == null || name.length() <= 0) {
       throw new ValidationException("The computer name must be set !");
     }
@@ -81,7 +76,7 @@ public class ComputerValidator {
    *
    * @param date The will be checked
    */
-  public static void checkDate(String date) {
+  public void checkDate(String date) {
 
     LocalDate currentDate = checkDateFormat(date);
     checkDateIsntToOld(currentDate);
@@ -93,7 +88,7 @@ public class ComputerValidator {
    * @param date the date
    * @return the local date
    */
-  public static LocalDate checkDateFormat(String date) {
+  public LocalDate checkDateFormat(String date) {
 
     Locale locale = LocaleContextHolder.getLocale();
     String format = messageSource.getMessage("date.format", null, locale);
@@ -125,7 +120,7 @@ public class ComputerValidator {
    *
    * @param date the date
    */
-  public static void checkDateIsntToOld(LocalDate date) {
+  public void checkDateIsntToOld(LocalDate date) {
 
     if (date != null) {
 
@@ -147,7 +142,7 @@ public class ComputerValidator {
    * @param introducedDate Introduced date of the computer
    * @param discontinuedDate Discontinued date of the computer
    */
-  public static void checkDateConsitency(LocalDate introducedDate, LocalDate discontinuedDate) {
+  public void checkDateConsitency(LocalDate introducedDate, LocalDate discontinuedDate) {
     if ((discontinuedDate != null && introducedDate == null) || (introducedDate != null
         && discontinuedDate != null && introducedDate.isAfter(discontinuedDate))) {
       throw new ValidationException(
@@ -162,7 +157,7 @@ public class ComputerValidator {
    * @param introducedStr the introduced str
    * @param discontinuedStr the discontinued str
    */
-  public static void checkDateConsitency(String introducedStr, String discontinuedStr) {
+  public void checkDateConsitency(String introducedStr, String discontinuedStr) {
 
     LocalDate introducedDate;
     LocalDate discontinuedDate;
@@ -177,14 +172,19 @@ public class ComputerValidator {
     checkDateConsitency(introducedDate, discontinuedDate);
   }
 
-  public static void checkComputer(Computer computer) {
+  /**
+   * Check computer.
+   *
+   * @param computer the computer
+   */
+  public void checkComputer(Computer computer) {
 
     if (computer == null) {
       throw new ValidationException("Computer is null");
     }
 
-    ComputerValidator.checkId(computer.getId());
-    ComputerValidator.checkName(computer.getName());
-    ComputerValidator.checkDateConsitency(computer.getIntroduced(), computer.getDiscontinued());
+    checkId(computer.getId());
+    checkName(computer.getName());
+    checkDateConsitency(computer.getIntroduced(), computer.getDiscontinued());
   }
 }

@@ -27,7 +27,7 @@ import java.util.Scanner;
 @Component
 public abstract class AbstractCommand {
 
-  protected Scanner scanner;
+  protected Scanner         scanner;
 
   protected ComputerService computerService;
   protected CompanyService  companyService;
@@ -40,12 +40,12 @@ public abstract class AbstractCommand {
   public AbstractCommand(Scanner scanner) {
     this.scanner = scanner;
 
-    try (ClassPathXmlApplicationContext applicationContext =
-        new ClassPathXmlApplicationContext("applicationContext.xml")) {
+    ClassPathXmlApplicationContext applicationContext =
+        new ClassPathXmlApplicationContext("applicationContext.xml");
 
-      computerService = applicationContext.getBean("computerService", ComputerService.class);
-      companyService = applicationContext.getBean("companyService", CompanyService.class);
-    }
+    computerService = applicationContext.getBean("computerService", ComputerService.class);
+    companyService = applicationContext.getBean("companyService", CompanyService.class);
+
   }
 
   /**
@@ -56,8 +56,7 @@ public abstract class AbstractCommand {
   /**
    * Method that asks to the user if he wants to search a computer by its name or its id.
    *
-   * @param action
-   *          The action that will be performed on the computer (ex : delete, update)
+   * @param action The action that will be performed on the computer (ex : delete, update)
    * @return the computer
    */
   protected Computer askForMethodToFindComputer(String action) {
@@ -86,8 +85,7 @@ public abstract class AbstractCommand {
    * Method that asks to the user to enter the name of the computer he wants to find. It won't stop
    * asking for a name until the user gives use a valid one.
    * 
-   * @param action
-   *          The action that will be performed on the computer (ex : delete, update)
+   * @param action The action that will be performed on the computer (ex : delete, update)
    * @return The first matching computer (Because multiple computers can have the same name).
    */
   protected Computer getExistingComputerByAskingName(String action) {
@@ -118,8 +116,7 @@ public abstract class AbstractCommand {
    * Method that asks to the use to enter the id of the computer he wants to find. It won't stop
    * asking for an id until the user gives us a valid one.
    * 
-   * @param action
-   *          The action that will be performed on the computer (ex : delete, update)
+   * @param action The action that will be performed on the computer (ex : delete, update)
    * @return The matching computer.
    */
   protected Computer getExistingComputerByAskingId(String action) {
@@ -211,8 +208,7 @@ public abstract class AbstractCommand {
    * Method that asks to the user to enter a date that respect the following format yyyy-MM-dd or an
    * empty one.
    * 
-   * @param dateType
-   *          The format that the date has to match
+   * @param dateType The format that the date has to match
    * @return The LocalDateTime object created from the user input.
    */
   protected LocalDate askForDate(String dateType) {

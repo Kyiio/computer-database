@@ -41,6 +41,13 @@
 		<hibernate-version>5.1.0.Final</hibernate-version>
 		<jboss-logging>3.3.0.Final</jboss-logging>
 
+		<!--  -->
+
+		<xml-apis>1.4.01</xml-apis>
+		<jta>1.1</jta>
+		<javassist>3.20.0-GA</javassist>
+		<classmate>1.3.0</classmate>
+
 		<!-- Test suite that will be executed -->
 		<junit-test-suite>com/excilys/TestSuite.java</junit-test-suite>
 		<selenium-test-suite>com/excilys/SeleniumIntegrationTestSuite.java</selenium-test-suite>
@@ -95,12 +102,6 @@
 			<version>${mysql-connector-java-version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${logback-classic-version}</version>
-			<scope>runtime</scope>
-		</dependency>
 
 		<!-- Provided dependencies -->
 
@@ -118,6 +119,14 @@
 			<scope>provided</scope>
 		</dependency>
 		<!-- Compile dependencies -->
+
+		<!-- Needed in compile for logger filters -->
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback-classic-version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -213,9 +222,21 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.fasterxml</groupId>
+			<artifactId>classmate</artifactId>
+			<version>${classmate}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>javax.transaction</groupId>
 			<artifactId>jta</artifactId>
-			<version>1.1</version>
+			<version>${jta}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>${javassist}</version>
 		</dependency>
 
 		<dependency>
@@ -224,6 +245,11 @@
 			<version>${jboss-logging}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
+			<version>${xml-apis}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>computerdatabase</finalName>

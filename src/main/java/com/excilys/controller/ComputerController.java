@@ -9,6 +9,7 @@ import com.excilys.model.QueryParameters;
 import com.excilys.service.CompanyDtoService;
 import com.excilys.service.ComputerDtoService;
 
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ public class ComputerController {
 
   private ArrayList<CompanyDto> companyDtoList;
 
+  @Autowired
+  private SessionFactory        sessionFactory;
+
   /**
    * Show dashboard.
    *
@@ -48,6 +52,7 @@ public class ComputerController {
   public String showDashboard(PageDto pageDto, ModelMap modelMap) {
 
     LOGGER.info("Show dashboard");
+    LOGGER.error("Computer get: Is the factory closed ? : " + sessionFactory.isClosed());
 
     pageDto = getPageDtoFromPreviousOne(pageDto);
     modelMap.addAttribute("page", pageDto);
@@ -67,6 +72,7 @@ public class ComputerController {
   public String deleteComputer(PageDto pageDto, Long[] selection, ModelMap modelMap) {
 
     LOGGER.info("User tries to delete computers");
+    LOGGER.error("Delete post : Is the factory closed ? : " + sessionFactory.isClosed());
 
     for (int i = 0; i < selection.length; i++) {
       computerDtoService.deleteComputer(selection[i]);
@@ -92,6 +98,7 @@ public class ComputerController {
       Model model) {
 
     LOGGER.info("Show edit form");
+    LOGGER.error("Edit get : Is the factory closed ? : " + sessionFactory.isClosed());
 
     ComputerDto computerDto = computerDtoService.getById(computerId);
     companyDtoList = companyDtoService.listCompanies();
@@ -114,6 +121,7 @@ public class ComputerController {
       Model model) {
 
     LOGGER.info("Performing update");
+    LOGGER.error("Edit post : Is the factory closed ? : " + sessionFactory.isClosed());
 
     if (bindingResult.hasErrors()) {
       LOGGER.info("Error detected, return to the form");
@@ -140,7 +148,7 @@ public class ComputerController {
   public String showAddForm(Model model, String lang) {
 
     LOGGER.info("Show add form");
-
+    LOGGER.error("Add get : Is the factory closed ? : " + sessionFactory.isClosed());
     companyDtoList = companyDtoService.listCompanies();
 
     model.addAttribute("computerDto", new ComputerDto());
@@ -160,6 +168,7 @@ public class ComputerController {
       Model model) {
 
     LOGGER.info("Performing insertion");
+    LOGGER.error("Add post : Is the factory closed ? : " + sessionFactory.isClosed());
 
     if (bindingResult.hasErrors()) {
       model.addAttribute("org.springframework.validation.BindingResult.computerDto", bindingResult);
