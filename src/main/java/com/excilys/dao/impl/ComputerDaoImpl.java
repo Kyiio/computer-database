@@ -64,7 +64,7 @@ public class ComputerDaoImpl implements ComputerDao {
     LOGGER.info(new StringBuffer("Insert computer with following information : Company : ")
         .append("computer name ").append(name).append(company).append(" introduced date :")
         .append(introduced).append(" discontinued date :").append(discontinued).toString());
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
+
     if (name == null || name.length() <= 0) {
       throw new DaoException("The name of the computer must be set !");
     }
@@ -93,7 +93,7 @@ public class ComputerDaoImpl implements ComputerDao {
   public void updateComputer(Computer computer) {
 
     LOGGER.info("Update computer " + computer);
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
+
     if (computer == null) {
       throw new DaoException("The given computer is null !");
     }
@@ -114,7 +114,7 @@ public class ComputerDaoImpl implements ComputerDao {
   public void deleteComputer(long id) throws DaoException {
 
     LOGGER.info("Delete by id " + id);
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
+
     Session session = null;
 
     try {
@@ -133,7 +133,7 @@ public class ComputerDaoImpl implements ComputerDao {
   public Computer getById(long id) throws DaoException {
 
     LOGGER.info("Get by id : " + id);
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
+
     Computer computerResult = null;
     Session session = null;
 
@@ -157,7 +157,7 @@ public class ComputerDaoImpl implements ComputerDao {
   public ArrayList<Computer> getByName(String name) {
 
     LOGGER.info("Get by name : " + name);
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
+
     Session session = null;
     ArrayList<Computer> computerResult = null;
 
@@ -181,33 +181,21 @@ public class ComputerDaoImpl implements ComputerDao {
   public ArrayList<Computer> listComputers() {
 
     LOGGER.info("List computers query");
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
 
     Session session = null;
     ArrayList<Computer> computerResult = null;
 
     try {
 
-      LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
-      LOGGER.error(sessionFactory.toString());
-
-      LOGGER.error("before get session");
       session = sessionFactory.openSession();
-      LOGGER.error("after get session :" + session.toString());
 
       Query query = session.createQuery(LIST_ALL_QUERY);
 
-      LOGGER.error("After create query " + query.toString());
-
       computerResult = (ArrayList<Computer>) query.list();
 
-      LOGGER.error("After list : " + computerResult);
-
     } catch (HibernateException e) {
-      LOGGER.error("Throw exception : " + e);
       throw new DaoException("Problem while retrieving the list of computers in the database!", e);
     }
-    LOGGER.error("return the results");
     return computerResult;
   }
 
@@ -216,7 +204,7 @@ public class ComputerDaoImpl implements ComputerDao {
   public ArrayList<Computer> selectWithParameters(QueryParameters queryParameters) {
 
     LOGGER.info("Select with parameters : " + queryParameters);
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
+
     if (queryParameters == null) {
       throw new DaoException("The queryParameters object shouldn't be null");
     }
@@ -249,7 +237,7 @@ public class ComputerDaoImpl implements ComputerDao {
   public long getCount(QueryParameters queryParameters) {
 
     LOGGER.info("Count query with parameters : " + queryParameters);
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
+
     long rowCount = 0;
     Session session = null;
 
@@ -272,7 +260,7 @@ public class ComputerDaoImpl implements ComputerDao {
   public void deleteComputersForCompanyId(long companyId) {
 
     LOGGER.info("Delete computers with company id: " + companyId);
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
+
     Session session = null;
 
     try {

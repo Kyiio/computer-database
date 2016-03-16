@@ -71,11 +71,13 @@ public class Computer implements Serializable {
    * @param computer the computer
    */
   public Computer(Computer computer) {
-    this.id = computer.id;
-    this.company = new Company(computer.company);
-    this.name = computer.name;
-    this.discontinued = computer.discontinued;
-    this.introduced = computer.introduced;
+    if (computer != null) {
+      this.id = computer.id;
+      this.company = new Company(computer.company);
+      this.name = computer.name;
+      this.discontinued = computer.discontinued;
+      this.introduced = computer.introduced;
+    }
   }
 
   public long getId() {

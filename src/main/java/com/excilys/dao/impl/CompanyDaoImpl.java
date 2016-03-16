@@ -37,7 +37,6 @@ public class CompanyDaoImpl implements CompanyDao {
   public Company getById(long id) {
 
     LOGGER.info("Get by id : " + id);
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
 
     Company companyResult = null;
     Session session = null;
@@ -47,7 +46,6 @@ public class CompanyDaoImpl implements CompanyDao {
 
       Query query = session.createQuery(GET_BY_ID_QUERY);
       query.setLong("id", id);
-      //session.byId(id);
 
       companyResult = (Company) query.uniqueResult();
 
@@ -63,7 +61,7 @@ public class CompanyDaoImpl implements CompanyDao {
   public ArrayList<Company> getByName(String name) {
 
     LOGGER.info("Get by name : " + name);
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
+
     ArrayList<Company> companyResults = null;
     Session session = null;
 
@@ -87,7 +85,7 @@ public class CompanyDaoImpl implements CompanyDao {
   public ArrayList<Company> listCompanies() {
 
     LOGGER.info("List all companies");
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
+
     ArrayList<Company> companyResults = null;
     Session session = null;
 
@@ -109,7 +107,7 @@ public class CompanyDaoImpl implements CompanyDao {
   public void deleteCompany(long id) {
 
     LOGGER.info("Delete company");
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
+
     Session session = null;
 
     try {

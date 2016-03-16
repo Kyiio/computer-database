@@ -6,7 +6,6 @@ import com.excilys.model.Company;
 import com.excilys.service.CompanyService;
 import com.excilys.validator.CompanyValidator;
 
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,21 +22,20 @@ public class CompanyServiceImpl implements CompanyService {
   private static final Logger LOGGER = LoggerFactory.getLogger(CompanyServiceImpl.class);
 
   @Autowired
-  private CompanyDao  companyDao;
+  private CompanyDao          companyDao;
 
   @Autowired
-  private ComputerDao computerDao;
+  private ComputerDao         computerDao;
 
   @Autowired
-  private SessionFactory sessionFactory;
+  private CompanyValidator    companyValidator;
 
   @Override
   public Company getById(long id) {
 
     LOGGER.info("Get company by id: " + id);
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
 
-    CompanyValidator.checkId(id);
+    companyValidator.checkId(id);
     return companyDao.getById(id);
   }
 
@@ -45,16 +43,15 @@ public class CompanyServiceImpl implements CompanyService {
   public ArrayList<Company> getByName(String name) {
 
     LOGGER.info("Get company by name: " + name);
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
 
-    CompanyValidator.checkName(name);
+    companyValidator.checkName(name);
     return companyDao.getByName(name);
   }
 
   @Override
   public ArrayList<Company> listCompanies() {
     LOGGER.info("List companies: ");
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
+
     return companyDao.listCompanies();
   }
 
@@ -63,8 +60,8 @@ public class CompanyServiceImpl implements CompanyService {
   public void deleteCompany(long id) {
 
     LOGGER.info("Delete company by id: " + id);
-    LOGGER.error("Is the factory closed ? : " + sessionFactory.isClosed());
-    CompanyValidator.checkId(id);
+
+    companyValidator.checkId(id);
 
     // We first delete all the computers associated to the company that
     // we will delete
@@ -72,7 +69,6 @@ public class CompanyServiceImpl implements CompanyService {
 
     // And finally we delete the company itself
     companyDao.deleteCompany(id);
-
   }
 
 }

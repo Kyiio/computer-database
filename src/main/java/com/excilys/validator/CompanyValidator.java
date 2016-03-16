@@ -2,11 +2,14 @@ package com.excilys.validator;
 
 import com.excilys.exception.ValidationException;
 
+import org.springframework.stereotype.Component;
+
 /**
  * Interface that provides methods to check if the data in a company are consistent.
  * 
  * @author B. Herbaut
  */
+@Component
 public class CompanyValidator {
 
   /**
@@ -16,7 +19,7 @@ public class CompanyValidator {
    * @param id
    *          The company id that will be checked.
    */
-  public static void checkId(long id) {
+  public void checkId(long id) {
     if (id <= 0) {
       throw new ValidationException("The company id must be positive ! Given id is " + id);
     }
@@ -29,7 +32,7 @@ public class CompanyValidator {
    * @param idString
    *          The String that contains the company id and that will be checked.
    */
-  public static void checkId(String idString) {
+  public void checkId(String idString) {
     if (idString == null || idString.length() == 0) {
       throw new ValidationException("The company id must be set ! Given id is " + idString);
     }
@@ -51,7 +54,7 @@ public class CompanyValidator {
    * @param name
    *          The company name that will be checked.
    */
-  public static void checkName(String name) {
+  public void checkName(String name) {
     if (name == null || name.length() <= 0) {
       throw new ValidationException("The company name must be set !");
     }

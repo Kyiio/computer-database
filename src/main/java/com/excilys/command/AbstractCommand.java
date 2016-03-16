@@ -78,7 +78,7 @@ public abstract class AbstractCommand {
 
     }
 
-    return null;
+    return foundComputer;
   }
 
   /**
@@ -132,8 +132,10 @@ public abstract class AbstractCommand {
 
       try {
         idOfExistingComputer = scanner.nextInt();
+
       } catch (InputMismatchException e) {
         System.out.println("Please !");
+        scanner.nextLine();
         continue;
       }
 
