@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-  <company ID="1" NAME="Excilys" />
-  <computer ID="1" NAME="MacBook Pro 15.4 inch" COMPANY_ID="1"/>
-  <computer ID="2" NAME="Alice" COMPANY_ID="1"/>
-  <computer ID="3" NAME="Charlie" COMPANY_ID="1"/>
-</dataset>
