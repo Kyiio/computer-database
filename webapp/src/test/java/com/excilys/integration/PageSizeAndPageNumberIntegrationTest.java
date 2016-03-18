@@ -25,10 +25,10 @@ import java.util.concurrent.TimeUnit;
 public class PageSizeAndPageNumberIntegrationTest {
 
   /** The driver. */
-  private WebDriver driver;
+  private WebDriver    driver;
 
   /** The base url. */
-  private String baseUrl;
+  private String       baseUrl;
 
   /** The verification errors. */
   private StringBuffer verificationErrors = new StringBuffer();
@@ -44,6 +44,13 @@ public class PageSizeAndPageNumberIntegrationTest {
     baseUrl = "http://127.0.0.1:6060";
     driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
     driver.manage().window().maximize();
+
+    driver.get(baseUrl + "/computerdatabase/login");
+    driver.findElement(By.id("username")).clear();
+    driver.findElement(By.id("username")).sendKeys("admin");
+    driver.findElement(By.id("passwd")).clear();
+    driver.findElement(By.id("passwd")).sendKeys("admin");
+    driver.findElement(By.name("submit")).click();
   }
 
   /**

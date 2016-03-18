@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.excilys</groupId>
 		<artifactId>computerdatabase-parent</artifactId>
-		<version>0.6.2-SNAPSHOT</version>
+		<version>${project-version}</version>
 	</parent>
 
 	<dependencies>
@@ -16,5 +16,12 @@
 			<groupId>com.excilys</groupId>
 			<artifactId>computerdatabase-persistence</artifactId>
 		</dependency>
+		
+		<!-- Other dependencies -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+		</dependency>
+		
 	</dependencies>
 </project>

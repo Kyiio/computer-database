@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.excilys</groupId>
 		<artifactId>computerdatabase-parent</artifactId>
-		<version>0.6.2-SNAPSHOT</version>
+		<version>${project-version}</version>
 	</parent>
 
 	<dependencies>
@@ -15,10 +15,6 @@
 		<dependency>
 			<groupId>com.excilys</groupId>
 			<artifactId>computerdatabase-binding</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.excilys</groupId>
-			<artifactId>computerdatabase-service</artifactId>
 		</dependency>
 		
 		<!-- Test dependencies -->
@@ -45,6 +41,19 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
 		</dependency>
 		
 		<dependency>
@@ -74,35 +83,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-			</plugin>
-			<!-- Tomcat plugin to run the integration test on it -->
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<port>6060</port>
-					<warDirectory>/target/computerdatabase.war</warDirectory>
-				</configuration>
-				<executions>
-					<execution>
-						<id>start-tomcat</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<fork>true</fork>
-						</configuration>
-					</execution>
-					<execution>
-						<id>stop-tomcat</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>shutdown</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

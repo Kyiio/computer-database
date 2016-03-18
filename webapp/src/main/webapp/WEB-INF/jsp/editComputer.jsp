@@ -16,12 +16,9 @@
 <link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<pagination:link pageNumber="1" pageSize="10" target="${pageContext.request.contextPath}/computers"
-				text="Application - Computer Database" cssClass="navbar-brand"></pagination:link>
-		</div>
-	</header>
+	<c:set var="attr" value="computerId=${computerDto.computerId}"></c:set>
+	<c:set var="pageSize" value="10"></c:set>
+	<%@include file="header.jsp" %>
 
 	<spring:message code="title.editcomputer" var="Title" />
 	<spring:message code="or" var="Or" />
@@ -44,7 +41,7 @@
 	<!-- We put all the needed strings in an array so that the js can access them -->
 
 	<script type="text/javascript">
-		var local = ${pageContext.response.locale};
+		var local = "${pageContext.response.locale}";
 		var strings = new Array();
 		strings['error.name'] = "<spring:message code='error.name' javaScriptEscape='true' />";
 		strings['error.date.format'] = "<spring:message code='error.date.format' javaScriptEscape='true' />";

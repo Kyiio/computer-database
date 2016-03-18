@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.excilys</groupId>
 		<artifactId>computerdatabase-parent</artifactId>
-		<version>0.6.2-SNAPSHOT</version>
+		<version>${project-version}</version>
 	</parent>
 
 	<dependencies>

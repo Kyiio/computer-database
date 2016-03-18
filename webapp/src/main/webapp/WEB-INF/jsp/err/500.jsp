@@ -12,11 +12,9 @@
 	<link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<a class="navbar-brand" href="${pageContext.request.contextPath}/computers"> Application - Computer Database </a>
-		</div>
-	</header>
+	<c:set var="attr" value=""></c:set>
+	<c:set var="pageSize" value="10"></c:set>
+	<%@include file="../header.jsp" %>	</header>
 
 	<section id="main">
 		<div class="container">	

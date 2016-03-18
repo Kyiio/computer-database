@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page session="true"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="pagination" tagdir="/WEB-INF/tags"%>
@@ -15,22 +17,9 @@
 <link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<pagination:link pageNumber="1" pageSize="${page.pageSize}"
-				target="computers" text="Application - Computer Database"
-				cssClass="navbar-brand"></pagination:link>
-			<div>
-				<a
-					href="computers?pageSize=${page.pageSize}&pageNumber=${page.pageNumber}&orderBy=${page.orderBy}&orderType=${page.orderType}&searchName=${page.searchName}&lang=en">
-					<img class="flags" src="${pageContext.request.contextPath}/fonts/england.png" alt="uk flag">
-				</a> <a
-					href="computers?pageSize=${page.pageSize}&pageNumber=${page.pageNumber}&orderBy=${page.orderBy}&orderType=${page.orderType}&searchName=${page.searchName}&lang=fr">
-					<img class="flags" src="${pageContext.request.contextPath}/fonts/french.png" alt="fr flag">
-				</a>
-			</div>
-		</div>
-	</header>
+	<c:set var="attr" value="pageSize=${page.pageSize}&pageNumber=${page.pageNumber}&orderBy=${page.orderBy}&orderType=${page.orderType}&searchName=${page.searchName}"></c:set>
+	<c:set var="pageSize" value="${page.pageSize}"></c:set>
+	<%@include file="header.jsp" %>
 
 	<spring:message code="button.filterbyname" var="SearchButtonName" />
 	<spring:message code="button.filterbyname.placeholder"
@@ -69,11 +58,13 @@
 							class="btn btn-primary" />
 					</form>
 				</div>
-				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="computers/add">${AddComputer}</a>
-					<a class="btn btn-default" id="editComputersButton" href="#"
-						onclick="$.fn.toggleEditMode();">${Edit}</a>
-				</div>
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+					<div class="pull-right">
+						<a class="btn btn-success" id="addComputer" href="computers/add">${AddComputer}</a>
+						<a class="btn btn-default" id="editComputersButton" href="#"
+							onclick="$.fn.toggleEditMode();">${Edit}</a>
+					</div>
+				</sec:authorize>
 			</div>
 		</div>
 
@@ -81,6 +72,7 @@
 			<input type="hidden" name="selection" value="" /> <input
 				type="hidden" name="pageSize" value="${page.pageSize}" /><input
 				type="hidden" name="searchName" value="${page.searchName}" />
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> 
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
@@ -127,9 +119,15 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.computerId}"></td>
-							<td><a
-								href="computers/edit?computerId=${computer.computerId}"
-								onclick=""><c:out value="${computer.computerName}" /></a></td>
+							<td>
+								<sec:authorize access="hasRole('ROLE_ADMIN')">
+									<a href="computers/edit?computerId=${computer.computerId}"
+										onclick=""><c:out value="${computer.computerName}" /></a>
+								</sec:authorize>
+								<sec:authorize access="hasRole('ROLE_USER')">
+									<c:out value="${computer.computerName}" />
+								</sec:authorize>
+							</td>
 							<td>${computer.introducedDate}</td>
 							<td>${computer.discontinuedDate}</td>
 							<td>${computer.companyName}</td>

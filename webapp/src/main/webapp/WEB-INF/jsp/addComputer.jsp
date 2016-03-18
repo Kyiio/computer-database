@@ -16,12 +16,9 @@
 <link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<pagination:link pageNumber="1" pageSize="10" target="${pageContext.request.contextPath}/computers"
-				text="Application - Computer Database" cssClass="navbar-brand"></pagination:link>
-		</div>
-	</header>
+	<c:set var="attr" value=""></c:set>
+	<c:set var="pageSize" value="10"></c:set>
+	<%@include file="header.jsp" %>
 
 	<spring:message code="title.addcomputer" var="Title" />
 	<spring:message code="or" var="Or" />

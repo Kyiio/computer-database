@@ -121,9 +121,6 @@ function checkDateConsistency(){
 	var introducedStr = $.trim($('#introducedDate').val());
 	var discontinuedStr = $.trim($('#discontinuedDate').val());
 
-	console.log("introduced",introducedStr);
-	console.log("discontinued",discontinuedStr);
-	
 	if(discontinuedStr === '' && introducedStr === ''){
 		removeErrorText($('#introducedErr'));
 		removeErrorText($('#discontinuedErr'));

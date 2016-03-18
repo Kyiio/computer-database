@@ -42,9 +42,17 @@ public class DeleteComputerIntegrationTest {
   @Before
   public void setUp() throws Exception {
     driver = new FirefoxDriver();
-    baseUrl = "http://127.0.0.1:6060/";
+    baseUrl = "http://127.0.0.1:6060";
     driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
     driver.manage().window().maximize();
+
+    driver.get(baseUrl + "/computerdatabase/login");
+    driver.findElement(By.id("username")).clear();
+    driver.findElement(By.id("username")).sendKeys("admin");
+    driver.findElement(By.id("passwd")).clear();
+    driver.findElement(By.id("passwd")).sendKeys("admin");
+    driver.findElement(By.name("submit")).click();
+
   }
 
   /**

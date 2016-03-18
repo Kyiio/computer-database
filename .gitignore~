@@ -1,6 +1,8 @@
 
 # Created by https://www.gitignore.io/api/eclipse,maven,java
 
+*.log
+
 ### Eclipse ###
 
 .metadata
@@ -12,6 +14,7 @@ tmp/
 *~.nib
 local.properties
 .settings/
+.checkstyle
 .loadpath
 
 # Eclipse Core

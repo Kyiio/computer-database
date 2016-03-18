@@ -50,9 +50,16 @@ public class AddComputerIntegrationTest {
   @Before
   public void setUp() throws Exception {
     driver = new FirefoxDriver();
-    baseUrl = "http://127.0.0.1:6060/";
+    baseUrl = "http://127.0.0.1:6060";
     driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
     driver.manage().window().maximize();
+
+    driver.get(baseUrl + "/computerdatabase/login");
+    driver.findElement(By.id("username")).clear();
+    driver.findElement(By.id("username")).sendKeys("admin");
+    driver.findElement(By.id("passwd")).clear();
+    driver.findElement(By.id("passwd")).sendKeys("admin");
+    driver.findElement(By.name("submit")).click();
   }
 
   /**
@@ -82,7 +89,8 @@ public class AddComputerIntegrationTest {
   public void addComputerEnglish() throws Exception {
 
     driver.get(baseUrl + "/computerdatabase/computers?computer-per-page=10&page-number=1&lang=en");
-
+    System.err.println(
+        baseUrl + "/computerdatabase/computers?computer-per-page=10&page-number=1&lang=en");
     driver.findElement(By.id("addComputer")).click();
     driver.findElement(By.id("computerName")).clear();
     driver.findElement(By.id("computerName")).sendKeys(computerName);
