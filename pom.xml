@@ -16,7 +16,7 @@
 	</modules>
 
 	<properties>
-		<project-version>0.6.2-SNAPSHOT</project-version>
+		<project-version>0.7.0-RELEASE</project-version>
 
 		<hibernate-version>5.1.0.Final</hibernate-version>
 		<javax.servlet-api-version>3.1.0</javax.servlet-api-version>
@@ -103,37 +103,37 @@
 			<dependency>
 				<groupId>com.excilys</groupId>
 				<artifactId>computerdatabase-core</artifactId>
-				<version>0.6.2-SNAPSHOT</version>
+				<version>${project-version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>com.excilys</groupId>
 				<artifactId>computerdatabase-persistence</artifactId>
-				<version>0.6.2-SNAPSHOT</version>
+				<version>${project-version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>com.excilys</groupId>
 				<artifactId>computerdatabase-service</artifactId>
-				<version>0.6.2-SNAPSHOT</version>
+				<version>${project-version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>com.excilys</groupId>
 				<artifactId>computerdatabase-service</artifactId>
-				<version>0.6.2-SNAPSHOT</version>
+				<version>${project-version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>com.excilys</groupId>
 				<artifactId>computerdatabase-binding</artifactId>
-				<version>0.6.2-SNAPSHOT</version>
+				<version>${project-version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>com.excilys</groupId>
 				<artifactId>computerdatabase-console</artifactId>
-				<version>0.6.2-SNAPSHOT</version>
+				<version>${project-version}</version>
 			</dependency>
 
 			<!-- Test dependencies -->
