@@ -89,8 +89,6 @@ public class AddComputerIntegrationTest {
   public void addComputerEnglish() throws Exception {
 
     driver.get(baseUrl + "/computerdatabase/computers?computer-per-page=10&page-number=1&lang=en");
-    System.err.println(
-        baseUrl + "/computerdatabase/computers?computer-per-page=10&page-number=1&lang=en");
     driver.findElement(By.id("addComputer")).click();
     driver.findElement(By.id("computerName")).clear();
     driver.findElement(By.id("computerName")).sendKeys(computerName);
@@ -99,7 +97,7 @@ public class AddComputerIntegrationTest {
     // We check that the error message regarding the computer's name shows up
 
     checkText("computerNameErr",
-        "The computer name is empty or is to long (more than 30 characters)!");
+        "The computer name is empty or is to long (more than 100 characters)!");
 
     driver.findElement(By.id("computerName")).sendKeys(computerName);
 
@@ -178,7 +176,7 @@ public class AddComputerIntegrationTest {
    * // We check that the error message regarding the computer's name shows up
    * 
    * checkText("computerNameErr",
-   * "Le nom de l'ordinateur ne contient pas entre 1 et 30 caractéres !");
+   * "Le nom de l'ordinateur ne contient pas entre 1 et 100 caractéres !");
    * 
    * driver.findElement(By.id("computerName")).sendKeys(computerName);
    * 

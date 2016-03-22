@@ -42,7 +42,7 @@ public abstract class AbstractCommand {
 
     @SuppressWarnings("resource")
     ClassPathXmlApplicationContext applicationContext =
-        new ClassPathXmlApplicationContext("applicationContext.xml");
+        new ClassPathXmlApplicationContext("console-context.xml");
 
     computerService = applicationContext.getBean("computerService", ComputerService.class);
     companyService = applicationContext.getBean("companyService", CompanyService.class);

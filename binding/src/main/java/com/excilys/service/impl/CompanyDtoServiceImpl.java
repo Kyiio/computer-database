@@ -19,7 +19,6 @@ public class CompanyDtoServiceImpl implements CompanyDtoService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDtoServiceImpl.class);
 
-
   @Autowired
   public CompanyService       companyService;
 

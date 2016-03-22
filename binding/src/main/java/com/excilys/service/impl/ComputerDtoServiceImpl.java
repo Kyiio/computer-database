@@ -2,11 +2,11 @@ package com.excilys.service.impl;
 
 import com.excilys.dto.ComputerDto;
 import com.excilys.dto.mapper.ComputerDtoMapper;
+import com.excilys.dto.validation.ComputerDtoValidator;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
 import com.excilys.service.ComputerDtoService;
 import com.excilys.service.ComputerService;
-import com.excilys.validator.ComputerValidator;
 import com.excilys.validator.QueryParametersValidator;
 
 import org.slf4j.Logger;
@@ -28,17 +28,17 @@ public class ComputerDtoServiceImpl implements ComputerDtoService {
   public ComputerDtoMapper    computerDtoMapper;
 
   @Autowired
-  public ComputerValidator    computerValidator;
+  public ComputerDtoValidator computerDtoValidator;
 
   @Override
   public void updateComputer(ComputerDto computerDto) {
 
     LOGGER.info("DTO : Update computer : " + computerDto);
 
-    computerValidator.checkId(computerDto.getComputerId());
-    computerValidator.checkName(computerDto.getComputerName());
-    computerValidator.checkDate(computerDto.getIntroducedDate());
-    computerValidator.checkDate(computerDto.getDiscontinuedDate());
+    computerDtoValidator.checkId(computerDto.getComputerId());
+    computerDtoValidator.checkName(computerDto.getComputerName());
+    computerDtoValidator.checkDate(computerDto.getIntroducedDate());
+    computerDtoValidator.checkDate(computerDto.getDiscontinuedDate());
 
     Computer computer = computerDtoMapper.getComputer(computerDto);
 
@@ -50,9 +50,9 @@ public class ComputerDtoServiceImpl implements ComputerDtoService {
 
     LOGGER.info("DTO : Insert computer : " + computerDto);
 
-    computerValidator.checkName(computerDto.getComputerName());
-    computerValidator.checkDate(computerDto.getIntroducedDate());
-    computerValidator.checkDate(computerDto.getDiscontinuedDate());
+    computerDtoValidator.checkName(computerDto.getComputerName());
+    computerDtoValidator.checkDate(computerDto.getIntroducedDate());
+    computerDtoValidator.checkDate(computerDto.getDiscontinuedDate());
 
     Computer computer = computerDtoMapper.getComputer(computerDto);
 
@@ -65,7 +65,7 @@ public class ComputerDtoServiceImpl implements ComputerDtoService {
 
     LOGGER.info("DTO : Delete computer by id: " + id);
 
-    computerValidator.checkId(id);
+    computerDtoValidator.checkId(id);
     computerService.deleteComputer(id);
   }
 
@@ -74,7 +74,7 @@ public class ComputerDtoServiceImpl implements ComputerDtoService {
 
     LOGGER.info("DTO : Get computer by id: " + id);
 
-    computerValidator.checkId(id);
+    computerDtoValidator.checkId(id);
     Computer computer = computerService.getById(id);
     return computerDtoMapper.getComputerDto(computer);
   }
@@ -84,7 +84,7 @@ public class ComputerDtoServiceImpl implements ComputerDtoService {
 
     LOGGER.info("DTO : Get computer by name: " + name);
 
-    computerValidator.checkName(name);
+    computerDtoValidator.checkName(name);
     ArrayList<Computer> computerList = computerService.getByName(name);
     return computerDtoMapper.getComputerDtoList(computerList);
   }

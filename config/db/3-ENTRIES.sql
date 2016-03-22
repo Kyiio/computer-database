@@ -1,5 +1,5 @@
-insert into users(username,passwd,enabled) values ('admin','admin', true);
-insert into users(username,passwd,enabled) values ('bibi','bibi', true);
+insert into users(username,passwd,enabled) values ('admin','$2a$04$5CdRYSDfp.51ooe8zcoS9uYMcZ6gHuD.7gqTf9uG6AzLLEGlUbeW6', true);
+insert into users(username,passwd,enabled) values ('bibi','$2a$04$cBN3aSAiNxzbJQJ9yT24vO0xMe/bCtdyVbFQuY0Mb.l13IbBvtJgW', true);
 
 insert into user_roles (username, role) values ('admin', 'ROLE_ADMIN');
 insert into user_roles (username, role) values ('bibi', 'ROLE_USER');

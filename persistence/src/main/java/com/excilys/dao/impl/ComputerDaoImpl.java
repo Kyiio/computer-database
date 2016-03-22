@@ -28,27 +28,24 @@ public class ComputerDaoImpl implements ComputerDao {
   private static final String DELETE_QUERY            =
       "DELETE Computer AS computer WHERE computer.id = :id";
 
-  private static final String LIST_ALL_QUERY          =
-      "SELECT computer FROM Computer AS computer LEFT JOIN computer.company AS company";
+  private static final String LIST_ALL_QUERY          = "SELECT computer FROM Computer AS computer";
 
   private static final String GET_BY_ID_QUERY         =
-      "SELECT computer FROM Computer AS computer LEFT JOIN computer.company AS company "
-          + "WHERE computer.id = :id";
+      "SELECT computer FROM Computer AS computer WHERE computer.id = :id";
 
   private static final String GET_BY_NAME_QUERY       =
-      "SELECT computer FROM Computer AS computer LEFT JOIN computer.company AS company "
-          + "WHERE computer.name = :name";
+      "SELECT computer FROM Computer AS computer WHERE computer.name = :name";
 
   private static final String GET_PAGE_QUERY          =
       "SELECT computer FROM Computer AS computer LEFT JOIN computer.company AS company "
           + "WHERE computer.name LIKE :searchName OR company.name LIKE :searchName";
 
   private static final String GET_COUNT_QUERY         =
-      "SELECT COUNT(*) from Computer AS computer LEFT JOIN computer.company AS company "
+      "SELECT COUNT(*) FROM Computer AS computer LEFT JOIN computer.company AS company "
           + "WHERE computer.name LIKE :searchName OR company.name LIKE :searchName";
 
   private static final String DELETE_WHERE_COMPANY_ID =
-      "DELETE Computer AS computer WHERE computer.company_id = :companyId";
+      "DELETE Computer AS computer WHERE computer.company.id = :companyId";
 
   private SessionFactory      sessionFactory;
 
@@ -130,7 +127,7 @@ public class ComputerDaoImpl implements ComputerDao {
   }
 
   @Override
-  public Computer getById(long id) throws DaoException {
+  public Computer getById(long id) {
 
     LOGGER.info("Get by id : " + id);
 
@@ -187,7 +184,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
     try {
 
-      session = sessionFactory.openSession();
+      session = sessionFactory.getCurrentSession();
 
       Query query = session.createQuery(LIST_ALL_QUERY);
 
@@ -258,6 +255,10 @@ public class ComputerDaoImpl implements ComputerDao {
 
   @Override
   public void deleteComputersForCompanyId(long companyId) {
+
+    if (companyId <= 0) {
+      throw new DaoException("The company id can't be negative or 0");
+    }
 
     LOGGER.info("Delete computers with company id: " + companyId);
 

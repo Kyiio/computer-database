@@ -1,6 +1,5 @@
 package com.excilys.dto.validation;
 
-import com.excilys.validator.ComputerValidator;
 import com.excilys.validator.exception.ValidationException;
 
 import org.slf4j.Logger;
@@ -15,7 +14,7 @@ public class DateFormatValidator implements ConstraintValidator<Date, String> {
   private static final Logger LOGGER = LoggerFactory.getLogger(DateFormatValidator.class);
 
   @Autowired
-  public ComputerValidator    computerValidator;
+  public ComputerDtoValidator computerDtoValidator;
 
   @Override
   public void initialize(Date date) {
@@ -28,7 +27,7 @@ public class DateFormatValidator implements ConstraintValidator<Date, String> {
     LOGGER.info("Start validation of the following date : " + date);
 
     try {
-      computerValidator.checkDate(date);
+      computerDtoValidator.checkDate(date);
     } catch (ValidationException e) {
       return false;
     }

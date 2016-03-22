@@ -30,7 +30,6 @@ public class ComputerServiceImpl implements ComputerService {
   @Autowired
   private ComputerValidator   computerValidator;
 
-
   @Override
   @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
   public void updateComputer(Computer computer) {
@@ -52,7 +51,7 @@ public class ComputerServiceImpl implements ComputerService {
         .append(introduced).append(" discontinued date :").append(discontinued).toString());
 
     computerValidator.checkName(name);
-    computerValidator.checkDateConsitency(introduced, discontinued);
+    computerValidator.checkDates(introduced, discontinued);
 
     long id = computerDao.insertComputer(company, introduced, discontinued, name);
 

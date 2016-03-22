@@ -6,18 +6,18 @@
 	<packaging>pom</packaging>
 	<version>${project-version}</version>
 
-    <modules>
-        <module>core</module>
-        <module>persistence</module>
-        <module>service</module>
-        <module>binding</module>
-        <module>console</module>
-        <module>webapp</module>
-    </modules>
+	<modules>
+		<module>core</module>
+		<module>persistence</module>
+		<module>service</module>
+		<module>binding</module>
+		<module>console</module>
+		<module>webapp</module>
+	</modules>
 
 	<properties>
 		<project-version>0.6.2-SNAPSHOT</project-version>
-	
+
 		<hibernate-version>5.1.0.Final</hibernate-version>
 		<javax.servlet-api-version>3.1.0</javax.servlet-api-version>
 		<jboss-logging>3.3.0.Final</jboss-logging>
@@ -36,9 +36,6 @@
 		<slf4j-api-version>1.7.14</slf4j-api-version>
 		<validation-api>1.1.0.Final</validation-api>
 		<xml-apis>1.4.01</xml-apis>
-		
-		<selenium-test-suite>com/excilys/SeleniumIntegrationTestSuite.java</selenium-test-suite>
-		<junit-test-suite>com/excilys/TestSuite.java</junit-test-suite>
 	</properties>
 
 	<!-- Repository used to trick maven and ignore all commons-logging dependencies -->
@@ -49,7 +46,7 @@
 			<url>http://version99.qos.ch/</url>
 		</repository>
 	</repositories>
-	
+
 	<dependencies>
 		<!-- We trick maven so that we won't have any reference to commons-logging 
 			in our project -->
@@ -58,7 +55,7 @@
 			<artifactId>commons-logging</artifactId>
 			<version>99-empty</version>
 		</dependency>
-	
+
 		<!-- Needed in compile for logger filters -->
 
 		<dependency>
@@ -72,7 +69,7 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j-api-version}</version>
 		</dependency>
-		
+
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -89,7 +86,7 @@
 			<artifactId>spring-beans</artifactId>
 			<version>${spring-version}</version>
 		</dependency>
-		
+
 		<!-- Spring logs -->
 
 		<dependency>
@@ -97,9 +94,9 @@
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${jcloverslf4j}</version>
 		</dependency>
-		
+
 	</dependencies>
-	
+
 	<dependencyManagement>
 		<dependencies>
 
@@ -108,13 +105,13 @@
 				<artifactId>computerdatabase-core</artifactId>
 				<version>0.6.2-SNAPSHOT</version>
 			</dependency>
-		
+
 			<dependency>
 				<groupId>com.excilys</groupId>
 				<artifactId>computerdatabase-persistence</artifactId>
 				<version>0.6.2-SNAPSHOT</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>com.excilys</groupId>
 				<artifactId>computerdatabase-service</artifactId>
@@ -126,7 +123,7 @@
 				<artifactId>computerdatabase-service</artifactId>
 				<version>0.6.2-SNAPSHOT</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>com.excilys</groupId>
 				<artifactId>computerdatabase-binding</artifactId>
@@ -138,9 +135,9 @@
 				<artifactId>computerdatabase-console</artifactId>
 				<version>0.6.2-SNAPSHOT</version>
 			</dependency>
-			
+
 			<!-- Test dependencies -->
-		
+
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
@@ -165,7 +162,7 @@
 				<version>${xml-apis}</version>
 				<scope>test</scope>
 			</dependency>
-		
+
 			<!-- Runtime dependencies -->
 
 			<dependency>
@@ -174,9 +171,9 @@
 				<version>${mysql-connector-java-version}</version>
 				<scope>runtime</scope>
 			</dependency>
-		
+
 			<!-- Javax dependencies -->
-		
+
 			<dependency>
 				<groupId>javax.validation</groupId>
 				<artifactId>validation-api</artifactId>
@@ -187,15 +184,15 @@
 				<artifactId>jta</artifactId>
 				<version>${jta}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>jstl</groupId>
 				<artifactId>jstl</artifactId>
 				<version>${jstl-version}</version>
 			</dependency>
-			
+
 			<!-- Spring -->
-			
+
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-orm</artifactId>
@@ -207,7 +204,7 @@
 				<version>${spring-version}</version>
 			</dependency>
 
-			
+
 			<!-- Spring web-mvc -->
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -219,7 +216,7 @@
 				<artifactId>spring-webmvc</artifactId>
 				<version>${spring-version}</version>
 			</dependency>
-			
+
 			<!-- Spring security -->
 			<dependency>
 				<groupId>org.springframework.security</groupId>
@@ -251,7 +248,7 @@
 				<version>${spring-version}</version>
 				<scope>test</scope>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
@@ -264,8 +261,8 @@
 				<version>${jsp-api-version}</version>
 				<scope>provided</scope>
 			</dependency>
-			
-			<!-- Hibernate dependencies-->
+
+			<!-- Hibernate dependencies -->
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
@@ -282,16 +279,14 @@
 				<version>${hibernate-version}</version>
 			</dependency>
 
-			
 			<dependency>
 				<groupId>org.jboss.logging</groupId>
 				<artifactId>jboss-logging</artifactId>
 				<version>${jboss-logging}</version>
-			</dependency>			
-			
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
-	
 
 	<build>
 		<finalName>computerdatabase</finalName>
@@ -320,36 +315,6 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<configuration>
-						<includes>
-							<include>${junit-test-suite}</include>
-						</includes>
-						<excludes>
-							<exclude>${selenium-test-suite}</exclude>
-						</excludes>
-					</configuration>
-				</plugin>
-				<!-- Plugin to run the integration tests -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-failsafe-plugin</artifactId>
-					<version>2.7.2</version>
-					<configuration>
-						<includes>
-							<include>${selenium-test-suite}</include>
-						</includes>
-						<excludes>
-							<exclude>${junit-test-suite}</exclude>
-						</excludes>
-					</configuration>
-					<executions>
-						<execution>
-							<goals>
-								<goal>integration-test</goal>
-								<goal>verify</goal>
-							</goals>
-						</execution>
-					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>

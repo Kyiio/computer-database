@@ -5,7 +5,7 @@ package com.excilys.validator.exception;
  * 
  * @author B. Herbaut
  */
-public class ValidationException extends RuntimeException {
+public class ValidationException extends IllegalArgumentException {
 
   private static final long serialVersionUID = -2469410843259970165L;
 
@@ -15,9 +15,5 @@ public class ValidationException extends RuntimeException {
 
   public ValidationException(String message, Throwable cause) {
     super(message, cause);
-  }
-
-  public ValidationException(Throwable cause) {
-    super(cause);
   }
 }

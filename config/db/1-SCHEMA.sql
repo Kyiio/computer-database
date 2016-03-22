@@ -22,8 +22,8 @@ drop schema if exists `computer-database-db`;
   ;
 
 	create table users (
-	  username 					varchar(45) not NULL ,
-	  passwd 					varchar(45) not NULL ,
+	  username 					varchar(100) not NULL ,
+	  passwd 					varchar(100) not NULL ,
 	  enabled 					tinyint not NULL default 1 ,
 	  constraint pk_users 		primary key (username));
 

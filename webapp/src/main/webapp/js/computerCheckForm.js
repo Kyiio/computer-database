@@ -166,7 +166,7 @@ function checkName(){
 	var name = $.trim($('#computerName').val());
 	
 
-    if (name === '' || name.length > 30) {
+    if (name === '' || name.length > 100) {
     	return false;
     }
         

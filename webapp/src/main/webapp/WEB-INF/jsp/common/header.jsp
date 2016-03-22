@@ -1,12 +1,12 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="pagination" tagdir="/WEB-INF/tags"%>
-<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <header class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
 		<pagination:link pageNumber="1" pageSize="${pageSize}"
-			target="computers" text="Application - Computer Database"
+			target="${pageContext.request.contextPath}/computers" text="Application - Computer Database"
 			cssClass="navbar-brand"></pagination:link>
 		<div>
 			<sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN')">

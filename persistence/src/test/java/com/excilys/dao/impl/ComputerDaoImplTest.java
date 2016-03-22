@@ -31,13 +31,13 @@ import javax.annotation.Resource;
  * The Class ComputerDaoImplTest.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:./persistence-context.xml" })
+@ContextConfiguration(locations = { "classpath:./persistence-context-test.xml" })
 @Transactional(transactionManager = "txManager")
 @Rollback(true)
 public class ComputerDaoImplTest {
 
   @Resource(name = "computerDao")
-  private ComputerDao computerDao;
+  private ComputerDao     computerDao;
 
   private QueryParameters queryParameter;
 
@@ -206,7 +206,7 @@ public class ComputerDaoImplTest {
    * @throws Exception the exception
    */
   @Test
-  public void testListComputer() throws Exception {
+  public void testListComputer() {
 
     ArrayList<Computer> listComputer = computerDao.listComputers();
 
@@ -260,5 +260,25 @@ public class ComputerDaoImplTest {
     ArrayList<Computer> computerList = computerDao.selectWithParameters(queryParameter);
 
     assertEquals(computerList.size(), 10);
+  }
+
+  @Test
+  public void testDeleteComputerByCompanyId() {
+
+    String computerName = "Toto's computer Unit Test";
+
+    Long id = computerDao.insertComputer(new Company(1, "Apple Inc."), null, null, computerName);
+
+    computerDao.deleteComputersForCompanyId(1);
+
+    Computer computer = computerDao.getById(id);
+
+    assertNull(computer);
+  }
+
+  @Test(expected = DaoException.class)
+  public void testDeleteComputerByNegativeCompanyId() {
+
+    computerDao.deleteComputersForCompanyId(-100);
   }
 }

@@ -1,7 +1,6 @@
 package com.excilys.dto.validation;
 
 import com.excilys.dto.ComputerDto;
-import com.excilys.validator.ComputerValidator;
 import com.excilys.validator.exception.ValidationException;
 
 import org.slf4j.Logger;
@@ -18,7 +17,7 @@ public class DateConsistencyValidator implements ConstraintValidator<DateConsist
   private static final Logger LOGGER = LoggerFactory.getLogger(DateConsistencyValidator.class);
 
   @Autowired
-  public ComputerValidator    computerValidator;
+  public ComputerDtoValidator computerDtoValidator;
 
   @Override
   public void initialize(DateConsistency constraintAnnotation) {
@@ -31,12 +30,12 @@ public class DateConsistencyValidator implements ConstraintValidator<DateConsist
     LOGGER.info("Starting date consistency validation for the following computer :" + computerDto);
 
     try {
-      computerValidator.checkDateConsitency(computerDto.getIntroducedDate(),
+      computerDtoValidator.checkDateConsitency(computerDto.getIntroducedDate(),
           computerDto.getDiscontinuedDate());
     } catch (ValidationException e) {
       return false;
     }
-    
+
     return true;
   }
 

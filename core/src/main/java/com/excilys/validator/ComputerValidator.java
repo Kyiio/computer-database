@@ -3,16 +3,9 @@ package com.excilys.validator;
 import com.excilys.model.Computer;
 import com.excilys.validator.exception.ValidationException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Locale;
 
 /**
  * Interface that provides methods to check if the data in a computer are consistent.
@@ -21,9 +14,6 @@ import java.util.Locale;
  */
 @Component("computerValidator")
 public class ComputerValidator {
-
-  @Autowired
-  public MessageSource messageSource;
 
   /**
    * Method that check that the given id is positive. It throws a ValidationException if it is not
@@ -38,27 +28,6 @@ public class ComputerValidator {
   }
 
   /**
-   * Method that check if the given string isn't null, nor empty and contains only an int. If not
-   * throws a ValidationException.
-   * 
-   * @param idString The string that will be checked.
-   */
-  public void checkId(String idString) {
-    if (idString == null || idString.length() == 0) {
-      throw new ValidationException("The computer id must be an int ! Given id is " + idString);
-    }
-
-    int id = 0;
-    try {
-      id = Integer.parseInt(idString);
-    } catch (Exception e) {
-      throw new ValidationException("Error parsing the given id ! Given id is " + idString);
-    }
-
-    checkId(id);
-  }
-
-  /**
    * Method that check that the computer name isn't null nor empty. If it is it throws a
    * ValidationException.
    * 
@@ -68,51 +37,9 @@ public class ComputerValidator {
     if (name == null || name.length() <= 0) {
       throw new ValidationException("The computer name must be set !");
     }
-  }
-
-  /**
-   * Method that check if the given String data is null, empty or contains only a date with valid
-   * format. If it doesn't respect those condition, it throws a ValidationException
-   *
-   * @param date The will be checked
-   */
-  public void checkDate(String date) {
-
-    LocalDate currentDate = checkDateFormat(date);
-    checkDateIsntToOld(currentDate);
-  }
-
-  /**
-   * Check date format.
-   *
-   * @param date the date
-   * @return the local date
-   */
-  public LocalDate checkDateFormat(String date) {
-
-    Locale locale = LocaleContextHolder.getLocale();
-    String format = messageSource.getMessage("date.format", null, locale);
-    String regex = messageSource.getMessage("date.java.regex", null, locale);
-
-    LocalDate localDate = null;
-
-    if (date != null && date.length() > 0) {
-
-      if (!date.matches(regex)) {
-        throw new ValidationException(
-            "The given date " + date + " isn't matching the format : " + format);
-      }
-
-      try {
-        localDate = new Timestamp(new SimpleDateFormat(format).parse(date).getTime())
-            .toLocalDateTime().toLocalDate();
-      } catch (ParseException e) {
-        throw new ValidationException(
-            "The given date " + date + " isn't matching the format : " + format);
-      }
+    if (name.length() > 100) {
+      throw new ValidationException("The computer name is to long!");
     }
-
-    return localDate;
   }
 
   /**
@@ -152,27 +79,6 @@ public class ComputerValidator {
   }
 
   /**
-   * Check date consitency.
-   *
-   * @param introducedStr the introduced str
-   * @param discontinuedStr the discontinued str
-   */
-  public void checkDateConsitency(String introducedStr, String discontinuedStr) {
-
-    LocalDate introducedDate;
-    LocalDate discontinuedDate;
-
-    try {
-      introducedDate = checkDateFormat(introducedStr);
-      discontinuedDate = checkDateFormat(discontinuedStr);
-    } catch (ValidationException e) {
-      return;
-    }
-
-    checkDateConsitency(introducedDate, discontinuedDate);
-  }
-
-  /**
    * Check computer.
    *
    * @param computer the computer
@@ -185,6 +91,18 @@ public class ComputerValidator {
 
     checkId(computer.getId());
     checkName(computer.getName());
-    checkDateConsitency(computer.getIntroduced(), computer.getDiscontinued());
+    checkDates(computer.getIntroduced(), computer.getDiscontinued());
+  }
+
+  /**
+   * Check dates.
+   *
+   * @param introduced the introduced
+   * @param discontinued the discontinued
+   */
+  public void checkDates(LocalDate introduced, LocalDate discontinued) {
+    checkDateIsntToOld(introduced);
+    checkDateIsntToOld(discontinued);
+    checkDateConsitency(introduced, discontinued);
   }
 }

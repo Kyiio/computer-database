@@ -30,7 +30,7 @@ public class UserDaoImpl implements UserDao {
     Session session = sessionFactory.getCurrentSession();
     Query query = session.createQuery(GET_BY_NAME);
     query.setString("username", username);
-    LOGGER.error("Query " + query);
+
     User user = (User) query.uniqueResult();
 
     return user;

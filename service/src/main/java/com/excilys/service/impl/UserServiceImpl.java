@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService {
     LOGGER.info("Security : loadUserByUsername : " + username);
 
     com.excilys.model.User user = userDao.getByName(username);
-    LOGGER.error("Security : user: " + user);
 
     List<GrantedAuthority> authorities = buildUserAuthority(user.getUserRole());
 
