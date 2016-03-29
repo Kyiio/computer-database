@@ -1,5 +1,6 @@
 package com.excilys.ui;
 
+import com.excilys.command.AbstractCommand;
 import com.excilys.command.CommandInvoker;
 import com.excilys.command.DeleteCompanyCommand;
 import com.excilys.command.DeleteComputerCommand;
@@ -22,31 +23,14 @@ public class CommandLineInterface {
    */
   enum CommandType {
 
-    /** The insert computer. */
     INSERT_COMPUTER,
-
-    /** The delete computer. */
     DELETE_COMPUTER,
-
-    /** The delete company. */
     DELETE_COMPANY,
-
-    /** The update computer. */
     UPDATE_COMPUTER,
-
-    /** The list computer. */
-    LIST_COMPUTER,
-
-    /** The list companies. */
+    LIST_COMPUTERS,
     LIST_COMPANIES,
-
-    /** The help. */
     HELP,
-
-    /** The quit. */
     QUIT,
-
-    /** The unknown command. */
     UNKNOWN_COMMAND
   }
 
@@ -66,7 +50,7 @@ public class CommandLineInterface {
     System.out.println("Type " + CommandType.INSERT_COMPUTER + " to insert computer");
     System.out.println("Type " + CommandType.DELETE_COMPUTER + " to delete computer");
     System.out.println("Type " + CommandType.UPDATE_COMPUTER + " to update computer");
-    System.out.println("Type " + CommandType.LIST_COMPUTER + " to list computer");
+    System.out.println("Type " + CommandType.LIST_COMPUTERS + " to list computer");
     System.out.println(
         "Type " + CommandType.DELETE_COMPANY + " to delete a company and all associated computers");
     System.out.println("Type " + CommandType.LIST_COMPANIES + " to list companies\n");
@@ -81,9 +65,27 @@ public class CommandLineInterface {
    */
   public void launch() {
 
-    System.out.println("#####################################################");
-    System.out.println("############Computer Database Project CLI############");
-    System.out.println("#####################################################\n");
+    System.out.println(
+        "#########################################################################################"
+            + "#####################");
+    System.out.println(
+        "          ______                            __               ____        __        __");
+    System.out
+        .println("         / ____/___  ____ ___  ____  __  __/ /____  _____   / __ \\____ _/ /_____"
+            + " _/ /_  ____ _________");
+    System.out
+        .println("        / /   / __ \\/ __ `__ \\/ __ \\/ / / / __/ _ \\/ ___/  / / / / __ `/ __/ "
+            + "__ `/ __ \\/ __ `/ ___/ _ \\");
+    System.out
+        .println("       / /___/ /_/ / / / / / / /_/ / /_/ / /_/  __/ /     / /_/ / /_/ / /_/ /_/ /"
+            + " /_/ / /_/ (__  )  __/");
+    System.out
+        .println("       \\____/\\____/_/ /_/ /_/ .___/\\__,_/\\__/\\___/_/     /_____/\\__,_/\\__/"
+            + "\\__,_/_.___/\\__,_/____/\\___/");
+    System.out.println("                           /_/");
+    System.out.println(
+        "#########################################################################################"
+            + "#####################\n");
 
     showHelp();
 
@@ -101,7 +103,7 @@ public class CommandLineInterface {
       CommandType line;
 
       try {
-        line = CommandType.valueOf(scanner.nextLine().trim());
+        line = CommandType.valueOf(scanner.nextLine().trim().toUpperCase());
       } catch (IllegalArgumentException e) {
         line = CommandType.UNKNOWN_COMMAND;
       }
@@ -127,7 +129,7 @@ public class CommandLineInterface {
           commandInvoker.setCommand(new ListCompaniesCommand(scanner));
           break;
 
-        case LIST_COMPUTER:
+        case LIST_COMPUTERS:
           commandInvoker.setCommand(new ListComputerCommand(scanner));
           break;
 
@@ -144,11 +146,12 @@ public class CommandLineInterface {
         default:
 
           System.out.println("Unknown command !");
-
           break;
       }
 
       commandInvoker.executeCommand();
     }
+
+    AbstractCommand.closeClient();
   }
 }

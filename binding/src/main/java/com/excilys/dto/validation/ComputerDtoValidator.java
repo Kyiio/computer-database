@@ -1,5 +1,6 @@
 package com.excilys.dto.validation;
 
+import com.excilys.dto.ComputerDto;
 import com.excilys.validator.ComputerValidator;
 import com.excilys.validator.exception.ValidationException;
 
@@ -101,7 +102,8 @@ public class ComputerDtoValidator {
 
       try {
         localDate = new Timestamp(new SimpleDateFormat(format).parse(date).getTime())
-            .toLocalDateTime().toLocalDate();
+            .toLocalDateTime()
+            .toLocalDate();
       } catch (ParseException e) {
         throw new ValidationException(
             "The given date " + date + " isn't matching the format : " + format);
@@ -109,6 +111,36 @@ public class ComputerDtoValidator {
     }
 
     return localDate;
+  }
+
+  /**
+   * Validate computer dto.
+   *
+   * @param computerDto the computer dto
+   */
+  public void validateComputerDto(ComputerDto computerDto) {
+
+    if (computerDto == null) {
+      throw new ValidationException("The computerDto can't be null");
+    }
+
+    checkId(computerDto.getComputerId());
+    checkName(computerDto.getComputerName());
+    checkDates(computerDto.getIntroducedDate(), computerDto.getDiscontinuedDate());
+  }
+
+  /**
+   * Check dates format and consistency.
+   *
+   * @param introducedStr the introduced str
+   * @param discontinuedStr the discontinued str
+   */
+  public void checkDates(String introducedStr, String discontinuedStr) {
+
+    LocalDate introducedDate = checkDateFormat(introducedStr);
+    LocalDate discontinuedDate = checkDateFormat(discontinuedStr);
+
+    computerValidator.checkDateConsitency(introducedDate, discontinuedDate);
   }
 
 }

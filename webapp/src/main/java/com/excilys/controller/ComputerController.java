@@ -1,11 +1,9 @@
 package com.excilys.controller;
 
-import com.excilys.controller.util.PageCreator;
-import com.excilys.controller.util.QueryParametersBuilder;
 import com.excilys.dto.CompanyDto;
 import com.excilys.dto.ComputerDto;
 import com.excilys.dto.PageDto;
-import com.excilys.model.QueryParameters;
+import com.excilys.dto.util.PageCreator;
 import com.excilys.service.CompanyDtoService;
 import com.excilys.service.ComputerDtoService;
 
@@ -24,6 +22,9 @@ import java.util.ArrayList;
 
 import javax.validation.Valid;
 
+/**
+ * The Class ComputerController.
+ */
 @Controller
 @RequestMapping(value = { "/", "/computers" })
 public class ComputerController {
@@ -32,8 +33,12 @@ public class ComputerController {
 
   @Autowired
   private CompanyDtoService     companyDtoService;
+
   @Autowired
   private ComputerDtoService    computerDtoService;
+
+  @Autowired
+  private PageCreator           pageCreator;
 
   private ArrayList<CompanyDto> companyDtoList;
 
@@ -49,7 +54,7 @@ public class ComputerController {
 
     LOGGER.info("Show dashboard");
 
-    pageDto = getPageDtoFromPreviousOne(pageDto);
+    pageDto = pageCreator.getPageDtoFromPreviousOne(pageDto);
     modelMap.addAttribute("page", pageDto);
 
     return "dashboard";
@@ -72,7 +77,7 @@ public class ComputerController {
       computerDtoService.deleteComputer(selection[i]);
     }
 
-    pageDto = getPageDtoFromPreviousOne(pageDto);
+    pageDto = pageCreator.getPageDtoFromPreviousOne(pageDto);
 
     modelMap.addAttribute("page", pageDto);
 
@@ -107,6 +112,7 @@ public class ComputerController {
    *
    * @param computerDto the computer dto
    * @param bindingResult the binding result
+   * @param model the model
    * @return the string
    */
   @RequestMapping(value = "/computers/edit", method = RequestMethod.POST)
@@ -134,6 +140,7 @@ public class ComputerController {
    * Show form.
    *
    * @param model the model map
+   * @param lang the lang
    * @return the string
    */
   @RequestMapping(value = "/computers/add", method = RequestMethod.GET)
@@ -152,6 +159,8 @@ public class ComputerController {
    * Perform add.
    *
    * @param computerDto the computer dto
+   * @param bindingResult the binding result
+   * @param model the model
    * @return the string
    */
   @RequestMapping(value = "/computers/add", method = RequestMethod.POST)
@@ -173,26 +182,4 @@ public class ComputerController {
     return "redirect:/computers";
   }
 
-  /**
-   * Update page dto.
-   *
-   * @param pageDto the page dto
-   * @return the page dto from previous one
-   */
-  public PageDto getPageDtoFromPreviousOne(PageDto pageDto) {
-
-    // We build the query parameters from the data in the pageDto object
-    QueryParameters queryParameters = QueryParametersBuilder.createQueryParameters(pageDto);
-
-    // We retrieve the needed computers from the database
-    ArrayList<ComputerDto> computerDtoList =
-        computerDtoService.selectWithParameters(queryParameters);
-
-    // We retrieve the number of computer in the database
-    long computerCount = computerDtoService.getCount(queryParameters);
-
-    pageDto = PageCreator.buildPage(queryParameters, computerDtoList, computerCount);
-
-    return pageDto;
-  }
 }

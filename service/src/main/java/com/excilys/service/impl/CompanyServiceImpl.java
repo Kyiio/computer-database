@@ -10,13 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
 @Service("companyService")
-@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+@Transactional(readOnly = true)
 public class CompanyServiceImpl implements CompanyService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CompanyServiceImpl.class);
@@ -56,7 +55,7 @@ public class CompanyServiceImpl implements CompanyService {
   }
 
   @Override
-  @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+  @Transactional(readOnly = false)
   public void deleteCompany(long id) {
 
     LOGGER.info("Delete company by id: " + id);

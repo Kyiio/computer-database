@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * 
  * @author B. Herbaut
  */
-@Component
+@Component("companyValidator")
 public class CompanyValidator {
 
   /**

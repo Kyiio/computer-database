@@ -3,6 +3,8 @@ package com.excilys.validator;
 import com.excilys.model.Computer;
 import com.excilys.validator.exception.ValidationException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -15,6 +17,8 @@ import java.time.LocalDate;
 @Component("computerValidator")
 public class ComputerValidator {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ComputerValidator.class);
+
   /**
    * Method that check that the given id is positive. It throws a ValidationException if it is not
    * the case.
@@ -22,6 +26,9 @@ public class ComputerValidator {
    * @param id The id that will be checked.
    */
   public void checkId(long id) {
+
+    LOGGER.info("Check computer id : " + id);
+
     if (id <= 0) {
       throw new ValidationException("The computer id must be positive ! Given id is " + id);
     }
@@ -34,6 +41,9 @@ public class ComputerValidator {
    * @param name The computer name that will be checked.
    */
   public void checkName(String name) {
+
+    LOGGER.info("Check computer name : " + name);
+
     if (name == null || name.length() <= 0) {
       throw new ValidationException("The computer name must be set !");
     }
@@ -48,6 +58,8 @@ public class ComputerValidator {
    * @param date the date
    */
   public void checkDateIsntToOld(LocalDate date) {
+
+    LOGGER.info("Check computer date isn't to old: " + date);
 
     if (date != null) {
 
@@ -70,6 +82,10 @@ public class ComputerValidator {
    * @param discontinuedDate Discontinued date of the computer
    */
   public void checkDateConsitency(LocalDate introducedDate, LocalDate discontinuedDate) {
+
+    LOGGER.info("Check date consistency for : introduced date" + introducedDate
+        + " and discontinued date : " + discontinuedDate);
+
     if ((discontinuedDate != null && introducedDate == null) || (introducedDate != null
         && discontinuedDate != null && introducedDate.isAfter(discontinuedDate))) {
       throw new ValidationException(
@@ -84,6 +100,8 @@ public class ComputerValidator {
    * @param computer the computer
    */
   public void checkComputer(Computer computer) {
+
+    LOGGER.info("Check computer " + computer);
 
     if (computer == null) {
       throw new ValidationException("Computer is null");
@@ -101,6 +119,9 @@ public class ComputerValidator {
    * @param discontinued the discontinued
    */
   public void checkDates(LocalDate introduced, LocalDate discontinued) {
+
+    LOGGER.info("Check dates : introduced " + introduced + " discontinued : " + discontinued);
+
     checkDateIsntToOld(introduced);
     checkDateIsntToOld(discontinued);
     checkDateConsitency(introduced, discontinued);

@@ -1,15 +1,19 @@
 package com.excilys.dto;
 
+import java.io.Serializable;
+
 /**
  * DTO representation of the model class Company
  * 
  * @author B. Herbaut
  * @see com.excilys.model.Company
  */
-public class CompanyDto {
+public class CompanyDto implements Serializable {
 
-  private long   id;
-  private String name;
+  private static final long serialVersionUID = 697013146781175536L;
+
+  private long              id;
+  private String            name;
 
   public CompanyDto() {
     super();
@@ -38,7 +42,11 @@ public class CompanyDto {
 
   @Override
   public String toString() {
-    return "CompanyDto [id=" + id + ", name=" + name + "]";
+    return new StringBuilder("Company's id : ")
+        .append(id)
+        .append(", company's name : ")
+        .append(name)
+        .toString();
   }
 
 }

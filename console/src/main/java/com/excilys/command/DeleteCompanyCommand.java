@@ -1,10 +1,12 @@
 package com.excilys.command;
 
-import com.excilys.command.exception.CommandException;
-import com.excilys.dao.exception.DaoException;
-import com.excilys.model.Company;
+import com.excilys.dto.CompanyDto;
 
 import java.util.Scanner;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
 public class DeleteCompanyCommand extends AbstractCommand {
 
@@ -15,16 +17,18 @@ public class DeleteCompanyCommand extends AbstractCommand {
   @Override
   public void execute() {
 
-    Company company = askForExistingCompanyByAskingName();
+    CompanyDto company = askForExistingCompanyByAskingName();
 
-    try {
-      if (company == null) {
-        throw new CommandException("");
-      }
-      companyService.deleteCompany(company.getId());
-      System.out.println("Delete complete !");
-    } catch (DaoException | CommandException e) {
-      System.out.println("No matching found for the given name, delete aborted !");
+    if (company == null) {
+      return;
     }
+
+    WebTarget target = baseUrl.path("/company/delete");
+
+    String results = target
+        .request()
+        .post(Entity.entity(company.getId(), MediaType.APPLICATION_JSON), String.class);
+
+    System.out.println(results);
   }
 }

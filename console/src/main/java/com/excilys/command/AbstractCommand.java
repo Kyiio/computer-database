@@ -1,22 +1,24 @@
 package com.excilys.command;
 
-import com.excilys.model.Company;
-import com.excilys.model.Computer;
-import com.excilys.service.CompanyService;
-import com.excilys.service.ComputerService;
+import com.excilys.dto.CompanyDto;
+import com.excilys.dto.ComputerDto;
+import com.excilys.security.Authenticator;
 import com.excilys.ui.validation.InputValidator;
-import com.excilys.validator.exception.ValidationException;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 
 /**
  * Abstract class that offers some useful method for the commands of the CLI. All CLI commands must
@@ -27,10 +29,16 @@ import java.util.Scanner;
 @Component
 public abstract class AbstractCommand {
 
-  protected Scanner         scanner;
+  protected Scanner          scanner;
 
-  protected ComputerService computerService;
-  protected CompanyService  companyService;
+  protected static Client    client;
+  protected static WebTarget baseUrl;
+
+  static {
+
+    client = ClientBuilder.newClient().register(new Authenticator("admin", "admin"));
+    baseUrl = client.target("http://localhost:6060/computerdatabase/api");
+  }
 
   /**
    * Instantiates a new abstract command.
@@ -38,15 +46,8 @@ public abstract class AbstractCommand {
    * @param scanner the scanner
    */
   public AbstractCommand(Scanner scanner) {
+
     this.scanner = scanner;
-
-    @SuppressWarnings("resource")
-    ClassPathXmlApplicationContext applicationContext =
-        new ClassPathXmlApplicationContext("console-context.xml");
-
-    computerService = applicationContext.getBean("computerService", ComputerService.class);
-    companyService = applicationContext.getBean("companyService", CompanyService.class);
-
   }
 
   /**
@@ -55,28 +56,42 @@ public abstract class AbstractCommand {
   public abstract void execute();
 
   /**
+   * Close client.
+   */
+  public static void closeClient() {
+    if (client != null) {
+      client.close();
+    }
+  }
+
+  /**
    * Method that asks to the user if he wants to search a computer by its name or its id.
    *
    * @param action The action that will be performed on the computer (ex : delete, update)
    * @return the computer
    */
-  protected Computer askForMethodToFindComputer(String action) {
+  protected ComputerDto askForMethodToFindComputer(String action) {
 
-    Computer foundComputer = null;
+    ComputerDto foundComputer = null;
     String searchingMethod;
 
     while (foundComputer == null) {
-      System.out.println("Do you want to find the computer by 'ID' or by 'NAME' ?");
-      searchingMethod = scanner.nextLine();
+      System.out.println("Do you want to find the computer by 'ID' or by 'NAME'"
+          + " (type 'QUIT' if you want to return to the menu)?");
+      searchingMethod = scanner.nextLine().trim().toUpperCase();
 
       if ("ID".equals(searchingMethod)) {
         foundComputer = getExistingComputerByAskingId(action);
+
       } else if ("NAME".equals(searchingMethod)) {
         foundComputer = getExistingComputerByAskingName(action);
+
+      } else if ("QUIT".equals(searchingMethod)) {
+        break;
+
       } else {
         System.out.println("Action not recognized !");
       }
-
     }
 
     return foundComputer;
@@ -84,32 +99,42 @@ public abstract class AbstractCommand {
 
   /**
    * Method that asks to the user to enter the name of the computer he wants to find. It won't stop
-   * asking for a name until the user gives use a valid one.
+   * asking for a name until the user gives use a valid one or when he type 'QUIT'.
    * 
    * @param action The action that will be performed on the computer (ex : delete, update)
    * @return The first matching computer (Because multiple computers can have the same name).
    */
-  protected Computer getExistingComputerByAskingName(String action) {
+  protected ComputerDto getExistingComputerByAskingName(String action) {
 
     boolean isNameOk = false;
-    ArrayList<Computer> matchingComputer = null;
+    ArrayList<ComputerDto> matchingComputers = null;
 
     while (!isNameOk) {
 
-      System.out.println("Enter the name of the computer you want to " + action);
+      System.out.println("Enter the name of the computer you want to " + action
+          + " or enter 'QUIT' if you want to return to the menu");
 
       String nameOfExistingComputer = scanner.nextLine();
 
-      matchingComputer = computerService.getByName(nameOfExistingComputer);
+      if ("QUIT".equals(nameOfExistingComputer)) {
+        return null;
+      }
 
-      if (matchingComputer.size() <= 0) {
+      matchingComputers = baseUrl
+          .path("/computer/get/name")
+          .queryParam("name", nameOfExistingComputer)
+          .request()
+          .get(new GenericType<ArrayList<ComputerDto>>() {
+          });
+
+      if (matchingComputers.size() <= 0) {
         System.out.println("The name you entered doesn't match any existing computer !");
         continue;
       }
 
       isNameOk = true;
     }
-    return matchingComputer.get(0);
+    return matchingComputers.get(0);
 
   }
 
@@ -120,10 +145,10 @@ public abstract class AbstractCommand {
    * @param action The action that will be performed on the computer (ex : delete, update)
    * @return The matching computer.
    */
-  protected Computer getExistingComputerByAskingId(String action) {
+  protected ComputerDto getExistingComputerByAskingId(String action) {
 
     boolean isIdOk = false;
-    Computer matchingComputer = null;
+    ComputerDto matchingComputer = null;
 
     int idOfExistingComputer;
 
@@ -135,14 +160,20 @@ public abstract class AbstractCommand {
         idOfExistingComputer = scanner.nextInt();
 
       } catch (InputMismatchException e) {
-        System.out.println("Please !");
+        System.out.println("Enter a valid id or -1 if you want to quit !");
         scanner.nextLine();
         continue;
       }
 
       scanner.nextLine();
 
-      matchingComputer = computerService.getById(idOfExistingComputer);
+      if (idOfExistingComputer == -1) {
+        break;
+      }
+
+      matchingComputer =
+          baseUrl.path("/computer/get/id").queryParam("id", idOfExistingComputer).request().get(
+              ComputerDto.class);
 
       if (matchingComputer == null) {
         System.out.println("The id you entered doesn't match any existing computer !");
@@ -163,7 +194,7 @@ public abstract class AbstractCommand {
   protected String askForNewComputerName() {
 
     boolean isNameOk = false;
-    String name = "";
+    String name = null;
 
     while (!isNameOk) {
 
@@ -171,8 +202,13 @@ public abstract class AbstractCommand {
 
       name = scanner.nextLine();
 
+      if ("QUIT".equals(name)) {
+        break;
+      }
+
       if (name.length() <= 0) {
-        System.out.println("The name of the computer must be set !");
+        System.out.println(
+            "The name of the computer must be set (You can return to the menu typing 'QUIT')!");
         continue;
       }
 
@@ -187,20 +223,37 @@ public abstract class AbstractCommand {
    * 
    * @return The Company object that we retrieved from the database.
    */
-  protected Company askForExistingCompanyByAskingName() {
+  protected CompanyDto askForExistingCompanyByAskingName() {
 
-    Company resCompany = null;
+    CompanyDto resCompany = null;
+    String companyName = null;
+    boolean companyOk = false;
 
-    System.out.println("Company name:");
+    while (!companyOk) {
 
-    String companyName = scanner.nextLine();
+      System.out
+          .println("Enter the company's name (or 'PASS' if you don't wan't to enter anything):");
 
-    if (companyName.length() > 0) {
+      companyName = scanner.nextLine().trim();
 
-      ArrayList<Company> matchingCompany = companyService.getByName(companyName);
+      if ("PASS".equals(companyName.toUpperCase())) {
+        break;
+      }
 
-      if (matchingCompany.size() > 0) {
-        resCompany = matchingCompany.get(0);
+      if (companyName.length() > 0) {
+
+        ArrayList<CompanyDto> matchingCompanies =
+            baseUrl.path("/company/get/name").queryParam("name", companyName).request().get(
+                new GenericType<ArrayList<CompanyDto>>() {
+                });
+
+        if (matchingCompanies.size() > 0) {
+          resCompany = matchingCompanies.get(0);
+          companyOk = true;
+
+        } else {
+          System.out.println("No company found for the given name");
+        }
       }
     }
 
@@ -214,36 +267,39 @@ public abstract class AbstractCommand {
    * @param dateType The format that the date has to match
    * @return The LocalDateTime object created from the user input.
    */
-  protected LocalDate askForDate(String dateType) {
+  protected String askForDate(String dateType) {
 
-    String format = "yyyy-MM-dd";
+    String format = "MM-dd-yyyy";
 
-    System.out.println(dateType + " date (YYYY-MM-DD) :");
+    System.out.println(dateType + " date (MM-DD-YYYY) type 'PASS' if you want to skip:");
 
-    String tmpDate = scanner.nextLine();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
 
-    LocalDate localDate = null;
+    String tmpDate;
+    String dateStr = null;
+    boolean dateOk = false;
 
-    if (tmpDate.length() > 0) {
+    while (!dateOk) {
+      try {
+        dateOk = true;
+        tmpDate = scanner.nextLine().trim();
 
-      boolean dateOk = false;
-      while (!dateOk) {
-        try {
-          dateOk = true;
-
-          InputValidator.isDate(tmpDate);
-          localDate = new Timestamp(new SimpleDateFormat(format).parse(tmpDate).getTime())
-              .toLocalDateTime().toLocalDate();
-
-        } catch (ParseException | ValidationException e) {
-          dateOk = false;
-          System.out.println("Wrong format entered, please retry :");
-          tmpDate = scanner.nextLine();
+        if ("PASS".equals(tmpDate.toUpperCase())) {
+          break;
         }
+
+        InputValidator.isDate(tmpDate);
+        dateStr = new Timestamp(new SimpleDateFormat(format).parse(tmpDate).getTime())
+            .toLocalDateTime()
+            .format(formatter);
+
+      } catch (ParseException | IllegalArgumentException e) {
+        dateOk = false;
+        System.out.println("Wrong format entered, please retry :");
+        tmpDate = scanner.nextLine();
       }
     }
 
-    return localDate;
+    return dateStr;
   }
-
 }

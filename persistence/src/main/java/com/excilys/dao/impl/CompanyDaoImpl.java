@@ -1,12 +1,8 @@
 package com.excilys.dao.impl;
 
 import com.excilys.dao.CompanyDao;
-import com.excilys.dao.exception.DaoException;
 import com.excilys.model.Company;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,20 +34,11 @@ public class CompanyDaoImpl implements CompanyDao {
 
     LOGGER.info("Get by id : " + id);
 
-    Company companyResult = null;
-    Session session = null;
-
-    try {
-      session = sessionFactory.getCurrentSession();
-
-      Query query = session.createQuery(GET_BY_ID_QUERY);
-      query.setLong("id", id);
-
-      companyResult = (Company) query.uniqueResult();
-
-    } catch (HibernateException e) {
-      throw new DaoException("Problem while retrieving the company with id " + id, e);
-    }
+    Company companyResult = (Company) sessionFactory
+        .getCurrentSession()
+        .createQuery(GET_BY_ID_QUERY)
+        .setLong("id", id)
+        .uniqueResult();
 
     return companyResult;
   }
@@ -62,20 +49,12 @@ public class CompanyDaoImpl implements CompanyDao {
 
     LOGGER.info("Get by name : " + name);
 
-    ArrayList<Company> companyResults = null;
-    Session session = null;
+    ArrayList<Company> companyResults = (ArrayList<Company>) sessionFactory
+        .getCurrentSession()
 
-    try {
-      session = sessionFactory.getCurrentSession();
-
-      Query query = session.createQuery(GET_BY_NAME_QUERY);
-      query.setString("name", name);
-
-      companyResults = (ArrayList<Company>) query.list();
-
-    } catch (HibernateException e) {
-      throw new DaoException("Problem while retrieving the companies with name " + name, e);
-    }
+        .createQuery(GET_BY_NAME_QUERY)
+        .setString("name", name)
+        .list();
 
     return companyResults;
   }
@@ -86,19 +65,8 @@ public class CompanyDaoImpl implements CompanyDao {
 
     LOGGER.info("List all companies");
 
-    ArrayList<Company> companyResults = null;
-    Session session = null;
-
-    try {
-      session = sessionFactory.getCurrentSession();
-
-      Query query = session.createQuery(LIST_ALL_QUERY);
-
-      companyResults = (ArrayList<Company>) query.list();
-
-    } catch (HibernateException e) {
-      throw new DaoException("Problem while retrieving the list of all the companies", e);
-    }
+    ArrayList<Company> companyResults =
+        (ArrayList<Company>) sessionFactory.getCurrentSession().createQuery(LIST_ALL_QUERY).list();
 
     return companyResults;
   }
@@ -108,17 +76,6 @@ public class CompanyDaoImpl implements CompanyDao {
 
     LOGGER.info("Delete company");
 
-    Session session = null;
-
-    try {
-      session = sessionFactory.getCurrentSession();
-
-      Query query = session.createQuery(DELETE_QUERY);
-      query.setLong("id", id);
-      query.executeUpdate();
-
-    } catch (HibernateException e) {
-      throw new DaoException("Problem while trying to delete the company with id : " + id, e);
-    }
+    sessionFactory.getCurrentSession().createQuery(DELETE_QUERY).setLong("id", id).executeUpdate();
   }
 }

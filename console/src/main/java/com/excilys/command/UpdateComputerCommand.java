@@ -1,9 +1,13 @@
 package com.excilys.command;
 
-import com.excilys.command.exception.CommandException;
-import com.excilys.model.Computer;
+import com.excilys.dto.CompanyDto;
+import com.excilys.dto.ComputerDto;
 
 import java.util.Scanner;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
 /**
  * Class that extends the AbstractCommand class and that is used in the CLI in order to handle the
@@ -22,32 +26,49 @@ public class UpdateComputerCommand extends AbstractCommand {
 
     /* We ask for the name of the computer the use want to change */
 
-    Computer oldComputer = askForMethodToFindComputer("update");
+    ComputerDto oldComputer = askForMethodToFindComputer("update");
+
+    if (oldComputer == null) {
+      return;
+    }
 
     /* New name */
 
     System.out.println("Now enter the new informations:\n");
-    oldComputer.setName(askForNewComputerName());
+    String name = askForNewComputerName();
+
+    if (name == null) {
+      return;
+    }
+
+    oldComputer.setComputerName(name);
 
     /* New introduced date */
 
-    oldComputer.setIntroduced(askForDate("Introduced"));
+    oldComputer.setIntroducedDate(askForDate("Introduced"));
 
     /* New discontinued date */
 
-    oldComputer.setDiscontinued(askForDate("Discontinued"));
+    oldComputer.setDiscontinuedDate(askForDate("Discontinued"));
 
     /* New company associated to the computer */
 
-    oldComputer.setCompany(askForExistingCompanyByAskingName());
+    CompanyDto company = askForExistingCompanyByAskingName();
 
-    try {
-      computerService.updateComputer(oldComputer);
-      System.out.println("Update succeeded!");
-    } catch (CommandException se) {
-      System.out.println(
-          "Inconsistant data entered (Issue with the name or with the dates)\nUpdate aborted!");
+    if (company != null) {
+      oldComputer.setCompanyName(company.getName());
+      oldComputer.setCompanyId(company.getId());
+    } else {
+      oldComputer.setCompanyName(null);
+      oldComputer.setCompanyId(-1);
     }
+
+    WebTarget target = baseUrl.path("/computer/edit");
+
+    String results =
+        target.request().post(Entity.entity(oldComputer, MediaType.APPLICATION_JSON), String.class);
+
+    System.out.println(results);
   }
 
 }

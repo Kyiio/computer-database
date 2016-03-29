@@ -6,9 +6,9 @@ import static org.junit.Assert.assertNull;
 
 import com.excilys.dao.CompanyDao;
 import com.excilys.dao.ComputerDao;
-import com.excilys.dao.exception.DaoException;
 import com.excilys.model.Company;
 
+import org.hibernate.HibernateException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.annotation.Rollback;
@@ -53,7 +53,7 @@ public class CompanyDaoImplTest {
     assertNotEquals(0, companies.size());
   }
 
-  @Test(expected = DaoException.class)
+  @Test(expected = HibernateException.class)
   public void testDeleteCompanyFail() {
     companyDao.deleteCompany(1);
     companyDao.getById(1);

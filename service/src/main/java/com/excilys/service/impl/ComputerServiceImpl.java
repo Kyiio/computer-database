@@ -12,14 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 @Service("computerService")
-@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+@Transactional(readOnly = true)
 public class ComputerServiceImpl implements ComputerService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ComputerServiceImpl.class);
@@ -31,7 +30,7 @@ public class ComputerServiceImpl implements ComputerService {
   private ComputerValidator   computerValidator;
 
   @Override
-  @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+  @Transactional(readOnly = false)
   public void updateComputer(Computer computer) {
 
     LOGGER.info("Update computer : " + computer);
@@ -42,13 +41,19 @@ public class ComputerServiceImpl implements ComputerService {
   }
 
   @Override
-  @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+  @Transactional(readOnly = false)
   public long insertComputer(Company company, LocalDate introduced, LocalDate discontinued,
       String name) {
 
     LOGGER.info(new StringBuffer("Insert computer with following information : Company : ")
-        .append("computer name ").append(name).append(company).append(" introduced date :")
-        .append(introduced).append(" discontinued date :").append(discontinued).toString());
+        .append("computer name ")
+        .append(name)
+        .append(company)
+        .append(" introduced date :")
+        .append(introduced)
+        .append(" discontinued date :")
+        .append(discontinued)
+        .toString());
 
     computerValidator.checkName(name);
     computerValidator.checkDates(introduced, discontinued);
@@ -59,7 +64,7 @@ public class ComputerServiceImpl implements ComputerService {
   }
 
   @Override
-  @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+  @Transactional(readOnly = false)
   public void deleteComputer(long id) {
 
     LOGGER.info("Delete computer with id : " + id);
@@ -67,17 +72,6 @@ public class ComputerServiceImpl implements ComputerService {
     computerValidator.checkId(id);
 
     computerDao.deleteComputer(id);
-  }
-
-  @Override
-  @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-  public void deleteComputerAssociatedToCompany(long companyId) {
-
-    LOGGER.info("Delete computers with company id : " + companyId);
-
-    computerValidator.checkId(companyId);
-
-    computerDao.deleteComputersForCompanyId(companyId);
   }
 
   @Override
@@ -132,6 +126,8 @@ public class ComputerServiceImpl implements ComputerService {
   public long getCount(QueryParameters queryParameters) {
 
     LOGGER.info("Get count with parameters : " + queryParameters);
+
+    QueryParametersValidator.validateQueryParameters(queryParameters);
 
     long count = computerDao.getCount(queryParameters);
 

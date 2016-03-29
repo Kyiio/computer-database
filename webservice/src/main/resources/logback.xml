@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration>
+
+    <appender name="STDOUT-SPRING" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                SPRING | [%thread] %-6level %logger - %msg %n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <appender name="STDOUT-CDB" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                Computer-database | %-6level %logger{36} - %msg %n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <logger name="org.springframework" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT-SPRING" />
+    </logger>
+
+    <logger name="com.excilys" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT-CDB" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT-CDB" />
+        <appender-ref ref="STDOUT-SPRING" />
+    </root>
+
+</configuration>

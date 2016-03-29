@@ -15,6 +15,7 @@
 
     <context:component-scan base-package="com.excilys.service" />
     <context:component-scan base-package="com.excilys.dto" />
+    <context:component-scan base-package="com.excilys.dto.util" />
 
     <!-- Needed for multilang -->
     <bean id="messageSource"

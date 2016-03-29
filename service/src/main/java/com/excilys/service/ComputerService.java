@@ -44,13 +44,6 @@ public interface ComputerService {
   public void deleteComputer(long id);
 
   /**
-   * Method that calls the deleteComputersForCompanyId method from {@link ComputerDao}.
-   *
-   * @param companyId The id of the company for witch we have to delete the computers
-   */
-  public void deleteComputerAssociatedToCompany(long companyId);
-
-  /**
    * Method that calls the getById method from the {@link ComputerDao}.
    *
    * @param id The id of the computer we want to retrieve

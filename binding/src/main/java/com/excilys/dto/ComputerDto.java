@@ -3,6 +3,8 @@ package com.excilys.dto;
 import com.excilys.dto.validation.Date;
 import com.excilys.dto.validation.DateConsistency;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -14,22 +16,24 @@ import javax.validation.constraints.Size;
  * @see com.excilys.model.Computer
  */
 @DateConsistency
-public class ComputerDto {
+public class ComputerDto implements Serializable {
+
+  private static final long serialVersionUID = -2761601670550288031L;
 
   @Min(0)
-  private long   computerId;
+  private long              computerId;
 
   @NotNull
   @Size(min = 1, max = 30)
-  private String computerName;
+  private String            computerName;
 
   @Date
-  private String introducedDate;
+  private String            introducedDate;
   @Date
-  private String discontinuedDate;
+  private String            discontinuedDate;
 
-  private long   companyId;
-  private String companyName;
+  private long              companyId;
+  private String            companyName;
 
   public ComputerDto() {
     super();
@@ -75,16 +79,34 @@ public class ComputerDto {
     return introducedDate;
   }
 
+  /**
+   * Sets the introduced date.
+   *
+   * @param introducedDate the new introduced date
+   */
   public void setIntroducedDate(String introducedDate) {
-    this.introducedDate = introducedDate.replace('/', '-');
+    if (introducedDate != null) {
+      this.introducedDate = introducedDate.replace('/', '-');
+    } else {
+      this.introducedDate = null;
+    }
   }
 
   public String getDiscontinuedDate() {
     return discontinuedDate;
   }
 
+  /**
+   * Sets the discontinued date.
+   *
+   * @param discontinuedDate the new discontinued date
+   */
   public void setDiscontinuedDate(String discontinuedDate) {
-    this.discontinuedDate = discontinuedDate.replace('/', '-');
+    if (discontinuedDate != null) {
+      this.discontinuedDate = discontinuedDate.replace('/', '-');
+    } else {
+      this.discontinuedDate = null;
+    }
   }
 
   public long getCompanyId() {

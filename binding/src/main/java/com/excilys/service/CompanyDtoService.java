@@ -36,4 +36,11 @@ public interface CompanyDtoService {
    */
   public ArrayList<CompanyDto> listCompanies();
 
+  /**
+   * This method delete the company with the given id and all the computer associated to it.
+   *
+   * @param id the id
+   */
+  public void deleteCompany(long id);
+
 }

@@ -13,12 +13,16 @@
 		<module>binding</module>
 		<module>console</module>
 		<module>webapp</module>
+		<module>webservice</module>
 	</modules>
 
 	<properties>
-		<project-version>0.7.0-RELEASE</project-version>
+		<project-version>0.7.1-SNAPSHOT</project-version>
 
 		<hibernate-version>5.1.0.Final</hibernate-version>
+		<hibernate-jpa>1.0.0.Final</hibernate-jpa>
+		<jackson>2.7.3</jackson>
+		<jax-rs-resteasy>3.0.16.Final</jax-rs-resteasy>
 		<javax.servlet-api-version>3.1.0</javax.servlet-api-version>
 		<jboss-logging>3.3.0.Final</jboss-logging>
 		<jcloverslf4j>1.7.0</jcloverslf4j>
@@ -70,31 +74,10 @@
 			<version>${slf4j-api-version}</version>
 		</dependency>
 
-		<!-- Spring -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring-version}</version>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-			<version>${spring-version}</version>
-		</dependency>
-
-		<!-- Spring logs -->
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${jcloverslf4j}</version>
-		</dependency>
-
 	</dependencies>
 
 	<dependencyManagement>
@@ -133,6 +116,12 @@
 			<dependency>
 				<groupId>com.excilys</groupId>
 				<artifactId>computerdatabase-console</artifactId>
+				<version>${project-version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.excilys</groupId>
+				<artifactId>computerdatabase-webservice</artifactId>
 				<version>${project-version}</version>
 			</dependency>
 
@@ -191,7 +180,29 @@
 				<version>${jstl-version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.hibernate.javax.persistence</groupId>
+				<artifactId>hibernate-jpa-2.1-api</artifactId>
+				<version>${hibernate-jpa}</version>
+			</dependency>
+
 			<!-- Spring -->
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${spring-version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -204,6 +215,13 @@
 				<version>${spring-version}</version>
 			</dependency>
 
+			<!-- Spring logs -->
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+				<version>${jcloverslf4j}</version>
+			</dependency>
 
 			<!-- Spring web-mvc -->
 			<dependency>
@@ -284,6 +302,25 @@
 				<artifactId>jboss-logging</artifactId>
 				<version>${jboss-logging}</version>
 			</dependency>
+
+			<!-- JAX-RS API -->
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-client</artifactId>
+				<version>${jax-rs-resteasy}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jackson-provider</artifactId>
+				<version>${jax-rs-resteasy}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson}</version>
+			</dependency>
+
 
 		</dependencies>
 	</dependencyManagement>

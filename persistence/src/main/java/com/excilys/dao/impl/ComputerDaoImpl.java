@@ -7,8 +7,6 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.QueryParameters;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -58,30 +56,24 @@ public class ComputerDaoImpl implements ComputerDao {
   public long insertComputer(Company company, LocalDate introduced, LocalDate discontinued,
       String name) {
 
-    LOGGER.info(new StringBuffer("Insert computer with following information : Company : ")
-        .append("computer name ").append(name).append(company).append(" introduced date :")
-        .append(introduced).append(" discontinued date :").append(discontinued).toString());
+    LOGGER.info(new StringBuilder("Insert computer with following information : Company : ")
+        .append("computer name ")
+        .append(name)
+        .append(company)
+        .append(" introduced date :")
+        .append(introduced)
+        .append(" discontinued date :")
+        .append(discontinued)
+        .toString());
 
     if (name == null || name.length() <= 0) {
       throw new DaoException("The name of the computer must be set !");
     }
 
-    Computer computer = new Computer();
-    computer.setName(name);
-    computer.setCompany(company);
-    computer.setIntroduced(introduced);
-    computer.setDiscontinued(discontinued);
+    Computer computer = new Computer(0, company, name, discontinued, introduced);
 
-    long id = 0;
-    Session session = null;
-
-    try {
-      session = sessionFactory.getCurrentSession();
-      id = (long) session.save(computer);
-
-    } catch (HibernateException e) {
-      throw new DaoException("Problem while inserting a computer ", e);
-    }
+    Session session = sessionFactory.getCurrentSession();
+    long id = (long) session.save(computer);
 
     return id;
   }
@@ -95,16 +87,7 @@ public class ComputerDaoImpl implements ComputerDao {
       throw new DaoException("The given computer is null !");
     }
 
-    Session session = null;
-
-    try {
-      session = sessionFactory.getCurrentSession();
-
-      session.update(computer);
-
-    } catch (HibernateException e) {
-      throw new DaoException("Problem while updating a computer ", e);
-    }
+    sessionFactory.getCurrentSession().update(computer);
   }
 
   @Override
@@ -112,18 +95,8 @@ public class ComputerDaoImpl implements ComputerDao {
 
     LOGGER.info("Delete by id " + id);
 
-    Session session = null;
+    sessionFactory.getCurrentSession().createQuery(DELETE_QUERY).setLong("id", id).executeUpdate();
 
-    try {
-      session = sessionFactory.getCurrentSession();
-
-      Query query = session.createQuery(DELETE_QUERY);
-      query.setLong("id", id);
-      query.executeUpdate();
-
-    } catch (HibernateException e) {
-      throw new DaoException("Problem while trying to delete computer with id : " + id, e);
-    }
   }
 
   @Override
@@ -131,20 +104,11 @@ public class ComputerDaoImpl implements ComputerDao {
 
     LOGGER.info("Get by id : " + id);
 
-    Computer computerResult = null;
-    Session session = null;
-
-    try {
-      session = sessionFactory.getCurrentSession();
-
-      Query query = session.createQuery(GET_BY_ID_QUERY);
-      query.setLong("id", id);
-
-      computerResult = (Computer) query.uniqueResult();
-
-    } catch (HibernateException e) {
-      throw new DaoException("Problem while retrieving the computer with id " + id, e);
-    }
+    Computer computerResult = (Computer) sessionFactory
+        .getCurrentSession()
+        .createQuery(GET_BY_ID_QUERY)
+        .setLong("id", id)
+        .uniqueResult();
 
     return computerResult;
   }
@@ -155,20 +119,11 @@ public class ComputerDaoImpl implements ComputerDao {
 
     LOGGER.info("Get by name : " + name);
 
-    Session session = null;
-    ArrayList<Computer> computerResult = null;
-
-    try {
-      session = sessionFactory.getCurrentSession();
-
-      Query query = session.createQuery(GET_BY_NAME_QUERY);
-      query.setString("name", name);
-      computerResult = (ArrayList<Computer>) query.list();
-
-    } catch (HibernateException e) {
-      throw new DaoException("Problem while retrieving the list of computers with name : " + name,
-          e);
-    }
+    ArrayList<Computer> computerResult = (ArrayList<Computer>) sessionFactory
+        .getCurrentSession()
+        .createQuery(GET_BY_NAME_QUERY)
+        .setString("name", name)
+        .list();
 
     return computerResult;
   }
@@ -179,20 +134,9 @@ public class ComputerDaoImpl implements ComputerDao {
 
     LOGGER.info("List computers query");
 
-    Session session = null;
-    ArrayList<Computer> computerResult = null;
+    ArrayList<Computer> computerResult =
+        (ArrayList<Computer>) sessionFactory.getCurrentSession().createQuery(LIST_ALL_QUERY).list();
 
-    try {
-
-      session = sessionFactory.getCurrentSession();
-
-      Query query = session.createQuery(LIST_ALL_QUERY);
-
-      computerResult = (ArrayList<Computer>) query.list();
-
-    } catch (HibernateException e) {
-      throw new DaoException("Problem while retrieving the list of computers in the database!", e);
-    }
     return computerResult;
   }
 
@@ -206,26 +150,18 @@ public class ComputerDaoImpl implements ComputerDao {
       throw new DaoException("The queryParameters object shouldn't be null");
     }
 
-    Session session = null;
-    ArrayList<Computer> computerResult = null;
+    String myQuery = new QueryBuilder()
+        .append(GET_PAGE_QUERY)
+        .orderBy(queryParameters.getByContent(), queryParameters.getOrder())
+        .getQuery();
 
-    try {
-      session = sessionFactory.getCurrentSession();
-
-      String myQuery = new QueryBuilder().append(GET_PAGE_QUERY)
-          .orderBy(queryParameters.getByContent(), queryParameters.getOrder()).getQuery();
-
-      Query query = session.createQuery(myQuery);
-
-      query.setString("searchName", "%" + queryParameters.getSearch() + "%");
-      query.setFirstResult(queryParameters.getOffset());
-      query.setMaxResults(queryParameters.getPageSize());
-
-      computerResult = (ArrayList<Computer>) query.list();
-
-    } catch (HibernateException e) {
-      throw new DaoException("Problem while executing the get page query !", e);
-    }
+    ArrayList<Computer> computerResult = (ArrayList<Computer>) sessionFactory
+        .getCurrentSession()
+        .createQuery(myQuery)
+        .setString("searchName", "%" + queryParameters.getSearch() + "%")
+        .setFirstResult(queryParameters.getOffset())
+        .setMaxResults(queryParameters.getPageSize())
+        .list();
 
     return computerResult;
   }
@@ -235,22 +171,14 @@ public class ComputerDaoImpl implements ComputerDao {
 
     LOGGER.info("Count query with parameters : " + queryParameters);
 
-    long rowCount = 0;
-    Session session = null;
-
-    try {
-      session = sessionFactory.getCurrentSession();
-
-      Query query = session.createQuery(GET_COUNT_QUERY);
-      query.setString("searchName", "%" + queryParameters.getSearch() + "%");
-
-      rowCount = ((Long) (query.uniqueResult())).longValue();
-
-    } catch (HibernateException e) {
-      throw new DaoException("Problem while executing the get count query!", e);
-    }
+    long rowCount = ((Long) sessionFactory
+        .getCurrentSession()
+        .createQuery(GET_COUNT_QUERY)
+        .setString("searchName", "%" + queryParameters.getSearch() + "%")
+        .uniqueResult()).longValue();
 
     return rowCount;
+
   }
 
   @Override
@@ -262,18 +190,10 @@ public class ComputerDaoImpl implements ComputerDao {
 
     LOGGER.info("Delete computers with company id: " + companyId);
 
-    Session session = null;
-
-    try {
-      session = sessionFactory.getCurrentSession();
-
-      Query query = session.createQuery(DELETE_WHERE_COMPANY_ID);
-      query.setLong("companyId", companyId);
-      query.executeUpdate();
-
-    } catch (HibernateException e) {
-      throw new DaoException("Problem while deleting the computers with company id : " + companyId,
-          e);
-    }
+    sessionFactory
+        .getCurrentSession()
+        .createQuery(DELETE_WHERE_COMPANY_ID)
+        .setLong("companyId", companyId)
+        .executeUpdate();
   }
 }

@@ -1,10 +1,12 @@
 package com.excilys.command;
 
-import com.excilys.command.exception.CommandException;
-import com.excilys.dao.exception.DaoException;
-import com.excilys.model.Computer;
+import com.excilys.dto.ComputerDto;
 
 import java.util.Scanner;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
 /**
  * Class that extends the AbstractCommand class and that is used in the CLI in order to handle the
@@ -21,15 +23,17 @@ public class DeleteComputerCommand extends AbstractCommand {
   @Override
   public void execute() {
 
-    Computer oldComputer = askForMethodToFindComputer("delete");
+    ComputerDto computer = askForMethodToFindComputer("delete");
 
-    try {
-      computerService.deleteComputer(oldComputer.getId());
-      System.out.println("Delete complete !");
-    } catch (DaoException e) {
-      System.out.println("No matching found for the given id, delete aborted !");
-    } catch (CommandException e) {
-      System.out.println("The id must be positive !");
+    if (computer == null) {
+      return;
     }
+
+    WebTarget target = baseUrl.path("/computer/delete");
+
+    String results = target.request().post(
+        Entity.entity(computer.getComputerId(), MediaType.APPLICATION_JSON), String.class);
+
+    System.out.println(results);
   }
 }

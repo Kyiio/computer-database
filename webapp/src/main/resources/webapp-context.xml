@@ -13,8 +13,6 @@
     
     <import resource="classpath:./binding-context.xml"/>
 
-    <context:component-scan base-package="com.excilys.controller" />
-
     <bean id="localeResolver"
         class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
         <property name="defaultLocale" value="en" />

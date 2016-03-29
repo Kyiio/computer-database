@@ -1,9 +1,13 @@
 package com.excilys.command;
 
-import com.excilys.command.exception.CommandException;
-import com.excilys.model.Computer;
+import com.excilys.dto.CompanyDto;
+import com.excilys.dto.ComputerDto;
 
 import java.util.Scanner;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
 /**
  * Class that extends the AbstractCommand class and that is used in the CLI in order to handle the
@@ -20,30 +24,40 @@ public class InsertComputerCommand extends AbstractCommand {
   @Override
   public void execute() {
 
-    Computer newComputer = new Computer();
+    ComputerDto newComputer = new ComputerDto();
 
     /* New name */
     System.out.println("Please enter information about the computer");
-    newComputer.setName(askForNewComputerName());
+    String name = askForNewComputerName();
 
-    /* New introduced date */
-    newComputer.setIntroduced(askForDate("Introduced"));
-
-    /* New discontinued date */
-    newComputer.setDiscontinued(askForDate("Discontinued"));
-
-    /* New company associated to the computer */
-    newComputer.setCompany(askForExistingCompanyByAskingName());
-
-    try {
-      computerService.insertComputer(newComputer.getCompany(), newComputer.getIntroduced(),
-          newComputer.getDiscontinued(), newComputer.getName());
-      System.out.println("Insert done !");
-    } catch (CommandException se) {
-      System.out.println(
-          "Inconsistant data entered (Issue with the name or with the dates)\nInsert aborted!");
+    if (name == null) {
+      return;
     }
 
-  }
+    newComputer.setComputerName(name);
 
+    /* New introduced date */
+
+    newComputer.setIntroducedDate(askForDate("Introduced"));
+
+    /* New discontinued date */
+
+    newComputer.setDiscontinuedDate(askForDate("Discontinued"));
+
+    /* New company associated to the computer */
+
+    CompanyDto company = askForExistingCompanyByAskingName();
+
+    if (company != null) {
+      newComputer.setCompanyName(company.getName());
+      newComputer.setCompanyId(company.getId());
+    }
+
+    WebTarget target = baseUrl.path("/computer/add");
+
+    String results =
+        target.request().post(Entity.entity(newComputer, MediaType.APPLICATION_JSON), String.class);
+
+    System.out.println(results);
+  }
 }

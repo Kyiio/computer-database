@@ -11,5 +11,17 @@
     http://www.springframework.org/schema/context/spring-context-4.0.xsd">
     <context:annotation-config />
 
-    <context:component-scan base-package="com.excilys.validator" />
+    <import resource="classpath:./persistence-context.xml"/>
+
+    <context:component-scan base-package="com.excilys.service" />
+    
+    <!-- Enable dao mocking by using bean factory -->
+    <bean id="computerDao" name="mockComputerDao" class="com.excilys.utils.MockitoFactoryBean">
+        <constructor-arg name="classToMock" value="com.excilys.dao.impl.ComputerDaoImpl" />
+    </bean>
+    
+    <bean id="companyDao" name="mockCompanyDao" class="com.excilys.utils.MockitoFactoryBean">
+        <constructor-arg name="classToMock" value="com.excilys.dao.impl.CompanyDaoImpl" />
+    </bean>
+
 </beans>

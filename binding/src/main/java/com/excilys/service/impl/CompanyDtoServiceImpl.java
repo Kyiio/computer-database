@@ -5,7 +5,7 @@ import com.excilys.dto.mapper.CompanyDtoMapper;
 import com.excilys.model.Company;
 import com.excilys.service.CompanyDtoService;
 import com.excilys.service.CompanyService;
-import com.excilys.validator.ComputerValidator;
+import com.excilys.validator.CompanyValidator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,14 +23,14 @@ public class CompanyDtoServiceImpl implements CompanyDtoService {
   public CompanyService       companyService;
 
   @Autowired
-  private ComputerValidator   computerValidator;
+  private CompanyValidator    companyValidator;
 
   @Override
   public CompanyDto getById(long id) {
 
     LOGGER.info("DTO : Get by id :" + id);
 
-    computerValidator.checkId(id);
+    companyValidator.checkId(id);
     Company company = companyService.getById(id);
 
     return CompanyDtoMapper.getCompanyDto(company);
@@ -40,7 +40,7 @@ public class CompanyDtoServiceImpl implements CompanyDtoService {
   public ArrayList<CompanyDto> getByName(String name) {
     LOGGER.info("DTO : Get by name :" + name);
 
-    computerValidator.checkName(name);
+    companyValidator.checkName(name);
     ArrayList<Company> companyList = companyService.getByName(name);
 
     return CompanyDtoMapper.getCompanyDtoList(companyList);
@@ -48,10 +48,19 @@ public class CompanyDtoServiceImpl implements CompanyDtoService {
 
   @Override
   public ArrayList<CompanyDto> listCompanies() {
-    LOGGER.info("DTO : Get list :");
+    LOGGER.info("DTO : Get list");
 
     ArrayList<Company> companyList = companyService.listCompanies();
 
     return CompanyDtoMapper.getCompanyDtoList(companyList);
+  }
+
+  @Override
+  public void deleteCompany(long id) {
+    LOGGER.info("DTO : delete company :" + id);
+
+    companyValidator.checkId(id);
+
+    companyService.deleteCompany(id);
   }
 }

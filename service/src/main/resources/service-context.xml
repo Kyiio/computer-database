@@ -14,4 +14,5 @@
     <import resource="classpath:./persistence-context.xml"/>
 
     <context:component-scan base-package="com.excilys.service" />
+    <context:component-scan base-package="com.excilys.validator" />
 </beans>
